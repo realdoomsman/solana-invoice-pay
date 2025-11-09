@@ -38,9 +38,12 @@ export async function POST(request: NextRequest) {
     }
 
     const network = process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'devnet'
-    const endpoint = network === 'mainnet-beta' 
-      ? 'https://api.mainnet-beta.solana.com'
-      : `https://api.${network}.solana.com`
+    const rpcUrl = process.env.NEXT_PUBLIC_SOLANA_RPC_URL
+    const endpoint = rpcUrl || (
+      network === 'mainnet-beta' 
+        ? 'https://api.mainnet-beta.solana.com'
+        : `https://api.${network}.solana.com`
+    )
     
     const connection = new Connection(endpoint, 'confirmed')
     
