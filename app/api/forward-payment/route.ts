@@ -50,21 +50,49 @@ export async function POST(request: NextRequest) {
     // Calculate rent exemption (minimum balance to keep account open)
     const rentExemption = await connection.getMinimumBalanceForRentExemption(0)
     
-    // Forward all funds minus transaction fee and rent
-    const amountToSend = balance - rentExemption - 5000 // 5000 lamports for tx fee
+    // Calculate platform fee
+    const platformFeePercentage = parseFloat(process.env.PLATFORM_FEE_PERCENTAGE || '0')
+    const platformFeeWallet = process.env.PLATFORM_FEE_WALLET
+    
+    let platformFeeAmount = 0
+    if (platformFeePercentage > 0 && platformFeeWallet) {
+      platformFeeAmount = Math.floor(balance * (platformFeePercentage / 100))
+    }
+    
+    // Forward funds minus fees
+    const amountToSend = balance - rentExemption - 5000 - platformFeeAmount // 5000 lamports for tx fee
     
     if (amountToSend <= 0) {
       return NextResponse.json({ error: 'Insufficient balance after fees' }, { status: 400 })
     }
 
     // Create transfer transaction
-    const transaction = new Transaction().add(
+    const transaction = new Transaction()
+    
+    // Transfer to merchant
+    transaction.add(
       SystemProgram.transfer({
         fromPubkey: paymentKeypair.publicKey,
         toPubkey: merchantWalletPubkey,
         lamports: amountToSend,
       })
     )
+    
+    // Transfer platform fee if configured
+    if (platformFeeAmount > 0 && platformFeeWallet) {
+      try {
+        const platformWalletPubkey = new PublicKey(platformFeeWallet)
+        transaction.add(
+          SystemProgram.transfer({
+            fromPubkey: paymentKeypair.publicKey,
+            toPubkey: platformWalletPubkey,
+            lamports: platformFeeAmount,
+          })
+        )
+      } catch (err) {
+        console.error('Invalid platform wallet, skipping fee')
+      }
+    }
 
     // Send transaction
     const signature = await sendAndConfirmTransaction(
@@ -77,6 +105,8 @@ export async function POST(request: NextRequest) {
       success: true,
       signature,
       amount: amountToSend / LAMPORTS_PER_SOL,
+      platformFee: platformFeeAmount / LAMPORTS_PER_SOL,
+      platformFeePercentage,
     })
   } catch (error: any) {
     console.error('Forward payment error:', error)
