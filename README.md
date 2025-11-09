@@ -25,6 +25,14 @@ A production-ready payment platform built on Solana for accepting crypto payment
 - 📈 **Monitoring** - Health checks and status page
 - ⚖️ **Legal Ready** - Terms of Service and Privacy Policy included
 
+### 🤖 AI-Powered Features
+- 💬 **AI Assistant** - Smart payment creation helper
+- 📊 **Payment Insights** - AI-powered analytics and trends
+- 💡 **Smart Suggestions** - Optimal amounts and descriptions
+- ✅ **Address Validation** - AI-powered wallet verification
+- 🎯 **Type Recommendations** - Best payment type for your needs
+- 🔍 **Fraud Detection** - Suspicious pattern analysis
+
 ### Monetization
 - 💰 **Platform Fees** - Earn 1% on payments ≥ 0.1 SOL
 - 🎯 **Automatic Collection** - Fees collected on every transaction
@@ -74,6 +82,7 @@ Visit `http://localhost:3000` to see your platform!
 
 ### Reference
 - [Features](docs/FEATURES.md) - Complete feature list
+- [AI Features](docs/AI_FEATURES.md) - AI-powered capabilities
 - [Production Ready](docs/PRODUCTION_READY.md) - Readiness checklist
 - [What's New](docs/WHATS_NEW.md) - Latest updates
 - [Monetization](docs/MONETIZATION.md) - Revenue guide
