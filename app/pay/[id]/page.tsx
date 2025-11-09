@@ -104,14 +104,17 @@ export default function PaymentPage() {
                   status: 'paid',
                   txSignature: result.signature,
                 })
+              } else {
+                // API returned error
+                console.error('Forward API error:', result.error, result.details)
+                alert(`Payment forward failed: ${result.error || 'Unknown error'}. Payment ID: ${paymentData.id}`)
+                setChecking(false)
               }
             } catch (error) {
               console.error('Error forwarding payment:', error)
-              const updated = payments.map((p: any) =>
-                p.id === paymentData.id ? { ...p, status: 'paid' } : p
-              )
-              localStorage.setItem('payments', JSON.stringify(updated))
-              setPayment({ ...paymentData, status: 'paid' })
+              alert(`Payment forward failed: ${error instanceof Error ? error.message : 'Unknown error'}. Please contact support with payment ID: ${paymentData.id}`)
+              // Don't mark as paid if forward failed
+              setChecking(false)
             }
           }
         }
