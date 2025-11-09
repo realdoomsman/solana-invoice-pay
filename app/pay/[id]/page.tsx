@@ -56,10 +56,12 @@ export default function PaymentPage() {
   const startBalanceCheck = async (paymentData: PaymentData) => {
     setChecking(true)
     const network = process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'devnet'
-    const endpoint =
+    const rpcUrl = process.env.NEXT_PUBLIC_SOLANA_RPC_URL
+    const endpoint = rpcUrl || (
       network === 'mainnet-beta'
         ? 'https://api.mainnet-beta.solana.com'
         : `https://api.${network}.solana.com`
+    )
 
     const connection = new Connection(endpoint, 'confirmed')
     const paymentPubkey = new PublicKey(paymentData.paymentWallet)
@@ -127,10 +129,12 @@ export default function PaymentPage() {
     setProcessing(true)
     try {
       const network = process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'devnet'
-      const endpoint =
+      const rpcUrl = process.env.NEXT_PUBLIC_SOLANA_RPC_URL
+      const endpoint = rpcUrl || (
         network === 'mainnet-beta'
           ? 'https://api.mainnet-beta.solana.com'
           : `https://api.${network}.solana.com`
+      )
 
       const connection = new Connection(endpoint, 'confirmed')
       const paymentPubkey = new PublicKey(payment.paymentWallet)
