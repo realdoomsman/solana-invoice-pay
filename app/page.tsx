@@ -1,9 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { nanoid } from 'nanoid'
 import { generatePaymentWallet } from '@/lib/payment-wallet'
+import { getCurrentUser } from '@/lib/auth'
 
 export default function Home() {
   const router = useRouter()
@@ -12,6 +13,15 @@ export default function Home() {
   const [description, setDescription] = useState('')
   const [merchantWallet, setMerchantWallet] = useState('')
   const [loading, setLoading] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+  useEffect(() => {
+    const user = getCurrentUser()
+    if (user) {
+      setMerchantWallet(user.walletAddress)
+      setIsLoggedIn(true)
+    }
+  }, [])
 
   const createPaymentLink = () => {
     if (!amount || parseFloat(amount) <= 0) {
@@ -109,16 +119,68 @@ export default function Home() {
               </h2>
 
               <div className="space-y-5">
+                {!isLoggedIn && (
+                  <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 mb-4">
+                    <div className="flex items-start gap-3">
+                      <svg
+                        className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                      </svg>
+                      <div>
+                        <p className="text-sm font-medium text-blue-900 dark:text-blue-100">
+                          Want to save your payment links?
+                        </p>
+                        <button
+                          onClick={() => router.push('/login')}
+                          className="text-sm text-blue-600 dark:text-blue-400 hover:underline mt-1"
+                        >
+                          Sign in with your wallet →
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                    Your Wallet Address
-                  </label>
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+                      Your Wallet Address
+                    </label>
+                    {isLoggedIn && (
+                      <span className="text-xs text-green-600 dark:text-green-400 flex items-center gap-1">
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                        Connected
+                      </span>
+                    )}
+                  </div>
                   <input
                     type="text"
                     value={merchantWallet}
                     onChange={(e) => setMerchantWallet(e.target.value)}
                     placeholder="Enter your Solana wallet address"
-                    className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-slate-700 text-slate-900 dark:text-white font-mono text-sm"
+                    disabled={isLoggedIn}
+                    className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-slate-700 text-slate-900 dark:text-white font-mono text-sm disabled:opacity-60 disabled:cursor-not-allowed"
                   />
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                     Payments will be forwarded to this address

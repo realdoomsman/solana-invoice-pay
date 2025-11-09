@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { formatDistanceToNow } from 'date-fns'
+import { getCurrentUser, logout } from '@/lib/auth'
 
 interface PaymentData {
   id: string
@@ -18,11 +19,28 @@ interface PaymentData {
 export default function Dashboard() {
   const router = useRouter()
   const [payments, setPayments] = useState<PaymentData[]>([])
+  const [user, setUser] = useState<{ walletAddress: string } | null>(null)
 
   useEffect(() => {
+    const currentUser = getCurrentUser()
+    if (!currentUser) {
+      router.push('/login')
+      return
+    }
+    setUser(currentUser)
+
+    // Filter payments for this user
     const stored = JSON.parse(localStorage.getItem('payments') || '[]')
-    setPayments(stored.reverse())
-  }, [])
+    const userPayments = stored.filter(
+      (p: PaymentData) => p.merchantWallet === currentUser.walletAddress
+    )
+    setPayments(userPayments.reverse())
+  }, [router])
+
+  const handleLogout = () => {
+    logout()
+    router.push('/')
+  }
 
   const totalPaid = payments
     .filter((p) => p.status === 'paid')
@@ -42,13 +60,26 @@ export default function Dashboard() {
             <p className="text-slate-600 dark:text-slate-400">
               Track all your payment links
             </p>
+            {user && (
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-mono">
+                {user.walletAddress.slice(0, 8)}...{user.walletAddress.slice(-8)}
+              </p>
+            )}
           </div>
-          <button
-            onClick={() => router.push('/')}
-            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors"
-          >
-            Create New Payment
-          </button>
+          <div className="flex gap-3">
+            <button
+              onClick={() => router.push('/')}
+              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors"
+            >
+              Create New Payment
+            </button>
+            <button
+              onClick={handleLogout}
+              className="px-6 py-3 border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg font-semibold transition-colors"
+            >
+              Logout
+            </button>
+          </div>
         </div>
 
         {/* Stats */}
