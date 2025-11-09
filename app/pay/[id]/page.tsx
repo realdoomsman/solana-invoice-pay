@@ -23,6 +23,14 @@ interface PaymentData {
   paymentWallet: string
   merchantWallet: string
   txSignature?: string
+  type?: 'simple' | 'split' | 'escrow' | 'goal'
+  splitRecipients?: any[]
+  mintNFT?: boolean
+  isGoal?: boolean
+  goalAmount?: number
+  currentAmount?: number
+  escrowEnabled?: boolean
+  milestones?: any[]
 }
 
 export default function PaymentPage() {
@@ -214,12 +222,64 @@ export default function PaymentPage() {
           // Payment Form
           <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg p-8">
             <div className="text-center mb-8">
+              {/* Payment Type Badge */}
+              {payment.type && payment.type !== 'simple' && (
+                <div className="inline-block mb-3">
+                  {payment.type === 'split' && (
+                    <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-full text-sm font-semibold">
+                      🔀 Split Payment
+                    </span>
+                  )}
+                  {payment.type === 'escrow' && (
+                    <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 rounded-full text-sm font-semibold">
+                      🔒 Escrow Payment
+                    </span>
+                  )}
+                  {payment.type === 'goal' && (
+                    <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-full text-sm font-semibold">
+                      🎯 Funding Goal
+                    </span>
+                  )}
+                </div>
+              )}
+              
               <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">
                 {payment.amount} {payment.token}
               </h2>
+              
+              {payment.isGoal && payment.goalAmount && (
+                <div className="mt-3 mb-3">
+                  <div className="max-w-md mx-auto">
+                    <div className="flex justify-between text-sm mb-1">
+                      <span className="text-slate-600 dark:text-slate-400">Progress</span>
+                      <span className="font-semibold text-slate-900 dark:text-white">
+                        {payment.currentAmount || 0} / {payment.goalAmount} {payment.token}
+                      </span>
+                    </div>
+                    <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-3">
+                      <div
+                        className="bg-gradient-to-r from-green-500 to-blue-500 h-3 rounded-full transition-all"
+                        style={{
+                          width: `${Math.min(((payment.currentAmount || 0) / payment.goalAmount) * 100, 100)}%`
+                        }}
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
               {payment.description && (
                 <p className="text-slate-600 dark:text-slate-400">{payment.description}</p>
               )}
+              
+              {payment.mintNFT && (
+                <div className="mt-3 inline-block px-4 py-2 bg-purple-100 dark:bg-purple-900/30 rounded-full">
+                  <span className="text-sm font-semibold text-purple-700 dark:text-purple-400">
+                    🎨 Includes NFT Receipt
+                  </span>
+                </div>
+              )}
+              
               {checking && balance > 0 && (
                 <div className="mt-3 inline-block px-4 py-2 bg-green-100 dark:bg-green-900 rounded-full">
                   <span className="text-sm font-semibold text-green-700 dark:text-green-400">

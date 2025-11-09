@@ -235,7 +235,14 @@ export default function Home() {
                   disabled={loading}
                   className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {loading ? 'Creating...' : 'Create Payment Link'}
+                  {loading ? 'Creating...' : 'Create Simple Payment'}
+                </button>
+
+                <button
+                  onClick={() => router.push('/create')}
+                  className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+                >
+                  ✨ Advanced Options (Split, Escrow, Goals, NFTs)
                 </button>
               </div>
 
