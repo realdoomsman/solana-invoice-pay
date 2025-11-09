@@ -225,7 +225,7 @@ export default function Home() {
                   {loading ? 'Creating...' : 'Create Payment Link'}
                 </button>
 
-                <div className="grid grid-cols-2 gap-3 mt-3">
+                <div className="grid grid-cols-3 gap-3 mt-3">
                   <button
                     onClick={() => router.push('/create/split')}
                     className="px-4 py-2 border-2 border-blue-600 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg font-medium transition-colors"
@@ -243,12 +243,6 @@ export default function Home() {
                     className="px-4 py-2 border-2 border-green-600 text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-lg font-medium transition-colors"
                   >
                     Funding Goal
-                  </button>
-                  <button
-                    onClick={() => router.push('/create/nft')}
-                    className="px-4 py-2 border-2 border-pink-600 text-pink-600 dark:text-pink-400 hover:bg-pink-50 dark:hover:bg-pink-900/20 rounded-lg font-medium transition-colors"
-                  >
-                    NFT Receipt
                   </button>
                 </div>
               </div>
