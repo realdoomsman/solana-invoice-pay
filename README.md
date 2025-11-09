@@ -1,189 +1,259 @@
-# Solana Invoice & Payment Links 💸
+# 💸 Solana Invoice & Payment Platform
 
-A modern, easy-to-use platform for creating payment links and invoices on Solana. Accept SOL, USDC, and other SPL tokens with instant settlement and ultra-low fees.
+A production-ready payment platform built on Solana for accepting crypto payments with instant settlements and minimal fees.
 
 ![Solana](https://img.shields.io/badge/Solana-14F195?style=for-the-badge&logo=solana&logoColor=white)
 ![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
 ## ✨ Features
 
-- 🔗 **Shareable Payment Links** - Generate unique payment links in seconds
-- 💰 **Multi-Token Support** - Accept SOL, USDC, USDT, and other SPL tokens
-- 🎯 **Unique Wallets** - Each payment gets its own temporary wallet for tracking
-- ⚡ **Auto-Forward** - Funds automatically forward to your merchant wallet
-- 📊 **Dashboard** - Track all payments with real-time status updates
-- 📱 **QR Codes** - Mobile-friendly QR codes for easy scanning
-- 🔌 **Dual Payment Methods** - Customers can send to address OR connect wallet
-- 🎨 **Clean UI** - Professional, intuitive interface
-- 🔒 **Secure** - Non-custodial with transparent on-chain transactions
+### Payment Types
+- 🔗 **Simple Payments** - Create instant payment links with QR codes
+- 💰 **Split Payments** - Divide payments among multiple recipients
+- 🔒 **Escrow Payments** - Milestone-based secure transactions
+- 🎯 **Goal Payments** - Crowdfunding with progress tracking
+
+### Platform Features
+- ⚡ **Lightning Fast** - Sub-second confirmations on Solana
+- 🔄 **Auto-Forwarding** - Automatic payment forwarding to merchant wallet
+- 💵 **Low Fees** - $0.00025 average transaction cost
+- 🔐 **Secure** - Non-custodial with encrypted key storage
+- 📊 **Dashboard** - Real-time payment tracking
+- 📱 **Mobile Ready** - Responsive design with QR code support
+- 🌐 **SEO Optimized** - Complete metadata and sitemap
+- 📈 **Monitoring** - Health checks and status page
+- ⚖️ **Legal Ready** - Terms of Service and Privacy Policy included
+
+### Monetization
+- 💰 **Platform Fees** - Earn 1% on payments ≥ 0.1 SOL
+- 🎯 **Automatic Collection** - Fees collected on every transaction
+- 📊 **Transparent** - Clear fee display to users
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-
-- Node.js 18+ installed
+- Node.js 18+
 - A Solana wallet (Phantom, Solflare, etc.)
-- Some devnet SOL for testing (get from [Solana Faucet](https://faucet.solana.com))
+- Vercel account (for deployment)
 
 ### Installation
 
-1. **Clone the repository**
 ```bash
-git clone https://github.com/yourusername/solana-invoice-pay.git
+# Clone the repository
+git clone https://github.com/realdoomsman/solana-invoice-pay.git
 cd solana-invoice-pay
-```
 
-2. **Install dependencies**
-```bash
+# Install dependencies
 npm install
-```
 
-3. **Configure environment**
-```bash
+# Copy environment file
 cp .env.example .env.local
-```
 
-Edit `.env.local` and add your merchant wallet address:
-```env
-NEXT_PUBLIC_SOLANA_NETWORK=devnet
-NEXT_PUBLIC_MERCHANT_WALLET=YourSolanaWalletAddressHere
-```
+# Edit .env.local with your settings
+# Add your wallet address and configure network
 
-4. **Run the development server**
-```bash
+# Run development server
 npm run dev
 ```
 
-5. **Open your browser**
-Navigate to [http://localhost:3000](http://localhost:3000)
+Visit `http://localhost:3000` to see your platform!
 
-## 📖 How It Works
+## 📚 Documentation
 
-1. **Create Payment Link**
-   - Enter amount, select token (SOL/USDC/USDT)
-   - Add optional description
-   - System generates unique temporary wallet
+### Setup Guides
+- [Quick Start Guide](docs/setup/QUICK_START.md) - Get started in 5 minutes
+- [Production Setup](docs/setup/PRODUCTION_SETUP.md) - Deploy to production
+- [Email Setup](docs/setup/EMAIL_SETUP.md) - Configure notifications
+- [GitHub Setup](docs/setup/GITHUB_SETUP.md) - Repository configuration
 
-2. **Share with Customer**
-   - Send payment link via email, text, or social media
-   - Customer can scan QR code or connect wallet
+### Deployment Guides
+- [Deploy to Mainnet](docs/guides/DEPLOY_TO_MAINNET.md) - Complete mainnet guide
+- [Launch Checklist](docs/guides/LAUNCH_CHECKLIST.md) - Pre-launch verification
+- [Launch Now](docs/guides/LAUNCH_NOW.md) - Quick launch guide
 
-3. **Customer Pays**
-   - Option 1: Scan QR code with Solana wallet
-   - Option 2: Copy address and send manually
-   - Option 3: Connect wallet and pay directly
+### Reference
+- [Features](docs/FEATURES.md) - Complete feature list
+- [Production Ready](docs/PRODUCTION_READY.md) - Readiness checklist
+- [What's New](docs/WHATS_NEW.md) - Latest updates
+- [Monetization](docs/MONETIZATION.md) - Revenue guide
 
-4. **Auto-Forward**
-   - System monitors payment wallet
-   - Once payment received, auto-forwards to merchant wallet
-   - Transaction recorded on Solana blockchain
+## 🔧 Configuration
 
-5. **Track Everything**
-   - View all payments in dashboard
-   - See status (pending/paid)
-   - Access transaction links on Solana Explorer
+### Environment Variables
 
-## 🛠️ Tech Stack
+Create `.env.local` with:
 
-- **Frontend**: Next.js 14 (App Router), React, TypeScript
-- **Styling**: TailwindCSS
-- **Blockchain**: Solana Web3.js, Wallet Adapter
-- **QR Codes**: qrcode.react
-- **Date Formatting**: date-fns
+```env
+# Network Configuration
+NEXT_PUBLIC_SOLANA_NETWORK=mainnet-beta
+NEXT_PUBLIC_SOLANA_RPC_URL=your_rpc_url
 
-## 📁 Project Structure
+# Platform Fee
+NEXT_PUBLIC_FEE_WALLET=your_wallet_address
+PLATFORM_FEE_PERCENTAGE=1
+PLATFORM_FEE_WALLET=your_wallet_address
 
-```
-solana-invoice-pay/
-├── app/
-│   ├── api/
-│   │   └── forward-payment/     # API route for auto-forwarding
-│   ├── dashboard/               # Dashboard page
-│   ├── pay/[id]/               # Payment page (dynamic route)
-│   ├── page.tsx                # Homepage
-│   ├── layout.tsx              # Root layout
-│   └── globals.css             # Global styles
-├── components/
-│   └── WalletProvider.tsx      # Solana wallet provider
-├── lib/
-│   └── payment-wallet.ts       # Wallet generation utilities
-├── .env.example                # Environment variables template
-└── README.md
+# Security
+ENCRYPTION_KEY=your_secure_random_key
+
+# Application
+NEXT_PUBLIC_BASE_URL=https://yourdomain.com
 ```
 
-## 🔐 Security Considerations
+See `.env.production.example` for complete configuration.
 
-⚠️ **Important for Production:**
+## 🎯 Usage
 
-This is a demo/MVP implementation. For production use:
+### Create a Payment Link
 
-- [ ] **Database**: Replace localStorage with secure database (PostgreSQL, Supabase)
-- [ ] **Key Management**: Store private keys encrypted in backend only
-- [ ] **Authentication**: Add user authentication and authorization
-- [ ] **Rate Limiting**: Implement rate limiting on API routes
-- [ ] **Monitoring**: Set up error tracking and monitoring
-- [ ] **Webhooks**: Add webhook support for payment notifications
-- [ ] **Testing**: Add comprehensive test coverage
-- [ ] **Audit**: Get smart contract/security audit before mainnet
+1. Visit your platform homepage
+2. Enter your wallet address
+3. Set amount and description
+4. Click "Create Payment Link"
+5. Share the link with your customer
 
-## 🌐 Deployment
+### Accept Payment
+
+Customers can pay via:
+- **QR Code** - Scan with mobile wallet
+- **Wallet Connect** - Connect browser wallet
+- **Direct Send** - Copy address and send
+
+Payments auto-forward to your wallet within seconds!
+
+## 🛠️ Development
+
+### Project Structure
+
+```
+├── app/                    # Next.js app directory
+│   ├── api/               # API routes
+│   ├── pay/[id]/          # Payment pages
+│   ├── create/            # Payment creation pages
+│   └── dashboard/         # User dashboard
+├── components/            # React components
+├── lib/                   # Utility functions
+├── scripts/               # Helper scripts
+├── docs/                  # Documentation
+│   ├── setup/            # Setup guides
+│   └── guides/           # Deployment guides
+└── public/               # Static assets
+```
+
+### Available Scripts
+
+```bash
+npm run dev          # Start development server
+npm run build        # Build for production
+npm start            # Start production server
+npm run lint         # Run linter
+npm run verify       # Verify production readiness
+```
+
+### Manual Payment Forward
+
+If auto-forward fails, use the manual script:
+
+```bash
+node scripts/manual-forward.js "private_key" "merchant_wallet"
+```
+
+## 🚀 Deployment
 
 ### Deploy to Vercel
 
-1. Push your code to GitHub
-2. Import project in [Vercel](https://vercel.com)
-3. Add environment variables:
-   - `NEXT_PUBLIC_SOLANA_NETWORK=mainnet-beta`
-   - `NEXT_PUBLIC_MERCHANT_WALLET=YourWalletAddress`
-4. Deploy!
+```bash
+# Install Vercel CLI
+npm i -g vercel
 
-### Deploy to Other Platforms
+# Deploy
+vercel --prod
+```
 
-Works with any platform supporting Next.js:
-- Netlify
-- Railway
-- Render
-- AWS Amplify
+### Configure Environment Variables
 
-## 🗺️ Roadmap
+1. Go to Vercel Dashboard → Settings → Environment Variables
+2. Import `.env.production` or add manually
+3. Redeploy
 
-- [ ] Database integration (PostgreSQL/Supabase)
-- [ ] User authentication and multi-merchant support
-- [ ] Email/SMS notifications
-- [ ] Full USDC/USDT support
-- [ ] Webhook API for integrations
-- [ ] Invoice PDF generation
-- [ ] Recurring payments/subscriptions
-- [ ] Analytics dashboard
-- [ ] Mobile app (React Native)
-- [ ] API for developers
+See [Deploy to Mainnet](docs/guides/DEPLOY_TO_MAINNET.md) for detailed instructions.
+
+## 📊 Monitoring
+
+### Health Check
+```
+GET /api/health
+```
+
+Returns system status and RPC latency.
+
+### Status Page
+Visit `/status` to see real-time system health.
+
+## 🔒 Security
+
+- ✅ Non-custodial architecture
+- ✅ Encrypted private key storage
+- ✅ Rate limiting (10 req/min per IP)
+- ✅ Input validation
+- ✅ Secure auto-forwarding
+- ✅ Environment variable validation
+
+## 💰 Monetization
+
+Platform earns 1% fee on payments ≥ 0.1 SOL:
+- $100 payment → $1 platform fee
+- $500 payment → $5 platform fee
+- $1000 payment → $10 platform fee
+
+Fees automatically collected and sent to your fee wallet.
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
 
-1. Fork the project
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+## 📄 License
 
-## 📝 License
+This project is open source and available under the MIT License.
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## 🆘 Support
 
-## 🙏 Acknowledgments
+- **Documentation**: Check the `docs/` folder
+- **Issues**: Open an issue on GitHub
+- **FAQ**: Visit `/faq` on your deployed site
 
-- Built on [Solana](https://solana.com) blockchain
-- Powered by [Next.js](https://nextjs.org)
-- Wallet integration via [@solana/wallet-adapter](https://github.com/solana-labs/wallet-adapter)
+## 🎉 What's Next?
 
-## 📧 Contact
+After deployment:
+1. Test with small amounts (0.01 SOL)
+2. Verify auto-forwarding works
+3. Check fee collection
+4. Monitor `/status` page
+5. Share your platform!
 
-Have questions? Open an issue or reach out!
+## 📈 Roadmap
+
+- [ ] Recurring payments / subscriptions
+- [ ] Multi-token support (USDC, USDT)
+- [ ] Email notifications
+- [ ] Webhook support
+- [ ] Public API
+- [ ] Mobile apps
+- [ ] Advanced analytics
+
+## 🌟 Built With
+
+- **Next.js 14** - React framework
+- **Solana Web3.js** - Blockchain interaction
+- **TypeScript** - Type safety
+- **Tailwind CSS** - Styling
+- **Vercel** - Deployment
 
 ---
 
-**⚡ Built with Solana - Fast, Cheap, Scalable**
+**Ready to launch?** Check out [Launch Now](docs/guides/LAUNCH_NOW.md) for a quick start guide!
+
+**Need help?** See the [documentation](docs/) or open an issue.
+
+**Built on Solana 💜**
