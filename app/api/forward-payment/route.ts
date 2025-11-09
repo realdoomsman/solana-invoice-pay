@@ -3,7 +3,12 @@ import { Connection, Keypair, PublicKey, SystemProgram, Transaction, LAMPORTS_PE
 
 export async function POST(request: NextRequest) {
   try {
-    const { paymentId, privateKey, merchantWallet } = await request.json()
+    const body = await request.json()
+    const { paymentId, privateKey, merchantWallet } = body
+
+    if (!paymentId) {
+      return NextResponse.json({ error: 'Missing payment ID' }, { status: 400 })
+    }
 
     if (!privateKey) {
       return NextResponse.json({ error: 'Missing private key' }, { status: 400 })
@@ -11,6 +16,13 @@ export async function POST(request: NextRequest) {
 
     if (!merchantWallet) {
       return NextResponse.json({ error: 'Missing merchant wallet' }, { status: 400 })
+    }
+
+    // Validate merchant wallet address
+    try {
+      new PublicKey(merchantWallet)
+    } catch (err) {
+      return NextResponse.json({ error: 'Invalid merchant wallet address' }, { status: 400 })
     }
 
     const network = process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'devnet'
@@ -66,10 +78,25 @@ export async function POST(request: NextRequest) {
       signature,
       amount: amountToSend / LAMPORTS_PER_SOL,
     })
-  } catch (error) {
+  } catch (error: any) {
     console.error('Forward payment error:', error)
+    
+    // Provide more specific error messages
+    let errorMessage = 'Failed to forward payment'
+    
+    if (error.message?.includes('insufficient')) {
+      errorMessage = 'Insufficient balance to forward payment'
+    } else if (error.message?.includes('blockhash')) {
+      errorMessage = 'Network error. Please try again.'
+    } else if (error.message?.includes('timeout')) {
+      errorMessage = 'Transaction timeout. Please check Solana Explorer.'
+    }
+    
     return NextResponse.json(
-      { error: 'Failed to forward payment' },
+      { 
+        error: errorMessage,
+        details: error.message 
+      },
       { status: 500 }
     )
   }

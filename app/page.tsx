@@ -24,7 +24,7 @@ export default function Home() {
     }
   }, [])
 
-  const createPaymentLink = () => {
+  const createPaymentLink = async () => {
     if (!amount || parseFloat(amount) <= 0) {
       alert('Please enter a valid amount')
       return
@@ -37,26 +37,34 @@ export default function Home() {
 
     setLoading(true)
 
-    const paymentId = nanoid(10)
-    const wallet = generatePaymentWallet()
+    try {
+      const paymentId = nanoid(10)
+      const wallet = generatePaymentWallet()
 
-    const paymentData = {
-      id: paymentId,
-      amount: parseFloat(amount),
-      token,
-      description,
-      status: 'pending',
-      createdAt: new Date().toISOString(),
-      paymentWallet: wallet.publicKey,
-      privateKey: wallet.privateKey,
-      merchantWallet: merchantWallet, // Store the merchant's wallet
+      const paymentData = {
+        id: paymentId,
+        amount: parseFloat(amount),
+        token,
+        description,
+        status: 'pending',
+        createdAt: new Date().toISOString(),
+        paymentWallet: wallet.publicKey,
+        privateKey: wallet.privateKey,
+        merchantWallet: merchantWallet,
+        type: 'simple',
+      }
+
+      // Save to localStorage
+      const payments = JSON.parse(localStorage.getItem('payments') || '[]')
+      payments.push(paymentData)
+      localStorage.setItem('payments', JSON.stringify(payments))
+
+      router.push(`/pay/${paymentId}`)
+    } catch (error) {
+      console.error('Error creating payment:', error)
+      alert('Failed to create payment link. Please try again.')
+      setLoading(false)
     }
-
-    const payments = JSON.parse(localStorage.getItem('payments') || '[]')
-    payments.push(paymentData)
-    localStorage.setItem('payments', JSON.stringify(payments))
-
-    router.push(`/pay/${paymentId}`)
   }
 
   return (

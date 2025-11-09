@@ -44,7 +44,7 @@ export default function CreateSplitPayment() {
     return splitRecipients.reduce((sum, r) => sum + Number(r.percentage), 0)
   }
 
-  const createPayment = () => {
+  const createPayment = async () => {
     if (!amount || parseFloat(amount) <= 0) {
       alert('Please enter a valid amount')
       return
@@ -61,7 +61,17 @@ export default function CreateSplitPayment() {
       return
     }
 
+    // Validate all wallet addresses
+    for (const recipient of splitRecipients) {
+      if (recipient.address.length < 32) {
+        alert(`Invalid wallet address for ${recipient.name || 'recipient'}`)
+        return
+      }
+    }
+
     setLoading(true)
+
+    try {
 
     const paymentId = nanoid(10)
     const wallet = generatePaymentWallet()
@@ -80,11 +90,16 @@ export default function CreateSplitPayment() {
       splitRecipients,
     }
 
-    const payments = JSON.parse(localStorage.getItem('payments') || '[]')
-    payments.push(paymentData)
-    localStorage.setItem('payments', JSON.stringify(payments))
+      const payments = JSON.parse(localStorage.getItem('payments') || '[]')
+      payments.push(paymentData)
+      localStorage.setItem('payments', JSON.stringify(payments))
 
-    router.push(`/pay/${paymentId}`)
+      router.push(`/pay/${paymentId}`)
+    } catch (error) {
+      console.error('Error creating split payment:', error)
+      alert('Failed to create split payment. Please try again.')
+      setLoading(false)
+    }
   }
 
   return (
