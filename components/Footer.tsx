@@ -22,6 +22,8 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-4">Resources</h4>
             <ul className="space-y-2 text-sm">
               <li><a href="/dashboard" className="hover:text-white transition-colors">Dashboard</a></li>
+              <li><a href="/faq" className="hover:text-white transition-colors">FAQ</a></li>
+              <li><a href="/status" className="hover:text-white transition-colors">System Status</a></li>
               <li><a href="https://docs.solana.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Solana Docs</a></li>
               <li><a href="https://explorer.solana.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Explorer</a></li>
             </ul>
