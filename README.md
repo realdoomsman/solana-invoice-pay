@@ -1,94 +1,189 @@
-# Solana Invoice & Payment Links
+# Solana Invoice & Payment Links 💸
 
-A simple, powerful platform for creating payment links and invoices on Solana. Accept SOL, USDC, and other SPL tokens with zero hassle.
+A modern, easy-to-use platform for creating payment links and invoices on Solana. Accept SOL, USDC, and other SPL tokens with instant settlement and ultra-low fees.
 
-## Features
+![Solana](https://img.shields.io/badge/Solana-14F195?style=for-the-badge&logo=solana&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
-- 🔗 Generate shareable payment links
-- 💰 Accept SOL, USDC, USDT, and SPL tokens
-- 🎯 Unique wallet per payment for easy tracking
-- ⚡ Auto-forward funds to merchant wallet
-- 📊 Dashboard to track all payments
-- 📱 QR codes for mobile payments
-- 🎨 Clean, professional UI
-- 🔒 No wallet connection needed for payers
+## ✨ Features
 
-## How It Works
+- 🔗 **Shareable Payment Links** - Generate unique payment links in seconds
+- 💰 **Multi-Token Support** - Accept SOL, USDC, USDT, and other SPL tokens
+- 🎯 **Unique Wallets** - Each payment gets its own temporary wallet for tracking
+- ⚡ **Auto-Forward** - Funds automatically forward to your merchant wallet
+- 📊 **Dashboard** - Track all payments with real-time status updates
+- 📱 **QR Codes** - Mobile-friendly QR codes for easy scanning
+- 🔌 **Dual Payment Methods** - Customers can send to address OR connect wallet
+- 🎨 **Clean UI** - Professional, intuitive interface
+- 🔒 **Secure** - Non-custodial with transparent on-chain transactions
 
-1. **Create Payment**: Generate a payment link with amount and description
-2. **Unique Wallet**: System creates a temporary wallet for this payment
-3. **Customer Pays**: Customer scans QR or sends to the wallet address
-4. **Auto-Forward**: Once payment received, funds auto-forward to your merchant wallet
-5. **Track Everything**: View all payments in the dashboard
+## 🚀 Quick Start
 
-## Getting Started
+### Prerequisites
 
-1. Install dependencies:
+- Node.js 18+ installed
+- A Solana wallet (Phantom, Solflare, etc.)
+- Some devnet SOL for testing (get from [Solana Faucet](https://faucet.solana.com))
+
+### Installation
+
+1. **Clone the repository**
+```bash
+git clone https://github.com/yourusername/solana-invoice-pay.git
+cd solana-invoice-pay
+```
+
+2. **Install dependencies**
 ```bash
 npm install
 ```
 
-2. Copy `.env.example` to `.env.local` and configure:
+3. **Configure environment**
 ```bash
 cp .env.example .env.local
 ```
 
-3. Add your merchant wallet address in `.env.local`:
-```
+Edit `.env.local` and add your merchant wallet address:
+```env
+NEXT_PUBLIC_SOLANA_NETWORK=devnet
 NEXT_PUBLIC_MERCHANT_WALLET=YourSolanaWalletAddressHere
 ```
 
-4. Run the development server:
+4. **Run the development server**
 ```bash
 npm run dev
 ```
 
-5. Open [http://localhost:3001](http://localhost:3001)
+5. **Open your browser**
+Navigate to [http://localhost:3000](http://localhost:3000)
 
-## Tech Stack
+## 📖 How It Works
 
-- Next.js 14 (App Router)
-- TypeScript
-- Solana Web3.js
-- TailwindCSS
-- QR Code generation
+1. **Create Payment Link**
+   - Enter amount, select token (SOL/USDC/USDT)
+   - Add optional description
+   - System generates unique temporary wallet
 
-## Usage
+2. **Share with Customer**
+   - Send payment link via email, text, or social media
+   - Customer can scan QR code or connect wallet
 
-1. Create a payment link with amount and description
-2. Share the link or QR code with your client
-3. Client sends SOL to the unique payment address
-4. System detects payment and auto-forwards to your wallet
-5. Track everything in the dashboard
+3. **Customer Pays**
+   - Option 1: Scan QR code with Solana wallet
+   - Option 2: Copy address and send manually
+   - Option 3: Connect wallet and pay directly
 
-## Security Notes
+4. **Auto-Forward**
+   - System monitors payment wallet
+   - Once payment received, auto-forwards to merchant wallet
+   - Transaction recorded on Solana blockchain
 
-⚠️ **Important for Production:**
-- Currently stores private keys in localStorage (for demo only!)
-- In production, store private keys securely in backend database
-- Use environment variables for sensitive data
-- Implement proper authentication
-- Add rate limiting and monitoring
+5. **Track Everything**
+   - View all payments in dashboard
+   - See status (pending/paid)
+   - Access transaction links on Solana Explorer
 
-## Deployment
+## 🛠️ Tech Stack
 
-Deploy on Vercel:
-```bash
-vercel deploy
+- **Frontend**: Next.js 14 (App Router), React, TypeScript
+- **Styling**: TailwindCSS
+- **Blockchain**: Solana Web3.js, Wallet Adapter
+- **QR Codes**: qrcode.react
+- **Date Formatting**: date-fns
+
+## 📁 Project Structure
+
+```
+solana-invoice-pay/
+├── app/
+│   ├── api/
+│   │   └── forward-payment/     # API route for auto-forwarding
+│   ├── dashboard/               # Dashboard page
+│   ├── pay/[id]/               # Payment page (dynamic route)
+│   ├── page.tsx                # Homepage
+│   ├── layout.tsx              # Root layout
+│   └── globals.css             # Global styles
+├── components/
+│   └── WalletProvider.tsx      # Solana wallet provider
+├── lib/
+│   └── payment-wallet.ts       # Wallet generation utilities
+├── .env.example                # Environment variables template
+└── README.md
 ```
 
-Make sure to set environment variables in Vercel dashboard.
+## 🔐 Security Considerations
 
-## Roadmap
+⚠️ **Important for Production:**
+
+This is a demo/MVP implementation. For production use:
+
+- [ ] **Database**: Replace localStorage with secure database (PostgreSQL, Supabase)
+- [ ] **Key Management**: Store private keys encrypted in backend only
+- [ ] **Authentication**: Add user authentication and authorization
+- [ ] **Rate Limiting**: Implement rate limiting on API routes
+- [ ] **Monitoring**: Set up error tracking and monitoring
+- [ ] **Webhooks**: Add webhook support for payment notifications
+- [ ] **Testing**: Add comprehensive test coverage
+- [ ] **Audit**: Get smart contract/security audit before mainnet
+
+## 🌐 Deployment
+
+### Deploy to Vercel
+
+1. Push your code to GitHub
+2. Import project in [Vercel](https://vercel.com)
+3. Add environment variables:
+   - `NEXT_PUBLIC_SOLANA_NETWORK=mainnet-beta`
+   - `NEXT_PUBLIC_MERCHANT_WALLET=YourWalletAddress`
+4. Deploy!
+
+### Deploy to Other Platforms
+
+Works with any platform supporting Next.js:
+- Netlify
+- Railway
+- Render
+- AWS Amplify
+
+## 🗺️ Roadmap
 
 - [ ] Database integration (PostgreSQL/Supabase)
-- [ ] Email notifications
-- [ ] USDC/USDT support
-- [ ] Webhook support
+- [ ] User authentication and multi-merchant support
+- [ ] Email/SMS notifications
+- [ ] Full USDC/USDT support
+- [ ] Webhook API for integrations
 - [ ] Invoice PDF generation
-- [ ] Multi-merchant support
+- [ ] Recurring payments/subscriptions
 - [ ] Analytics dashboard
+- [ ] Mobile app (React Native)
+- [ ] API for developers
 
-## License
+## 🤝 Contributing
 
-MIT
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Built on [Solana](https://solana.com) blockchain
+- Powered by [Next.js](https://nextjs.org)
+- Wallet integration via [@solana/wallet-adapter](https://github.com/solana-labs/wallet-adapter)
+
+## 📧 Contact
+
+Have questions? Open an issue or reach out!
+
+---
+
+**⚡ Built with Solana - Fast, Cheap, Scalable**
