@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { nanoid } from 'nanoid'
 import { generatePaymentWallet } from '@/lib/payment-wallet'
 import { getCurrentUser } from '@/lib/auth'
+import Footer from '@/components/Footer'
 
 export default function Home() {
   const router = useRouter()
@@ -61,48 +62,70 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
       {/* Hero Section */}
-      <div className="bg-gradient-to-br from-blue-600 to-purple-700 text-white">
-        <div className="max-w-6xl mx-auto px-4 py-20">
-          <div className="text-center mb-12">
-            <div className="inline-block px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full mb-6">
-              <span className="text-sm font-semibold">⚡ Powered by Solana</span>
+      <div className="bg-gradient-to-br from-blue-600 via-blue-700 to-purple-800 text-white relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+        </div>
+        
+        <div className="max-w-6xl mx-auto px-4 py-24 relative z-10">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full mb-8 border border-white/30">
+              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+              <span className="text-sm font-semibold">Powered by Solana</span>
             </div>
-            <h1 className="text-6xl font-bold mb-6">
-              Get Paid in Crypto,<br />Instantly
+            <h1 className="text-5xl md:text-7xl font-black mb-6 leading-tight">
+              Accept Crypto Payments<br />
+              <span className="text-blue-200">In Seconds</span>
             </h1>
-            <p className="text-xl text-blue-100 max-w-2xl mx-auto">
-              Create payment links in seconds. Accept SOL, USDC, and more. No chargebacks, no middlemen, just instant crypto payments.
+            <p className="text-xl md:text-2xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
+              Create payment links, split payments, escrow deals, and crowdfunding campaigns. All on Solana's lightning-fast blockchain.
             </p>
+            <div className="flex flex-wrap gap-4 justify-center mt-8">
+              <div className="px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
+                <div className="text-2xl font-bold">$0.00025</div>
+                <div className="text-xs text-blue-200">Avg Fee</div>
+              </div>
+              <div className="px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
+                <div className="text-2xl font-bold">&lt;1s</div>
+                <div className="text-xs text-blue-200">Settlement</div>
+              </div>
+              <div className="px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
+                <div className="text-2xl font-bold">100%</div>
+                <div className="text-xs text-blue-200">Uptime</div>
+              </div>
+            </div>
           </div>
 
           {/* Features Grid */}
-          <div className="grid md:grid-cols-3 gap-6 mt-16">
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-              <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mb-4">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20 hover:bg-white/15 transition-all">
+              <div className="w-14 h-14 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center mb-4 shadow-lg">
+                <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold mb-2">Instant Settlement</h3>
-              <p className="text-blue-100 text-sm">Payments confirm in seconds on Solana. No waiting days for funds to clear.</p>
+              <h3 className="text-xl font-bold mb-2">Lightning Fast</h3>
+              <p className="text-blue-100">Payments confirm in under 1 second. No more waiting days for settlement.</p>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-              <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mb-4">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20 hover:bg-white/15 transition-all">
+              <div className="w-14 h-14 bg-gradient-to-br from-purple-400 to-purple-600 rounded-xl flex items-center justify-center mb-4 shadow-lg">
+                <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold mb-2">Secure & Trackable</h3>
-              <p className="text-blue-100 text-sm">Each payment gets a unique wallet. Auto-forwards to your address with full transparency.</p>
+              <h3 className="text-xl font-bold mb-2">Fully Secure</h3>
+              <p className="text-blue-100">Non-custodial with unique wallets per payment. Full blockchain transparency.</p>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-              <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mb-4">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20 hover:bg-white/15 transition-all">
+              <div className="w-14 h-14 bg-gradient-to-br from-green-400 to-green-600 rounded-xl flex items-center justify-center mb-4 shadow-lg">
+                <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold mb-2">Low Fees</h3>
-              <p className="text-blue-100 text-sm">Solana's ultra-low transaction fees mean you keep more of what you earn.</p>
+              <h3 className="text-xl font-bold mb-2">Minimal Fees</h3>
+              <p className="text-blue-100">Average $0.00025 per transaction. Keep 99.9% of what you earn.</p>
             </div>
           </div>
         </div>
@@ -113,10 +136,17 @@ export default function Home() {
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           {/* Left: Form */}
           <div>
-            <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg p-8 sticky top-8">
-              <h2 className="text-2xl font-semibold mb-6 text-slate-900 dark:text-white">
-                Create Payment Link
-              </h2>
+            <div className="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-8 sticky top-8 border border-slate-200 dark:border-slate-700">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                </div>
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
+                  Create Payment Link
+                </h2>
+              </div>
 
               <div className="space-y-5">
                 {!isLoggedIn && (
@@ -220,29 +250,47 @@ export default function Home() {
                 <button
                   onClick={createPaymentLink}
                   disabled={loading}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-4 px-6 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:scale-[1.02]"
                 >
-                  {loading ? 'Creating...' : 'Create Payment Link'}
+                  {loading ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                      Creating...
+                    </span>
+                  ) : (
+                    'Create Payment Link'
+                  )}
                 </button>
 
-                <div className="grid grid-cols-3 gap-3 mt-3">
+                <div className="relative my-6">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-slate-200 dark:border-slate-700"></div>
+                  </div>
+                  <div className="relative flex justify-center text-sm">
+                    <span className="px-2 bg-white dark:bg-slate-800 text-slate-500">
+                      or choose advanced options
+                    </span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-3 gap-3">
                   <button
                     onClick={() => router.push('/create/split')}
-                    className="px-4 py-2 border-2 border-blue-600 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg font-medium transition-colors"
+                    className="group px-4 py-3 border-2 border-blue-600 text-blue-600 dark:text-blue-400 hover:bg-blue-600 hover:text-white dark:hover:text-white rounded-xl font-semibold transition-all transform hover:scale-105"
                   >
-                    Split Payment
+                    <div className="text-sm">Split</div>
                   </button>
                   <button
                     onClick={() => router.push('/create/escrow')}
-                    className="px-4 py-2 border-2 border-purple-600 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded-lg font-medium transition-colors"
+                    className="group px-4 py-3 border-2 border-purple-600 text-purple-600 dark:text-purple-400 hover:bg-purple-600 hover:text-white dark:hover:text-white rounded-xl font-semibold transition-all transform hover:scale-105"
                   >
-                    Escrow
+                    <div className="text-sm">Escrow</div>
                   </button>
                   <button
                     onClick={() => router.push('/create/goal')}
-                    className="px-4 py-2 border-2 border-green-600 text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-lg font-medium transition-colors"
+                    className="group px-4 py-3 border-2 border-green-600 text-green-600 dark:text-green-400 hover:bg-green-600 hover:text-white dark:hover:text-white rounded-xl font-semibold transition-all transform hover:scale-105"
                   >
-                    Funding Goal
+                    <div className="text-sm">Goal</div>
                   </button>
                 </div>
               </div>
@@ -405,6 +453,8 @@ export default function Home() {
           </div>
         </div>
       </div>
+      
+      <Footer />
     </div>
   )
 }
