@@ -70,9 +70,11 @@ export default function PaymentPage() {
       try {
         const balance = await connection.getBalance(paymentPubkey)
         const solBalance = balance / LAMPORTS_PER_SOL
+        console.log(`[Balance Check] Wallet: ${paymentPubkey.toString()}, Balance: ${solBalance} SOL, Expected: ${paymentData.amount} SOL`)
         setBalance(solBalance)
 
         if (solBalance >= paymentData.amount) {
+          console.log('[Payment Detected] Balance sufficient, starting forward...')
           clearInterval(interval)
 
           const payments = JSON.parse(localStorage.getItem('payments') || '[]')
@@ -80,6 +82,7 @@ export default function PaymentPage() {
 
           if (paymentWithKey && paymentWithKey.privateKey) {
             try {
+              console.log('[Forward API] Calling /api/forward-payment...')
               const response = await fetch('/api/forward-payment', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -89,6 +92,7 @@ export default function PaymentPage() {
                   merchantWallet: paymentData.merchantWallet,
                 }),
               })
+              console.log('[Forward API] Response status:', response.status)
 
               const result = await response.json()
 

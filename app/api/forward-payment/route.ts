@@ -62,9 +62,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'No balance to forward' }, { status: 400 })
     }
 
-    // Calculate rent exemption (minimum balance to keep account open)
-    const rentExemption = await connection.getMinimumBalanceForRentExemption(0)
-    
     // Calculate platform fee
     const platformFeePercentage = parseFloat(process.env.PLATFORM_FEE_PERCENTAGE || '0')
     const platformFeeWallet = process.env.PLATFORM_FEE_WALLET
@@ -74,8 +71,14 @@ export async function POST(request: NextRequest) {
       platformFeeAmount = Math.floor(balance * (platformFeePercentage / 100))
     }
     
-    // Forward funds minus fees
-    const amountToSend = balance - rentExemption - 5000 - platformFeeAmount // 5000 lamports for tx fee
+    // Calculate transaction fee (5000 lamports per signature)
+    // We have 2 transfers if platform fee is enabled, otherwise 1
+    const numTransfers = platformFeeAmount > 0 ? 2 : 1
+    const txFee = 5000 * numTransfers
+    
+    // Forward all funds minus transaction fees and platform fee
+    // No rent exemption needed since we're emptying the temporary wallet
+    const amountToSend = balance - txFee - platformFeeAmount
     
     if (amountToSend <= 0) {
       return NextResponse.json({ error: 'Insufficient balance after fees' }, { status: 400 })
