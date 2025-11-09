@@ -6,6 +6,7 @@ import { nanoid } from 'nanoid'
 import { generatePaymentWallet } from '@/lib/payment-wallet'
 import { getCurrentUser } from '@/lib/auth'
 import Footer from '@/components/Footer'
+import AIAssistant from '@/components/AIAssistant'
 
 export default function Home() {
   const router = useRouter()
@@ -463,6 +464,17 @@ export default function Home() {
       </div>
       
       <Footer />
+      
+      {/* AI Assistant */}
+      <AIAssistant
+        onSuggestion={(data) => {
+          if (data.type === 'description') {
+            setDescription(data.value)
+          } else if (data.type === 'amount') {
+            setAmount(data.value.toString())
+          }
+        }}
+      />
     </div>
   )
 }

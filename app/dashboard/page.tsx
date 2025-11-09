@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { formatDistanceToNow } from 'date-fns'
 import { getCurrentUser, logout } from '@/lib/auth'
+import { getPaymentInsights } from '@/lib/ai'
 
 interface PaymentData {
   id: string
@@ -20,6 +21,7 @@ export default function Dashboard() {
   const router = useRouter()
   const [payments, setPayments] = useState<PaymentData[]>([])
   const [user, setUser] = useState<{ walletAddress: string } | null>(null)
+  const [insights, setInsights] = useState<{ insights: string[], trends: string[] } | null>(null)
 
   useEffect(() => {
     const currentUser = getCurrentUser()
@@ -35,6 +37,13 @@ export default function Dashboard() {
       (p: PaymentData) => p.merchantWallet === currentUser.walletAddress
     )
     setPayments(userPayments.reverse())
+    
+    // Load AI insights
+    getPaymentInsights(userPayments).then(result => {
+      if (result.success && result.data) {
+        setInsights(result.data)
+      }
+    })
   }, [router])
 
   const handleLogout = () => {
@@ -109,6 +118,36 @@ export default function Dashboard() {
         </div>
 
         {/* Payments List */}
+        {/* AI Insights */}
+        {insights && (insights.insights.length > 0 || insights.trends.length > 0) && (
+          <div className="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-lg shadow p-6 border border-purple-200 dark:border-purple-800">
+            <div className="flex items-center gap-2 mb-4">
+              <svg className="w-5 h-5 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+              </svg>
+              <h3 className="text-lg font-semibold text-purple-900 dark:text-purple-100">
+                AI Insights
+              </h3>
+            </div>
+            <div className="space-y-3">
+              {insights.insights.map((insight, i) => (
+                <div key={i} className="flex items-start gap-2">
+                  <span className="text-purple-600 dark:text-purple-400">•</span>
+                  <p className="text-sm text-purple-900 dark:text-purple-100">{insight}</p>
+                </div>
+              ))}
+              {insights.trends.length > 0 && (
+                <div className="mt-4 pt-4 border-t border-purple-200 dark:border-purple-800">
+                  <p className="text-xs font-semibold text-purple-700 dark:text-purple-300 mb-2">TRENDS</p>
+                  {insights.trends.map((trend, i) => (
+                    <div key={i} className="text-sm text-purple-800 dark:text-purple-200">{trend}</div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow overflow-hidden">
           <div className="p-6 border-b border-slate-200 dark:border-slate-700">
             <h2 className="text-xl font-semibold text-slate-900 dark:text-white">
