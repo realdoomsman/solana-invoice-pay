@@ -1,8 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Connection, Keypair, PublicKey, SystemProgram, Transaction, LAMPORTS_PER_SOL, sendAndConfirmTransaction } from '@solana/web3.js'
+import { rateLimit } from '@/lib/rate-limit'
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting: 10 requests per minute per IP
+    const ip = request.headers.get('x-forwarded-for') || 'unknown'
+    const rateLimitResult = rateLimit(ip, 10, 60000)
+    
+    if (!rateLimitResult.success) {
+      return NextResponse.json(
+        { error: 'Too many requests. Please try again later.' },
+        { status: 429 }
+      )
+    }
+
     const body = await request.json()
     const { paymentId, privateKey, merchantWallet } = body
 

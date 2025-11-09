@@ -38,6 +38,10 @@ export default function Footer() {
           </div>
         </div>
         <div className="border-t border-slate-800 mt-8 pt-8 text-center text-sm text-slate-500">
+          <div className="flex justify-center gap-6 mb-4">
+            <a href="/terms" className="hover:text-white transition-colors">Terms of Service</a>
+            <a href="/privacy" className="hover:text-white transition-colors">Privacy Policy</a>
+          </div>
           <p>Built on Solana. Open source and non-custodial.</p>
         </div>
       </div>
