@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "verify": "node scripts/verify-production.js",
+    "deploy": "npm run verify && vercel --prod"
   },
   "dependencies": {
     "@sendgrid/mail": "^8.1.6",

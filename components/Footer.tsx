@@ -32,10 +32,16 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-4">Network</h4>
             <div className="flex items-center gap-2 text-sm">
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <span>Devnet Active</span>
+              <span>
+                {process.env.NEXT_PUBLIC_SOLANA_NETWORK === 'mainnet-beta' 
+                  ? 'Mainnet Live' 
+                  : 'Devnet Active'}
+              </span>
             </div>
             <p className="text-xs text-slate-500 mt-2">
-              Switch to mainnet in production
+              {process.env.NEXT_PUBLIC_SOLANA_NETWORK === 'mainnet-beta'
+                ? 'Production ready'
+                : 'Testing environment'}
             </p>
           </div>
         </div>
