@@ -143,7 +143,7 @@ export default function Home() {
                           onClick={() => router.push('/login')}
                           className="text-sm text-blue-600 dark:text-blue-400 hover:underline mt-1"
                         >
-                          Sign in with your wallet →
+                          Sign in with your wallet
                         </button>
                       </div>
                     </div>
@@ -156,20 +156,7 @@ export default function Home() {
                       Your Wallet Address
                     </label>
                     {isLoggedIn && (
-                      <span className="text-xs text-green-600 dark:text-green-400 flex items-center gap-1">
-                        <svg
-                          className="w-4 h-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M5 13l4 4L19 7"
-                          />
-                        </svg>
+                      <span className="text-xs text-green-600 dark:text-green-400">
                         Connected
                       </span>
                     )}
@@ -235,15 +222,35 @@ export default function Home() {
                   disabled={loading}
                   className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {loading ? 'Creating...' : 'Create Simple Payment'}
+                  {loading ? 'Creating...' : 'Create Payment Link'}
                 </button>
 
-                <button
-                  onClick={() => router.push('/create')}
-                  className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
-                >
-                  ✨ Advanced Options (Split, Escrow, Goals, NFTs)
-                </button>
+                <div className="grid grid-cols-2 gap-3 mt-3">
+                  <button
+                    onClick={() => router.push('/create/split')}
+                    className="px-4 py-2 border-2 border-blue-600 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg font-medium transition-colors"
+                  >
+                    Split Payment
+                  </button>
+                  <button
+                    onClick={() => router.push('/create/escrow')}
+                    className="px-4 py-2 border-2 border-purple-600 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded-lg font-medium transition-colors"
+                  >
+                    Escrow
+                  </button>
+                  <button
+                    onClick={() => router.push('/create/goal')}
+                    className="px-4 py-2 border-2 border-green-600 text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-lg font-medium transition-colors"
+                  >
+                    Funding Goal
+                  </button>
+                  <button
+                    onClick={() => router.push('/create/nft')}
+                    className="px-4 py-2 border-2 border-pink-600 text-pink-600 dark:text-pink-400 hover:bg-pink-50 dark:hover:bg-pink-900/20 rounded-lg font-medium transition-colors"
+                  >
+                    NFT Receipt
+                  </button>
+                </div>
               </div>
 
               <div className="mt-6 text-center">
