@@ -21,6 +21,7 @@ interface PaymentData {
   status: string
   createdAt: string
   paymentWallet: string
+  merchantWallet: string
   txSignature?: string
 }
 
@@ -75,6 +76,7 @@ export default function PaymentPage() {
                 body: JSON.stringify({
                   paymentId: paymentData.id,
                   privateKey: paymentWithKey.privateKey,
+                  merchantWallet: paymentData.merchantWallet,
                 }),
               })
 

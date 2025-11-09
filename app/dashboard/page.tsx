@@ -11,6 +11,7 @@ interface PaymentData {
   description: string
   status: string
   createdAt: string
+  merchantWallet?: string
   txSignature?: string
 }
 

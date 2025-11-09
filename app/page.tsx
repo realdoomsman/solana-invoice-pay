@@ -10,11 +10,17 @@ export default function Home() {
   const [amount, setAmount] = useState('')
   const [token, setToken] = useState('SOL')
   const [description, setDescription] = useState('')
+  const [merchantWallet, setMerchantWallet] = useState('')
   const [loading, setLoading] = useState(false)
 
   const createPaymentLink = () => {
     if (!amount || parseFloat(amount) <= 0) {
       alert('Please enter a valid amount')
+      return
+    }
+
+    if (!merchantWallet || merchantWallet.length < 32) {
+      alert('Please enter a valid Solana wallet address')
       return
     }
 
@@ -32,6 +38,7 @@ export default function Home() {
       createdAt: new Date().toISOString(),
       paymentWallet: wallet.publicKey,
       privateKey: wallet.privateKey,
+      merchantWallet: merchantWallet, // Store the merchant's wallet
     }
 
     const payments = JSON.parse(localStorage.getItem('payments') || '[]')
@@ -102,6 +109,22 @@ export default function Home() {
               </h2>
 
               <div className="space-y-5">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                    Your Wallet Address
+                  </label>
+                  <input
+                    type="text"
+                    value={merchantWallet}
+                    onChange={(e) => setMerchantWallet(e.target.value)}
+                    placeholder="Enter your Solana wallet address"
+                    className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-slate-700 text-slate-900 dark:text-white font-mono text-sm"
+                  />
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                    Payments will be forwarded to this address
+                  </p>
+                </div>
+
                 <div className="grid grid-cols-3 gap-4">
                   <div className="col-span-2">
                     <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">

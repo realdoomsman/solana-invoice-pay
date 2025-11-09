@@ -3,10 +3,14 @@ import { Connection, Keypair, PublicKey, SystemProgram, Transaction, LAMPORTS_PE
 
 export async function POST(request: NextRequest) {
   try {
-    const { paymentId, privateKey } = await request.json()
+    const { paymentId, privateKey, merchantWallet } = await request.json()
 
     if (!privateKey) {
       return NextResponse.json({ error: 'Missing private key' }, { status: 400 })
+    }
+
+    if (!merchantWallet) {
+      return NextResponse.json({ error: 'Missing merchant wallet' }, { status: 400 })
     }
 
     const network = process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'devnet'
@@ -21,10 +25,8 @@ export async function POST(request: NextRequest) {
       Uint8Array.from(Buffer.from(privateKey, 'base64'))
     )
     
-    // Get merchant wallet from env
-    const merchantWallet = new PublicKey(
-      process.env.NEXT_PUBLIC_MERCHANT_WALLET || ''
-    )
+    // Use merchant wallet from payment data
+    const merchantWalletPubkey = new PublicKey(merchantWallet)
 
     // Get balance
     const balance = await connection.getBalance(paymentKeypair.publicKey)
@@ -47,7 +49,7 @@ export async function POST(request: NextRequest) {
     const transaction = new Transaction().add(
       SystemProgram.transfer({
         fromPubkey: paymentKeypair.publicKey,
-        toPubkey: merchantWallet,
+        toPubkey: merchantWalletPubkey,
         lamports: amountToSend,
       })
     )
