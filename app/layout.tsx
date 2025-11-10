@@ -7,20 +7,20 @@ import { ErrorBoundary } from '@/components/ErrorBoundary'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Solana Payment Links - Accept Crypto Payments Instantly',
-  description: 'Create payment links, invoices, escrow deals, and crowdfunding campaigns on Solana. Lightning-fast settlements, minimal fees, and instant crypto payments.',
-  keywords: ['solana', 'crypto payments', 'payment links', 'invoice', 'escrow', 'blockchain', 'cryptocurrency', 'accept crypto', 'solana pay'],
-  authors: [{ name: 'Solana Invoice Pay' }],
+  title: 'NOVIQ - Next-Gen Crypto Payment Infrastructure',
+  description: 'Enterprise-grade payment infrastructure on Solana. Lightning-fast settlements, AI-powered insights, and institutional-grade security. Built for the future of finance.',
+  keywords: ['noviq', 'solana', 'crypto payments', 'payment infrastructure', 'defi', 'blockchain', 'web3', 'fintech', 'payment gateway'],
+  authors: [{ name: 'NOVIQ' }],
   openGraph: {
-    title: 'Solana Payment Links - Accept Crypto Payments Instantly',
-    description: 'Create payment links, invoices, escrow deals, and crowdfunding campaigns on Solana. Lightning-fast settlements with minimal fees.',
+    title: 'NOVIQ - Next-Gen Crypto Payment Infrastructure',
+    description: 'Enterprise-grade payment infrastructure on Solana. Lightning-fast settlements with institutional-grade security.',
     type: 'website',
     locale: 'en_US',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Solana Payment Links - Accept Crypto Payments Instantly',
-    description: 'Create payment links, invoices, escrow deals, and crowdfunding campaigns on Solana.',
+    title: 'NOVIQ - Next-Gen Crypto Payment Infrastructure',
+    description: 'Enterprise-grade payment infrastructure on Solana. Built for the future of finance.',
   },
   robots: {
     index: true,

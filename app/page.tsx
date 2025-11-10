@@ -69,92 +69,156 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
+    <div className="min-h-screen bg-black">
       {/* Hero Section */}
-      <div className="bg-gradient-to-br from-blue-600 via-blue-700 to-purple-800 text-white relative overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
-        </div>
+      <div className="relative overflow-hidden bg-gradient-to-b from-slate-900 via-black to-black">
+        {/* Animated Background Grid */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px]"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
         
-        <div className="max-w-6xl mx-auto px-4 py-24 relative z-10">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full mb-8 border border-white/30">
-              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-              <span className="text-sm font-semibold">Powered by Solana</span>
+        {/* Glowing Orbs */}
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"></div>
+        
+        <div className="max-w-7xl mx-auto px-4 py-32 relative z-10">
+          <div className="text-center mb-20">
+            {/* Logo/Brand */}
+            <div className="mb-8">
+              <h1 className="text-7xl md:text-9xl font-black mb-4 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                NOVIQ
+              </h1>
+              <p className="text-slate-400 text-lg tracking-[0.3em] uppercase font-light">
+                Payment Infrastructure
+              </p>
             </div>
-            <h1 className="text-5xl md:text-7xl font-black mb-6 leading-tight">
-              Accept Crypto Payments<br />
-              <span className="text-blue-200">In Seconds</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
-              Create payment links, split payments, escrow deals, and crowdfunding campaigns. All on Solana's lightning-fast blockchain.
+            
+            {/* Status Badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-500/10 backdrop-blur-sm rounded-full mb-12 border border-green-500/20">
+              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+              <span className="text-sm font-medium text-green-400">Mainnet Live</span>
+            </div>
+            
+            <h2 className="text-4xl md:text-6xl font-bold mb-6 text-white leading-tight">
+              Enterprise-Grade Crypto<br />
+              <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Payment Infrastructure</span>
+            </h2>
+            <p className="text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed">
+              Lightning-fast settlements. AI-powered insights. Institutional-grade security.<br />Built on Solana for the future of finance.
             </p>
-            <div className="flex flex-wrap gap-4 justify-center mt-8">
-              <div className="px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
-                <div className="text-2xl font-bold">$0.00025</div>
-                <div className="text-xs text-blue-200">Avg Fee</div>
+            <div className="grid grid-cols-3 gap-8 max-w-3xl mx-auto mt-12">
+              <div className="text-center">
+                <div className="text-5xl font-black text-white mb-2">&lt;1s</div>
+                <div className="text-sm text-slate-500 uppercase tracking-wider">Settlement</div>
               </div>
-              <div className="px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
-                <div className="text-2xl font-bold">&lt;1s</div>
-                <div className="text-xs text-blue-200">Settlement</div>
+              <div className="text-center border-x border-slate-800">
+                <div className="text-5xl font-black text-white mb-2">$0.0003</div>
+                <div className="text-sm text-slate-500 uppercase tracking-wider">Avg Fee</div>
               </div>
-              <div className="px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
-                <div className="text-2xl font-bold">100%</div>
-                <div className="text-xs text-blue-200">Uptime</div>
+              <div className="text-center">
+                <div className="text-5xl font-black text-white mb-2">99.9%</div>
+                <div className="text-sm text-slate-500 uppercase tracking-wider">Uptime</div>
               </div>
             </div>
           </div>
 
           {/* Features Grid */}
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20 hover:bg-white/15 transition-all">
-              <div className="w-14 h-14 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center mb-4 shadow-lg">
-                <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="grid md:grid-cols-3 gap-6 mt-20">
+            <div className="group relative bg-slate-900/50 backdrop-blur-sm rounded-2xl p-8 border border-slate-800 hover:border-blue-500/50 transition-all">
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-6">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold mb-2">Lightning Fast</h3>
-              <p className="text-blue-100">Payments confirm in under 1 second. No more waiting days for settlement.</p>
+              <h3 className="text-xl font-bold mb-3 text-white">Lightning Fast</h3>
+              <p className="text-slate-400 leading-relaxed">Sub-second confirmations. Instant settlements. No waiting.</p>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20 hover:bg-white/15 transition-all">
-              <div className="w-14 h-14 bg-gradient-to-br from-purple-400 to-purple-600 rounded-xl flex items-center justify-center mb-4 shadow-lg">
-                <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="group relative bg-slate-900/50 backdrop-blur-sm rounded-2xl p-8 border border-slate-800 hover:border-purple-500/50 transition-all">
+              <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mb-6">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold mb-2">Fully Secure</h3>
-              <p className="text-blue-100">Non-custodial with unique wallets per payment. Full blockchain transparency.</p>
+              <h3 className="text-xl font-bold mb-3 text-white">Enterprise Security</h3>
+              <p className="text-slate-400 leading-relaxed">Non-custodial. Encrypted. Audited. Bank-grade protection.</p>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20 hover:bg-white/15 transition-all">
-              <div className="w-14 h-14 bg-gradient-to-br from-green-400 to-green-600 rounded-xl flex items-center justify-center mb-4 shadow-lg">
-                <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <div className="group relative bg-slate-900/50 backdrop-blur-sm rounded-2xl p-8 border border-slate-800 hover:border-green-500/50 transition-all">
+              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center mb-6">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold mb-2">Minimal Fees</h3>
-              <p className="text-blue-100">Average $0.00025 per transaction. Keep 99.9% of what you earn.</p>
+              <h3 className="text-xl font-bold mb-3 text-white">AI-Powered</h3>
+              <p className="text-slate-400 leading-relaxed">Smart insights. Fraud detection. Automated optimization.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Token Section */}
+      <div className="bg-gradient-to-b from-black via-slate-900 to-black py-24 border-y border-slate-800">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="text-center mb-16">
+            <div className="inline-block px-4 py-2 bg-purple-500/10 rounded-full border border-purple-500/20 mb-6">
+              <span className="text-purple-400 font-semibold text-sm">$NOVIQ TOKEN</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              Powering the Future of Payments
+            </h2>
+            <p className="text-xl text-slate-400 max-w-3xl mx-auto">
+              The NOVIQ token enables governance, fee discounts, and exclusive platform features. Real utility, real value.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-slate-900/50 rounded-2xl p-8 border border-slate-800">
+              <div className="text-3xl mb-4">🎯</div>
+              <h3 className="text-xl font-bold text-white mb-3">Fee Discounts</h3>
+              <p className="text-slate-400">Hold $NOVIQ to get up to 50% off platform fees. More tokens, lower costs.</p>
+            </div>
+            <div className="bg-slate-900/50 rounded-2xl p-8 border border-slate-800">
+              <div className="text-3xl mb-4">🗳️</div>
+              <h3 className="text-xl font-bold text-white mb-3">Governance</h3>
+              <p className="text-slate-400">Vote on platform upgrades, new features, and treasury allocation.</p>
+            </div>
+            <div className="bg-slate-900/50 rounded-2xl p-8 border border-slate-800">
+              <div className="text-3xl mb-4">💎</div>
+              <h3 className="text-xl font-bold text-white mb-3">Staking Rewards</h3>
+              <p className="text-slate-400">Stake tokens to earn rewards from platform revenue. Passive income.</p>
+            </div>
+          </div>
+
+          <div className="mt-12 text-center">
+            <div className="inline-flex items-center gap-4 bg-slate-900/50 rounded-2xl p-6 border border-slate-800">
+              <div>
+                <div className="text-sm text-slate-500 mb-1">Token Launch</div>
+                <div className="text-2xl font-bold text-white">Coming Soon</div>
+              </div>
+              <div className="h-12 w-px bg-slate-800"></div>
+              <div>
+                <div className="text-sm text-slate-500 mb-1">Total Supply</div>
+                <div className="text-2xl font-bold text-white">1B $NOVIQ</div>
+              </div>
+              <div className="h-12 w-px bg-slate-800"></div>
+              <div>
+                <div className="text-sm text-slate-500 mb-1">Network</div>
+                <div className="text-2xl font-bold text-white">Solana</div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="max-w-6xl mx-auto px-4 py-16">
+      <div className="max-w-6xl mx-auto px-4 py-16 bg-black">
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           {/* Left: Form */}
           <div>
-            <div className="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-8 sticky top-8 border border-slate-200 dark:border-slate-700">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                  </svg>
-                </div>
-                <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
-                  Create Payment Link
+            <div className="bg-slate-900 rounded-2xl shadow-2xl p-8 sticky top-8 border border-slate-800">
+              <div className="mb-8">
+                <h2 className="text-3xl font-bold text-white mb-2">
+                  Create Payment
                 </h2>
+                <p className="text-slate-400">Generate a payment link in seconds</p>
               </div>
 
               <div className="space-y-5">
