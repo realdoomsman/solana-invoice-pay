@@ -162,46 +162,81 @@ export default function Home() {
               <span className="text-purple-400 font-semibold text-sm">$NOVIQ TOKEN</span>
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              Powering the Future of Payments
+              Lock Tokens, Reduce Fees
             </h2>
             <p className="text-xl text-slate-400 max-w-3xl mx-auto">
-              The NOVIQ token enables governance, fee discounts, and exclusive platform features. Real utility, real value.
+              Lock $NOVIQ tokens to slash platform fees and earn from revenue distribution. Simple, powerful, profitable.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-slate-900/50 rounded-2xl p-8 border border-slate-800">
-              <div className="text-3xl mb-4">🎯</div>
-              <h3 className="text-xl font-bold text-white mb-3">Fee Discounts</h3>
-              <p className="text-slate-400">Hold $NOVIQ to get up to 50% off platform fees. More tokens, lower costs.</p>
+          {/* Fee Tiers */}
+          <div className="grid md:grid-cols-4 gap-6 mb-12">
+            <div className="bg-slate-900/50 rounded-2xl p-6 border border-slate-800 text-center">
+              <div className="text-sm text-slate-500 mb-2">No Tokens</div>
+              <div className="text-4xl font-black text-red-400 mb-2">3%</div>
+              <div className="text-xs text-slate-600">Platform Fee</div>
             </div>
-            <div className="bg-slate-900/50 rounded-2xl p-8 border border-slate-800">
-              <div className="text-3xl mb-4">🗳️</div>
-              <h3 className="text-xl font-bold text-white mb-3">Governance</h3>
-              <p className="text-slate-400">Vote on platform upgrades, new features, and treasury allocation.</p>
+            <div className="bg-slate-900/50 rounded-2xl p-6 border border-blue-500/30 text-center">
+              <div className="text-sm text-blue-400 mb-2">Lock 500K</div>
+              <div className="text-4xl font-black text-blue-400 mb-2">2%</div>
+              <div className="text-xs text-slate-600">33% Savings</div>
             </div>
-            <div className="bg-slate-900/50 rounded-2xl p-8 border border-slate-800">
-              <div className="text-3xl mb-4">💎</div>
-              <h3 className="text-xl font-bold text-white mb-3">Staking Rewards</h3>
-              <p className="text-slate-400">Stake tokens to earn rewards from platform revenue. Passive income.</p>
+            <div className="bg-slate-900/50 rounded-2xl p-6 border border-purple-500/30 text-center">
+              <div className="text-sm text-purple-400 mb-2">Lock 1M</div>
+              <div className="text-4xl font-black text-purple-400 mb-2">1%</div>
+              <div className="text-xs text-slate-600">66% Savings</div>
+            </div>
+            <div className="bg-slate-900/50 rounded-2xl p-6 border border-green-500/30 text-center">
+              <div className="text-sm text-green-400 mb-2">Lock 10M</div>
+              <div className="text-4xl font-black text-green-400 mb-2">0.25%</div>
+              <div className="text-xs text-slate-600">92% Savings</div>
             </div>
           </div>
 
-          <div className="mt-12 text-center">
-            <div className="inline-flex items-center gap-4 bg-slate-900/50 rounded-2xl p-6 border border-slate-800">
-              <div>
-                <div className="text-sm text-slate-500 mb-1">Token Launch</div>
-                <div className="text-2xl font-bold text-white">Coming Soon</div>
+          {/* Benefits */}
+          <div className="grid md:grid-cols-2 gap-8 mb-12">
+            <div className="bg-slate-900/50 rounded-2xl p-8 border border-slate-800">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-white mb-2">Massive Fee Reduction</h3>
+                  <p className="text-slate-400">Lock tokens to reduce fees from 3% down to 0.25%. Process $100K/month? Save $2,750/month.</p>
+                </div>
               </div>
-              <div className="h-12 w-px bg-slate-800"></div>
-              <div>
-                <div className="text-sm text-slate-500 mb-1">Total Supply</div>
-                <div className="text-2xl font-bold text-white">1B $NOVIQ</div>
+            </div>
+            <div className="bg-slate-900/50 rounded-2xl p-8 border border-slate-800">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-white mb-2">Revenue Distribution</h3>
+                  <p className="text-slate-400">15% of platform fees distributed to locked token holders. Earn passive income proportional to your lock.</p>
+                </div>
               </div>
-              <div className="h-12 w-px bg-slate-800"></div>
+            </div>
+          </div>
+
+          {/* Token Info */}
+          <div className="bg-slate-900/50 rounded-2xl p-8 border border-slate-800">
+            <div className="grid md:grid-cols-3 gap-8 text-center">
               <div>
-                <div className="text-sm text-slate-500 mb-1">Network</div>
-                <div className="text-2xl font-bold text-white">Solana</div>
+                <div className="text-sm text-slate-500 mb-2">Total Supply</div>
+                <div className="text-3xl font-bold text-white">1B $NOVIQ</div>
+              </div>
+              <div className="border-x border-slate-800">
+                <div className="text-sm text-slate-500 mb-2">Liquidity</div>
+                <div className="text-3xl font-bold text-white">100% Burned</div>
+              </div>
+              <div>
+                <div className="text-sm text-slate-500 mb-2">Launch</div>
+                <div className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Coming Soon</div>
               </div>
             </div>
           </div>
