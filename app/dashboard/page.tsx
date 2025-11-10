@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation'
 import { formatDistanceToNow } from 'date-fns'
 import { getCurrentUser, logout } from '@/lib/auth'
 import { getPaymentInsights } from '@/lib/ai'
+import { exportToCSV, exportToJSON, generateInvoicePDF, copyPaymentLink, sharePaymentLink } from '@/lib/export'
+import PaymentAnalytics from '@/components/PaymentAnalytics'
 
 interface PaymentData {
   id: string
@@ -22,6 +24,7 @@ export default function Dashboard() {
   const [payments, setPayments] = useState<PaymentData[]>([])
   const [user, setUser] = useState<{ walletAddress: string } | null>(null)
   const [insights, setInsights] = useState<{ insights: string[], trends: string[] } | null>(null)
+  const [activeTab, setActiveTab] = useState<'overview' | 'analytics'>('overview')
 
   useEffect(() => {
     const currentUser = getCurrentUser()
@@ -66,7 +69,7 @@ export default function Dashboard() {
             <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-2">
               Dashboard
             </h1>
-            <p className="text-slate-600 dark:text-slate-400">
+            <p className="text-slate-600 dark:text-slate-400 mb-4">
               Track all your payment links
             </p>
             {user && (
@@ -91,6 +94,52 @@ export default function Dashboard() {
           </div>
         </div>
 
+        {/* Tabs and Export */}
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+          <div className="flex gap-2">
+            <button
+              onClick={() => setActiveTab('overview')}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                activeTab === 'overview'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'
+              }`}
+            >
+              Overview
+            </button>
+            <button
+              onClick={() => setActiveTab('analytics')}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                activeTab === 'analytics'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'
+              }`}
+            >
+              📊 Analytics
+            </button>
+          </div>
+          
+          <div className="flex gap-2">
+            <button
+              onClick={() => exportToCSV(payments)}
+              className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors flex items-center gap-2"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              Export CSV
+            </button>
+            <button
+              onClick={() => exportToJSON(payments)}
+              className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition-colors"
+            >
+              JSON
+            </button>
+          </div>
+        </div>
+
+        {activeTab === 'overview' && (
+          <>
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6">
@@ -220,12 +269,45 @@ export default function Dashboard() {
                         })}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
-                        <button
-                          onClick={() => router.push(`/pay/${payment.id}`)}
-                          className="text-blue-600 dark:text-blue-400 hover:underline mr-4 font-medium"
-                        >
-                          View
-                        </button>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => router.push(`/pay/${payment.id}`)}
+                            className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
+                            title="View Payment"
+                          >
+                            View
+                          </button>
+                          <button
+                            onClick={() => generateInvoicePDF(payment)}
+                            className="p-2 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 rounded transition-colors"
+                            title="Download Invoice"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                          </button>
+                          <button
+                            onClick={async () => {
+                              const result = await copyPaymentLink(payment.id)
+                              if (result.success) alert('Link copied!')
+                            }}
+                            className="p-2 text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded transition-colors"
+                            title="Copy Link"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                            </svg>
+                          </button>
+                          <button
+                            onClick={() => sharePaymentLink(payment.id, payment.amount, payment.token)}
+                            className="p-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded transition-colors"
+                            title="Share"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                            </svg>
+                          </button>
+                        </div>
                         {payment.txSignature && (
                           <a
                             href={`https://explorer.solana.com/tx/${payment.txSignature}?cluster=${process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'devnet'}`}
@@ -244,6 +326,15 @@ export default function Dashboard() {
             </div>
           )}
         </div>
+        </>
+        )}
+
+        {/* Analytics Tab */}
+        {activeTab === 'analytics' && (
+          <div>
+            <PaymentAnalytics payments={payments} />
+          </div>
+        )}
       </div>
     </div>
   )
