@@ -1,12 +1,12 @@
 export default function Footer() {
   return (
-    <footer className="bg-slate-900 text-slate-300 py-12 mt-20">
+    <footer className="bg-black text-slate-300 py-12 mt-20 border-t border-slate-800">
       <div className="max-w-6xl mx-auto px-4">
         <div className="grid md:grid-cols-4 gap-8">
           <div>
-            <h3 className="text-white font-bold text-lg mb-4">Solana Pay</h3>
+            <h3 className="text-white font-black text-2xl mb-4 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">NOVIQ</h3>
             <p className="text-sm text-slate-400">
-              Accept crypto payments instantly on Solana's lightning-fast blockchain.
+              Next-generation payment infrastructure. Built on Solana. Powered by innovation.
             </p>
           </div>
           <div>
@@ -31,26 +31,27 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-semibold mb-4">Network</h4>
             <div className="flex items-center gap-2 text-sm">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <span>
+              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+              <span className="text-green-400 font-medium">
                 {process.env.NEXT_PUBLIC_SOLANA_NETWORK === 'mainnet-beta' 
                   ? 'Mainnet Live' 
                   : 'Devnet Active'}
               </span>
             </div>
             <p className="text-xs text-slate-500 mt-2">
-              {process.env.NEXT_PUBLIC_SOLANA_NETWORK === 'mainnet-beta'
-                ? 'Production ready'
-                : 'Testing environment'}
+              Powered by Solana
             </p>
           </div>
         </div>
-        <div className="border-t border-slate-800 mt-8 pt-8 text-center text-sm text-slate-500">
-          <div className="flex justify-center gap-6 mb-4">
-            <a href="/terms" className="hover:text-white transition-colors">Terms of Service</a>
-            <a href="/privacy" className="hover:text-white transition-colors">Privacy Policy</a>
+        <div className="border-t border-slate-800 mt-8 pt-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="flex gap-6 text-sm text-slate-500">
+              <a href="/terms" className="hover:text-white transition-colors">Terms</a>
+              <a href="/privacy" className="hover:text-white transition-colors">Privacy</a>
+              <a href="/faq" className="hover:text-white transition-colors">FAQ</a>
+            </div>
+            <p className="text-sm text-slate-500">© 2025 NOVIQ. Built on Solana.</p>
           </div>
-          <p>Built on Solana. Open source and non-custodial.</p>
         </div>
       </div>
     </footer>
