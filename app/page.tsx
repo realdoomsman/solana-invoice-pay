@@ -6,7 +6,8 @@ import { nanoid } from 'nanoid'
 import { generatePaymentWallet } from '@/lib/payment-wallet'
 import { getCurrentUser } from '@/lib/auth'
 import Footer from '@/components/Footer'
-import AIAssistant from '@/components/AIAssistant'
+import Logo from '@/components/Logo'
+import Header from '@/components/Header'
 
 export default function Home() {
   const router = useRouter()
@@ -70,8 +71,9 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-black">
+      <Header />
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-b from-slate-900 via-black to-black">
+      <div className="relative overflow-hidden bg-gradient-to-b from-slate-900 via-black to-black pt-16">
         {/* Animated Background Grid */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px]"></div>
         <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
@@ -83,40 +85,79 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 py-32 relative z-10">
           <div className="text-center mb-20">
             {/* Logo/Brand */}
-            <div className="mb-8">
-              <h1 className="text-7xl md:text-9xl font-black mb-4 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                NOVIQ
-              </h1>
-              <p className="text-slate-400 text-lg tracking-[0.3em] uppercase font-light">
-                Payment Infrastructure
-              </p>
+            <div className="mb-12">
+              <Logo className="h-16 md:h-20 mx-auto" />
             </div>
             
-            {/* Status Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-500/10 backdrop-blur-sm rounded-full mb-12 border border-green-500/20">
-              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-              <span className="text-sm font-medium text-green-400">Mainnet Live</span>
-            </div>
-            
-            <h2 className="text-4xl md:text-6xl font-bold mb-6 text-white leading-tight">
-              Enterprise-Grade Crypto<br />
-              <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Payment Infrastructure</span>
-            </h2>
-            <p className="text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed">
-              Lightning-fast settlements. AI-powered insights. Institutional-grade security.<br />Built on Solana for the future of finance.
+            <h1 className="text-5xl md:text-7xl font-bold mb-6 text-white leading-tight">
+              Payment infrastructure for Solana
+            </h1>
+            <p className="text-xl text-slate-400 max-w-2xl mx-auto mb-12">
+              Escrow for secure transactions. Automated payment distribution. Collective fundraising.
             </p>
-            <div className="grid grid-cols-3 gap-8 max-w-3xl mx-auto mt-12">
-              <div className="text-center">
-                <div className="text-5xl font-black text-white mb-2">&lt;1s</div>
-                <div className="text-sm text-slate-500 uppercase tracking-wider">Settlement</div>
+            {/* 3 Main Features - Simple */}
+            <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto mt-16">
+              <div className="border border-slate-800 rounded-lg p-6 hover:border-slate-700 transition-colors">
+                <h3 className="text-xl font-bold mb-2 text-white">Escrow</h3>
+                <p className="text-slate-400 text-sm mb-4">
+                  Trustless peer-to-peer transactions. Both parties deposit funds into escrow. Automated release upon mutual confirmation.
+                </p>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => router.push('/escrow')}
+                    className="text-sm text-slate-400 hover:text-white"
+                  >
+                    Learn more →
+                  </button>
+                  <button
+                    onClick={() => router.push('/create/escrow')}
+                    className="text-sm text-blue-400 hover:text-blue-300 font-medium"
+                  >
+                    Create
+                  </button>
+                </div>
               </div>
-              <div className="text-center border-x border-slate-800">
-                <div className="text-5xl font-black text-white mb-2">$0.0003</div>
-                <div className="text-sm text-slate-500 uppercase tracking-wider">Avg Fee</div>
+
+              <div className="border border-slate-800 rounded-lg p-6 hover:border-slate-700 transition-colors">
+                <h3 className="text-xl font-bold mb-2 text-white">Splits</h3>
+                <p className="text-slate-400 text-sm mb-4">
+                  Multi-recipient payment distribution. Define allocation percentages. Instant settlement to all recipients.
+                </p>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => router.push('/splits')}
+                    className="text-sm text-slate-400 hover:text-white"
+                  >
+                    Learn more →
+                  </button>
+                  <button
+                    onClick={() => router.push('/create/split')}
+                    className="text-sm text-purple-400 hover:text-purple-300 font-medium"
+                  >
+                    Create
+                  </button>
+                </div>
               </div>
-              <div className="text-center">
-                <div className="text-5xl font-black text-white mb-2">99.9%</div>
-                <div className="text-sm text-slate-500 uppercase tracking-wider">Uptime</div>
+
+              <div className="border border-slate-800 rounded-lg p-6 hover:border-slate-700 transition-colors">
+                <h3 className="text-xl font-bold mb-2 text-white">Funding Goals</h3>
+                <p className="text-slate-400 text-sm mb-4">
+                  Collective fundraising with transparency. Real-time progress tracking. Automatic refunds if target not reached.
+                </p>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => router.push('/crowdfunding')}
+                    className="text-sm text-slate-400 hover:text-white"
+                  >
+                    Learn more →
+                  </button>
+                  <button
+                    onClick={() => router.push('/create/goal')}
+                    className="text-sm text-green-400 hover:text-green-300 font-medium"
+                  >
+                    Create
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -154,97 +195,8 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Token Section */}
-      <div className="bg-gradient-to-b from-black via-slate-900 to-black py-24 border-y border-slate-800">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <div className="inline-block px-4 py-2 bg-purple-500/10 rounded-full border border-purple-500/20 mb-6">
-              <span className="text-purple-400 font-semibold text-sm">$NOVIQ TOKEN</span>
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              Lock Tokens, Reduce Fees
-            </h2>
-            <p className="text-xl text-slate-400 max-w-3xl mx-auto">
-              Lock $NOVIQ tokens to slash platform fees and earn from revenue distribution. Simple, powerful, profitable.
-            </p>
-          </div>
-
-          {/* Fee Tiers */}
-          <div className="grid md:grid-cols-4 gap-6 mb-12">
-            <div className="bg-slate-900/50 rounded-2xl p-6 border border-slate-800 text-center">
-              <div className="text-sm text-slate-500 mb-2">No Tokens</div>
-              <div className="text-4xl font-black text-red-400 mb-2">3%</div>
-              <div className="text-xs text-slate-600">Platform Fee</div>
-            </div>
-            <div className="bg-slate-900/50 rounded-2xl p-6 border border-blue-500/30 text-center">
-              <div className="text-sm text-blue-400 mb-2">Lock 500K</div>
-              <div className="text-4xl font-black text-blue-400 mb-2">2%</div>
-              <div className="text-xs text-slate-600">33% Savings</div>
-            </div>
-            <div className="bg-slate-900/50 rounded-2xl p-6 border border-purple-500/30 text-center">
-              <div className="text-sm text-purple-400 mb-2">Lock 1M</div>
-              <div className="text-4xl font-black text-purple-400 mb-2">1%</div>
-              <div className="text-xs text-slate-600">66% Savings</div>
-            </div>
-            <div className="bg-slate-900/50 rounded-2xl p-6 border border-green-500/30 text-center">
-              <div className="text-sm text-green-400 mb-2">Lock 10M</div>
-              <div className="text-4xl font-black text-green-400 mb-2">0.25%</div>
-              <div className="text-xs text-slate-600">92% Savings</div>
-            </div>
-          </div>
-
-          {/* Benefits */}
-          <div className="grid md:grid-cols-2 gap-8 mb-12">
-            <div className="bg-slate-900/50 rounded-2xl p-8 border border-slate-800">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-white mb-2">Massive Fee Reduction</h3>
-                  <p className="text-slate-400">Lock tokens to reduce fees from 3% down to 0.25%. Process $100K/month? Save $2,750/month.</p>
-                </div>
-              </div>
-            </div>
-            <div className="bg-slate-900/50 rounded-2xl p-8 border border-slate-800">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-white mb-2">Revenue Distribution</h3>
-                  <p className="text-slate-400">15% of platform fees distributed to locked token holders. Earn passive income proportional to your lock.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Token Info */}
-          <div className="bg-slate-900/50 rounded-2xl p-8 border border-slate-800">
-            <div className="grid md:grid-cols-3 gap-8 text-center">
-              <div>
-                <div className="text-sm text-slate-500 mb-2">Total Supply</div>
-                <div className="text-3xl font-bold text-white">1B $NOVIQ</div>
-              </div>
-              <div className="border-x border-slate-800">
-                <div className="text-sm text-slate-500 mb-2">Liquidity</div>
-                <div className="text-3xl font-bold text-white">100% Burned</div>
-              </div>
-              <div>
-                <div className="text-sm text-slate-500 mb-2">Launch</div>
-                <div className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Coming Soon</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Main Content */}
-      <div className="max-w-6xl mx-auto px-4 py-16 bg-black">
+      <div className="max-w-6xl mx-auto px-4 py-20 bg-black">
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           {/* Left: Form */}
           <div>
@@ -563,17 +515,6 @@ export default function Home() {
       </div>
       
       <Footer />
-      
-      {/* AI Assistant */}
-      <AIAssistant
-        onSuggestion={(data) => {
-          if (data.type === 'description') {
-            setDescription(data.value)
-          } else if (data.type === 'amount') {
-            setAmount(data.value.toString())
-          }
-        }}
-      />
     </div>
   )
 }

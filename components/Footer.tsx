@@ -1,10 +1,12 @@
+import Logo from './Logo'
+
 export default function Footer() {
   return (
     <footer className="bg-black text-slate-300 py-12 mt-20 border-t border-slate-800">
       <div className="max-w-6xl mx-auto px-4">
         <div className="grid md:grid-cols-4 gap-8">
           <div>
-            <h3 className="text-white font-black text-2xl mb-4 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">NOVIQ</h3>
+            <Logo className="h-8 mb-4" />
             <p className="text-sm text-slate-400">
               Next-generation payment infrastructure. Built on Solana. Powered by innovation.
             </p>

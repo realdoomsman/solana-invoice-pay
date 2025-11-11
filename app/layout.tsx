@@ -3,24 +3,29 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { WalletProvider } from '@/components/WalletProvider'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
+import Header from '@/components/Header'
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ 
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700', '800', '900'],
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
-  title: 'NOVIQ - Next-Gen Crypto Payment Infrastructure',
-  description: 'Enterprise-grade payment infrastructure on Solana. Lightning-fast settlements, AI-powered insights, and institutional-grade security. Built for the future of finance.',
-  keywords: ['noviq', 'solana', 'crypto payments', 'payment infrastructure', 'defi', 'blockchain', 'web3', 'fintech', 'payment gateway'],
+  title: 'NOVIQ - Payment Links for Solana Traders & Degens',
+  description: 'OTC escrow, group buys, profit splits, and instant SOL payments. Non-custodial, no KYC, built for Solana traders and memecoin communities.',
+  keywords: ['noviq', 'solana', 'otc', 'escrow', 'group buy', 'memecoin', 'trading', 'p2p', 'crypto payments', 'defi', 'degen'],
   authors: [{ name: 'NOVIQ' }],
   openGraph: {
-    title: 'NOVIQ - Next-Gen Crypto Payment Infrastructure',
-    description: 'Enterprise-grade payment infrastructure on Solana. Lightning-fast settlements with institutional-grade security.',
+    title: 'NOVIQ - Payment Links for Solana Traders',
+    description: 'OTC escrow, group buys, and instant payments. Non-custodial. No KYC. Built for degens.',
     type: 'website',
     locale: 'en_US',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'NOVIQ - Next-Gen Crypto Payment Infrastructure',
-    description: 'Enterprise-grade payment infrastructure on Solana. Built for the future of finance.',
+    title: 'NOVIQ - Payment Links for Solana Degens',
+    description: 'OTC trades, group buys, profit splits. Non-custodial. No KYC. ⚡',
   },
   robots: {
     index: true,
