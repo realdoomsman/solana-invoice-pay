@@ -90,6 +90,7 @@ export default function PaymentPage() {
                   paymentId: paymentData.id,
                   privateKey: paymentWithKey.privateKey,
                   merchantWallet: paymentData.merchantWallet,
+                  splitRecipients: paymentWithKey.splitRecipients, // Include split recipients
                 }),
               })
               console.log('[Forward API] Response status:', response.status)
