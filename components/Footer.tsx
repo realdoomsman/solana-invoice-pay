@@ -1,4 +1,4 @@
-import Logo from './Logo'
+import { LogoIcon } from './Logo'
 
 export default function Footer() {
   return (
@@ -6,7 +6,12 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto px-4">
         <div className="grid md:grid-cols-4 gap-8">
           <div>
-            <Logo className="h-8 mb-4" />
+            <div className="flex items-center gap-2 mb-4">
+            <LogoIcon className="h-7 w-7" />
+            <span className="text-xl font-semibold tracking-tight bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
+              NOVIQ
+            </span>
+          </div>
             <p className="text-sm text-slate-400">
               Next-generation payment infrastructure. Built on Solana. Powered by innovation.
             </p>

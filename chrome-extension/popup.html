@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NOVIQ Quick Payment</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 380px;
+      min-height: 500px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #fff;
+      padding: 0;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+      padding: 20px;
+      text-align: center;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .tagline {
+      font-size: 12px;
+      opacity: 0.9;
+    }
+
+    .container {
+      padding: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: #cbd5e1;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 10px 12px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 14px;
+      font-family: inherit;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: #3b82f6;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+
+    .amount-group {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 10px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background: #334155;
+      margin-top: 8px;
+    }
+
+    .success {
+      background: #10b981;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    .error {
+      background: #ef4444;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    .link-result {
+      background: #1e293b;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      word-break: break-all;
+      font-size: 12px;
+      font-family: monospace;
+    }
+
+    .quick-amounts {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .quick-amount {
+      padding: 8px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      text-align: center;
+      cursor: pointer;
+      font-size: 12px;
+      transition: all 0.2s;
+    }
+
+    .quick-amount:hover {
+      border-color: #3b82f6;
+      background: #334155;
+    }
+
+    .quick-amount.active {
+      border-color: #3b82f6;
+      background: #3b82f6;
+    }
+
+    .settings-link {
+      text-align: center;
+      margin-top: 12px;
+      font-size: 12px;
+    }
+
+    .settings-link a {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+
+    .settings-link a:hover {
+      text-decoration: underline;
+    }
+
+    .loading {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid #fff;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">⚡ NOVIQ</div>
+    <div class="tagline">Quick Payment Links</div>
+  </div>
+
+  <div class="container">
+    <div id="message"></div>
+
+    <form id="paymentForm">
+      <div class="form-group">
+        <label>Your Wallet Address</label>
+        <input 
+          type="text" 
+          id="walletAddress" 
+          placeholder="Enter your Solana wallet address"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Quick Amounts</label>
+        <div class="quick-amounts">
+          <div class="quick-amount" data-amount="0.1">0.1 SOL</div>
+          <div class="quick-amount" data-amount="0.5">0.5 SOL</div>
+          <div class="quick-amount" data-amount="1">1 SOL</div>
+          <div class="quick-amount" data-amount="5">5 SOL</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="amount-group">
+          <div>
+            <label>Amount</label>
+            <input 
+              type="number" 
+              id="amount" 
+              placeholder="0.00" 
+              step="0.01"
+              required
+            />
+          </div>
+          <div>
+            <label>Token</label>
+            <select id="token">
+              <option value="SOL">SOL</option>
+              <option value="USDC">USDC</option>
+              <option value="USDT">USDT</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Description (Optional)</label>
+        <textarea 
+          id="description" 
+          placeholder="What is this payment for?"
+        ></textarea>
+      </div>
+
+      <button type="submit" class="btn" id="createBtn">
+        Create Payment Link
+      </button>
+
+      <button type="button" class="btn btn-secondary" id="openDashboard">
+        Open Dashboard
+      </button>
+    </form>
+
+    <div class="settings-link">
+      <a href="#" id="settingsLink">⚙️ Settings</a>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
