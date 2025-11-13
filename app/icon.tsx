@@ -14,40 +14,19 @@ export default function Icon() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          background: 'linear-gradient(135deg, #8B5CF6 0%, #06B6D4 100%)',
-          borderRadius: '8px',
+          background: '#000000',
         }}
       >
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M4 4 L4 20 L12 12 L12 20"
-            stroke="white"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <circle
-            cx="18"
-            cy="12"
-            r="5"
-            stroke="white"
-            strokeWidth="2"
-            fill="none"
-          />
-          <line
-            x1="21"
-            y1="15"
-            x2="23"
-            y2="17"
-            stroke="white"
-            strokeWidth="2"
-            strokeLinecap="round"
+        <svg width="24" height="24" viewBox="0 0 32 32" fill="none">
+          <defs>
+            <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#00d4ff" />
+              <stop offset="100%" stopColor="#9945ff" />
+            </linearGradient>
+          </defs>
+          <path 
+            d="M 8 8 L 8 24 L 11 24 L 11 14 L 21 24 L 24 24 L 24 8 L 21 8 L 21 18 L 11 8 Z" 
+            fill="url(#g)"
           />
         </svg>
       </div>

@@ -6,7 +6,6 @@ import { nanoid } from 'nanoid'
 import { generatePaymentWallet } from '@/lib/payment-wallet'
 import { getCurrentUser } from '@/lib/auth'
 import Footer from '@/components/Footer'
-import Logo from '@/components/Logo'
 import Header from '@/components/Header'
 
 export default function Home() {
@@ -86,7 +85,11 @@ export default function Home() {
           <div className="text-center mb-20">
             {/* Logo/Brand */}
             <div className="mb-12">
-              <Logo className="h-16 md:h-20 mx-auto" />
+              <div className="flex justify-center">
+                <span className="text-6xl md:text-7xl font-semibold tracking-tight bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
+                  NOVIQ
+                </span>
+              </div>
             </div>
             
             <h1 className="text-5xl md:text-7xl font-bold mb-6 text-white leading-tight">
