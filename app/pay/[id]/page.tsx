@@ -12,6 +12,7 @@ import {
   SystemProgram,
 } from '@solana/web3.js'
 import { QRCodeSVG } from 'qrcode.react'
+import { getEscrowByPaymentId, getEscrowMilestones, getEscrowActions, markEscrowFunded, EscrowContract, EscrowMilestone, EscrowAction } from '@/lib/escrow'
 
 interface PaymentData {
   id: string
@@ -41,6 +42,14 @@ export default function PaymentPage() {
   const [balance, setBalance] = useState(0)
   const [paymentMethod, setPaymentMethod] = useState<'address' | 'wallet'>('address')
   const [processing, setProcessing] = useState(false)
+  
+  // Escrow state
+  const [escrow, setEscrow] = useState<EscrowContract | null>(null)
+  const [milestones, setMilestones] = useState<EscrowMilestone[]>([])
+  const [actions, setActions] = useState<EscrowAction[]>([])
+  const [submittingMilestone, setSubmittingMilestone] = useState<string | null>(null)
+  const [approvingMilestone, setApprovingMilestone] = useState<string | null>(null)
+  const [releasingMilestone, setReleasingMilestone] = useState<string | null>(null)
 
   useEffect(() => {
     const payments = JSON.parse(localStorage.getItem('payments') || '[]')
@@ -50,8 +59,28 @@ export default function PaymentPage() {
       if (found.status === 'pending') {
         startBalanceCheck(found)
       }
+      // Load escrow data if this is an escrow payment
+      if (found.type === 'escrow') {
+        loadEscrowData(found.id)
+      }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.id])
+
+  const loadEscrowData = async (paymentId: string) => {
+    try {
+      const escrowData = await getEscrowByPaymentId(paymentId)
+      if (escrowData) {
+        setEscrow(escrowData)
+        const milestonesData = await getEscrowMilestones(escrowData.id)
+        setMilestones(milestonesData)
+        const actionsData = await getEscrowActions(escrowData.id)
+        setActions(actionsData)
+      }
+    } catch (error) {
+      console.error('Error loading escrow data:', error)
+    }
+  }
 
   const startBalanceCheck = async (paymentData: PaymentData) => {
     setChecking(true)
@@ -80,7 +109,26 @@ export default function PaymentPage() {
           const payments = JSON.parse(localStorage.getItem('payments') || '[]')
           const paymentWithKey = payments.find((p: any) => p.id === paymentData.id)
 
-          if (paymentWithKey && paymentWithKey.privateKey) {
+          // Check if this is an escrow payment
+          if (paymentData.type === 'escrow') {
+            // For escrow, just mark as funded - don't forward yet
+            console.log('[Escrow] Marking as funded, funds will be held in escrow')
+            try {
+              const escrowData = await getEscrowByPaymentId(paymentData.id)
+              if (escrowData) {
+                await markEscrowFunded(escrowData.id)
+                const updated = payments.map((p: any) =>
+                  p.id === paymentData.id ? { ...p, status: 'funded' } : p
+                )
+                localStorage.setItem('payments', JSON.stringify(updated))
+                setPayment({ ...paymentData, status: 'funded' })
+                await loadEscrowData(paymentData.id)
+              }
+            } catch (error) {
+              console.error('Error marking escrow as funded:', error)
+            }
+          } else if (paymentWithKey && paymentWithKey.privateKey) {
+            // Normal payment - forward immediately
             try {
               console.log('[Forward API] Calling /api/forward-payment...')
               const response = await fetch('/api/forward-payment', {
@@ -90,7 +138,7 @@ export default function PaymentPage() {
                   paymentId: paymentData.id,
                   privateKey: paymentWithKey.privateKey,
                   merchantWallet: paymentData.merchantWallet,
-                  splitRecipients: paymentWithKey.splitRecipients, // Include split recipients
+                  splitRecipients: paymentWithKey.splitRecipients,
                 }),
               })
               console.log('[Forward API] Response status:', response.status)
@@ -110,7 +158,6 @@ export default function PaymentPage() {
                   txSignature: result.signature,
                 })
               } else {
-                // API returned error
                 console.error('Forward API error:', result.error, result.details)
                 alert(`Payment forward failed: ${result.error || 'Unknown error'}. Payment ID: ${paymentData.id}`)
                 setChecking(false)
@@ -118,7 +165,6 @@ export default function PaymentPage() {
             } catch (error) {
               console.error('Error forwarding payment:', error)
               alert(`Payment forward failed: ${error instanceof Error ? error.message : 'Unknown error'}. Please contact support with payment ID: ${paymentData.id}`)
-              // Don't mark as paid if forward failed
               setChecking(false)
             }
           }
@@ -167,6 +213,136 @@ export default function PaymentPage() {
     }
   }
 
+  // Escrow functions
+  const handleSubmitMilestone = async (milestoneId: string) => {
+    if (!publicKey || !escrow) return
+    
+    const notes = prompt('Add notes about the completed work (optional):')
+    
+    setSubmittingMilestone(milestoneId)
+    try {
+      const response = await fetch('/api/escrow/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          milestoneId,
+          sellerWallet: publicKey.toString(),
+          notes,
+        }),
+      })
+
+      const result = await response.json()
+      if (result.success) {
+        alert('Milestone submitted for review!')
+        await loadEscrowData(payment!.id)
+      } else {
+        alert(`Error: ${result.error}`)
+      }
+    } catch (error) {
+      console.error('Error submitting milestone:', error)
+      alert('Failed to submit milestone')
+    } finally {
+      setSubmittingMilestone(null)
+    }
+  }
+
+  const handleApproveMilestone = async (milestoneId: string) => {
+    if (!publicKey || !escrow) return
+    
+    if (!confirm('Approve this milestone and release funds to the seller?')) return
+    
+    const notes = prompt('Add approval notes (optional):')
+    
+    setApprovingMilestone(milestoneId)
+    try {
+      // First approve
+      const approveResponse = await fetch('/api/escrow/approve', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          milestoneId,
+          buyerWallet: publicKey.toString(),
+          notes,
+        }),
+      })
+
+      const approveResult = await approveResponse.json()
+      if (!approveResult.success) {
+        alert(`Error: ${approveResult.error}`)
+        return
+      }
+
+      // Then release funds
+      setReleasingMilestone(milestoneId)
+      const releaseResponse = await fetch('/api/escrow/release', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ milestoneId }),
+      })
+
+      const releaseResult = await releaseResponse.json()
+      if (releaseResult.success) {
+        alert(`Milestone approved! ${releaseResult.amount} ${payment!.token} released to seller.`)
+        await loadEscrowData(payment!.id)
+      } else {
+        alert(`Error releasing funds: ${releaseResult.error}`)
+      }
+    } catch (error) {
+      console.error('Error approving milestone:', error)
+      alert('Failed to approve milestone')
+    } finally {
+      setApprovingMilestone(null)
+      setReleasingMilestone(null)
+    }
+  }
+
+  const handleRaiseDispute = async (milestoneId: string) => {
+    if (!publicKey || !escrow) return
+    
+    const reason = prompt('Describe the issue:')
+    if (!reason) return
+    
+    try {
+      const response = await fetch('/api/escrow/dispute', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          escrowId: escrow.id,
+          milestoneId,
+          actorWallet: publicKey.toString(),
+          reason,
+        }),
+      })
+
+      const result = await response.json()
+      if (result.success) {
+        alert('Dispute raised. Funds are now frozen.')
+        await loadEscrowData(payment!.id)
+      } else {
+        alert(`Error: ${result.error}`)
+      }
+    } catch (error) {
+      console.error('Error raising dispute:', error)
+      alert('Failed to raise dispute')
+    }
+  }
+
+  const getStatusBadge = (status: string) => {
+    const badges: Record<string, { bg: string; text: string; label: string }> = {
+      pending: { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-700 dark:text-gray-300', label: 'Pending' },
+      work_submitted: { bg: 'bg-yellow-100 dark:bg-yellow-900/30', text: 'text-yellow-700 dark:text-yellow-400', label: 'Awaiting Approval' },
+      approved: { bg: 'bg-blue-100 dark:bg-blue-900/30', text: 'text-blue-700 dark:text-blue-400', label: 'Approved' },
+      released: { bg: 'bg-green-100 dark:bg-green-900/30', text: 'text-green-700 dark:text-green-400', label: 'Released' },
+      disputed: { bg: 'bg-red-100 dark:bg-red-900/30', text: 'text-red-700 dark:text-red-400', label: 'Disputed' },
+    }
+    const badge = badges[status] || badges.pending
+    return (
+      <span className={`px-3 py-1 rounded-full text-sm font-semibold ${badge.bg} ${badge.text}`}>
+        {badge.label}
+      </span>
+    )
+  }
+
   if (!payment) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900">
@@ -177,6 +353,12 @@ export default function PaymentPage() {
 
   const paymentUrl = typeof window !== 'undefined' ? window.location.href : ''
   const solanaPayUrl = `solana:${payment.paymentWallet}?amount=${payment.amount}&label=${encodeURIComponent(payment.description || 'Payment')}`
+  
+  // Escrow role detection
+  const isBuyer = escrow && publicKey && escrow.buyer_wallet === publicKey.toString()
+  const isSeller = escrow && publicKey && escrow.seller_wallet === publicKey.toString()
+  const isParty = isBuyer || isSeller
+  const completedMilestones = milestones.filter(m => m.status === 'released').length
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900 py-12 px-4">
@@ -240,6 +422,192 @@ export default function PaymentPage() {
                 </>
               )}
             </div>
+          </div>
+        ) : payment.type === 'escrow' && escrow && (payment.status === 'funded' || payment.status === 'paid') ? (
+          // Escrow Management Interface
+          <div className="space-y-6">
+            {/* Role Indicator */}
+            {publicKey && (
+              <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg p-6">
+                {isBuyer && (
+                  <div className="flex items-center gap-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                    <span className="text-3xl">👤</span>
+                    <div>
+                      <div className="font-bold text-blue-900 dark:text-blue-300">You are the BUYER</div>
+                      <div className="text-sm text-blue-700 dark:text-blue-400">
+                        You can approve milestones and release funds
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {isSeller && (
+                  <div className="flex items-center gap-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+                    <span className="text-3xl">🛠️</span>
+                    <div>
+                      <div className="font-bold text-green-900 dark:text-green-300">You are the SELLER</div>
+                      <div className="text-sm text-green-700 dark:text-green-400">
+                        You can submit completed work for review
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {!isParty && (
+                  <div className="flex items-center gap-3 bg-gray-50 dark:bg-gray-900/20 border border-gray-200 dark:border-gray-800 rounded-lg p-4">
+                    <span className="text-3xl">👁️</span>
+                    <div>
+                      <div className="font-bold text-gray-900 dark:text-gray-300">You are viewing this escrow</div>
+                      <div className="text-sm text-gray-700 dark:text-gray-400">
+                        Only the buyer and seller can take actions
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Progress Bar */}
+            <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg p-6">
+              <div className="flex justify-between text-sm mb-2">
+                <span className="text-slate-700 dark:text-slate-300 font-medium">Escrow Progress</span>
+                <span className="text-slate-900 dark:text-white font-bold">
+                  {completedMilestones}/{milestones.length} milestones completed
+                </span>
+              </div>
+              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
+                <div
+                  className="bg-gradient-to-r from-cyan-500 to-purple-600 h-3 rounded-full transition-all"
+                  style={{ width: `${(completedMilestones / milestones.length) * 100}%` }}
+                />
+              </div>
+            </div>
+
+            {/* Milestones */}
+            <div className="space-y-4">
+              {milestones.map((milestone, index) => (
+                <div key={milestone.id} className="bg-white dark:bg-slate-800 rounded-lg shadow-lg p-6">
+                  <div className="flex justify-between items-start mb-4">
+                    <div>
+                      <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+                        Milestone {index + 1}: {milestone.description}
+                      </h3>
+                      <p className="text-sm text-slate-600 dark:text-slate-400">
+                        {milestone.amount} {payment.token} ({milestone.percentage}%)
+                      </p>
+                    </div>
+                    {getStatusBadge(milestone.status)}
+                  </div>
+
+                  {/* Milestone Actions */}
+                  {milestone.status === 'pending' && isSeller && (
+                    <button
+                      onClick={() => handleSubmitMilestone(milestone.id)}
+                      disabled={submittingMilestone === milestone.id}
+                      className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors disabled:opacity-50"
+                    >
+                      {submittingMilestone === milestone.id ? 'Submitting...' : '✓ Submit Work for Review'}
+                    </button>
+                  )}
+
+                  {milestone.status === 'work_submitted' && (
+                    <div className="space-y-3">
+                      <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 p-3 rounded-lg">
+                        <p className="text-sm text-yellow-900 dark:text-yellow-300">
+                          {isBuyer ? 'Seller submitted work. Review and approve to release funds.' : 'Work submitted. Waiting for buyer approval.'}
+                        </p>
+                        {milestone.seller_notes && (
+                          <p className="text-sm mt-2 text-yellow-800 dark:text-yellow-400">
+                            <strong>Notes:</strong> {milestone.seller_notes}
+                          </p>
+                        )}
+                      </div>
+                      {isBuyer && (
+                        <div className="flex gap-3">
+                          <button
+                            onClick={() => handleApproveMilestone(milestone.id)}
+                            disabled={approvingMilestone === milestone.id || releasingMilestone === milestone.id}
+                            className="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors disabled:opacity-50"
+                          >
+                            {approvingMilestone === milestone.id || releasingMilestone === milestone.id
+                              ? 'Processing...'
+                              : `✓ Approve & Release ${milestone.amount} ${payment.token}`}
+                          </button>
+                          <button
+                            onClick={() => handleRaiseDispute(milestone.id)}
+                            className="px-4 py-3 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 font-semibold rounded-lg hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors"
+                          >
+                            ⚠️ Dispute
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {milestone.status === 'released' && (
+                    <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 p-3 rounded-lg">
+                      <p className="text-sm text-green-800 dark:text-green-300">
+                        ✓ Funds released on {new Date(milestone.released_at!).toLocaleDateString()}
+                      </p>
+                      {milestone.tx_signature && (
+                        <a
+                          href={`https://explorer.solana.com/tx/${milestone.tx_signature}?cluster=${process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'devnet'}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
+                        >
+                          View Transaction →
+                        </a>
+                      )}
+                    </div>
+                  )}
+
+                  {milestone.status === 'disputed' && (
+                    <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 p-3 rounded-lg">
+                      <p className="text-sm text-red-800 dark:text-red-300">
+                        ⚠️ This milestone is under dispute. Funds are frozen.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* Activity Timeline */}
+            {actions.length > 0 && (
+              <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg p-6">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">Activity Timeline</h3>
+                <div className="space-y-3">
+                  {actions.slice(0, 5).map((action, index) => (
+                    <div key={action.id} className="flex gap-3 text-sm">
+                      <div className="flex flex-col items-center">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full" />
+                        {index < Math.min(actions.length, 5) - 1 && (
+                          <div className="w-0.5 h-full bg-gray-300 dark:bg-gray-700 my-1" />
+                        )}
+                      </div>
+                      <div className="flex-1 pb-3">
+                        <p className="font-medium text-slate-900 dark:text-white">{action.action}</p>
+                        {action.notes && (
+                          <p className="text-slate-600 dark:text-slate-400">{action.notes}</p>
+                        )}
+                        <p className="text-xs text-slate-400 dark:text-slate-500">
+                          {new Date(action.created_at).toLocaleString()}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Connect Wallet Prompt */}
+            {!publicKey && (
+              <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg p-6 text-center">
+                <p className="text-slate-600 dark:text-slate-400 mb-4">
+                  Connect your wallet to manage this escrow
+                </p>
+                <WalletMultiButton />
+              </div>
+            )}
           </div>
         ) : (
           // Payment Form

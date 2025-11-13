@@ -13,7 +13,8 @@ export default function CreateEscrowPayment() {
   const [amount, setAmount] = useState('')
   const [token, setToken] = useState('SOL')
   const [description, setDescription] = useState('')
-  const [merchantWallet, setMerchantWallet] = useState('')
+  const [buyerWallet, setBuyerWallet] = useState('')
+  const [sellerWallet, setSellerWallet] = useState('')
   const [milestones, setMilestones] = useState<Milestone[]>([
     { id: nanoid(6), description: '', percentage: 100, status: 'pending' }
   ])
@@ -23,7 +24,7 @@ export default function CreateEscrowPayment() {
     const currentUser = getCurrentUser()
     if (currentUser) {
       setUser(currentUser)
-      setMerchantWallet(currentUser.walletAddress)
+      setBuyerWallet(currentUser.walletAddress)
     }
   }, [])
 
@@ -45,14 +46,19 @@ export default function CreateEscrowPayment() {
     return milestones.reduce((sum, m) => sum + Number(m.percentage), 0)
   }
 
-  const createPayment = () => {
+  const createPayment = async () => {
     if (!amount || parseFloat(amount) <= 0) {
       alert('Please enter a valid amount')
       return
     }
 
-    if (!merchantWallet) {
-      alert('Please enter your wallet address')
+    if (!buyerWallet) {
+      alert('Please enter buyer wallet address')
+      return
+    }
+
+    if (!sellerWallet) {
+      alert('Please enter seller wallet address')
       return
     }
 
@@ -69,29 +75,50 @@ export default function CreateEscrowPayment() {
 
     setLoading(true)
 
-    const paymentId = nanoid(10)
-    const wallet = generatePaymentWallet()
+    try {
+      const paymentId = nanoid(10)
+      const wallet = generatePaymentWallet()
 
-    const paymentData = {
-      id: paymentId,
-      amount: parseFloat(amount),
-      token,
-      description,
-      status: 'pending',
-      createdAt: new Date().toISOString(),
-      paymentWallet: wallet.publicKey,
-      privateKey: wallet.privateKey,
-      merchantWallet,
-      type: 'escrow',
-      escrowEnabled: true,
-      milestones,
+      const paymentData = {
+        id: paymentId,
+        amount: parseFloat(amount),
+        token,
+        description,
+        status: 'pending',
+        createdAt: new Date().toISOString(),
+        paymentWallet: wallet.publicKey,
+        privateKey: wallet.privateKey,
+        merchantWallet: sellerWallet,
+        type: 'escrow' as const,
+        escrowEnabled: true,
+        milestones,
+      }
+
+      // Save to localStorage
+      const payments = JSON.parse(localStorage.getItem('payments') || '[]')
+      payments.push(paymentData)
+      localStorage.setItem('payments', JSON.stringify(payments))
+
+      // Create escrow contract in database
+      const { createEscrowContract } = await import('@/lib/escrow')
+      await createEscrowContract(
+        paymentId,
+        buyerWallet,
+        sellerWallet,
+        parseFloat(amount),
+        token,
+        description,
+        wallet.publicKey,
+        wallet.privateKey,
+        milestones.map(m => ({ description: m.description, percentage: m.percentage }))
+      )
+
+      router.push(`/pay/${paymentId}`)
+    } catch (error) {
+      console.error('Error creating escrow:', error)
+      alert('Failed to create escrow. Please try again.')
+      setLoading(false)
     }
-
-    const payments = JSON.parse(localStorage.getItem('payments') || '[]')
-    payments.push(paymentData)
-    localStorage.setItem('payments', JSON.stringify(payments))
-
-    router.push(`/pay/${paymentId}`)
   }
 
   return (
@@ -114,18 +141,32 @@ export default function CreateEscrowPayment() {
 
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg p-8">
           <div className="space-y-6">
-            {/* Wallet Address */}
+            {/* Buyer Wallet */}
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                Your Wallet Address
+                Buyer Wallet (who pays)
               </label>
               <input
                 type="text"
-                value={merchantWallet}
-                onChange={(e) => setMerchantWallet(e.target.value)}
-                placeholder="Enter your Solana wallet address"
+                value={buyerWallet}
+                onChange={(e) => setBuyerWallet(e.target.value)}
+                placeholder="Buyer's Solana wallet address"
                 disabled={!!user}
                 className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white font-mono text-sm disabled:opacity-60"
+              />
+            </div>
+
+            {/* Seller Wallet */}
+            <div>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                Seller Wallet (who receives)
+              </label>
+              <input
+                type="text"
+                value={sellerWallet}
+                onChange={(e) => setSellerWallet(e.target.value)}
+                placeholder="Seller's Solana wallet address"
+                className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white font-mono text-sm"
               />
             </div>
 
