@@ -22,7 +22,10 @@ export async function POST(request: NextRequest) {
 
     await approveMilestone(milestoneId, buyerWallet, notes)
 
-    return NextResponse.json({ success: true })
+    return NextResponse.json({ 
+      success: true,
+      message: 'Milestone approved. Awaiting admin review for fund release.'
+    })
   } catch (error: any) {
     console.error('Approve milestone error:', error)
     return NextResponse.json(
