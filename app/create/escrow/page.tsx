@@ -100,23 +100,31 @@ export default function CreateEscrowPayment() {
       localStorage.setItem('payments', JSON.stringify(payments))
 
       // Create escrow contract in database
-      const { createEscrowContract } = await import('@/lib/escrow')
-      await createEscrowContract(
-        paymentId,
-        buyerWallet,
-        sellerWallet,
-        parseFloat(amount),
-        token,
-        description,
-        wallet.publicKey,
-        wallet.privateKey,
-        milestones.map(m => ({ description: m.description, percentage: m.percentage }))
-      )
+      try {
+        const { createEscrowContract } = await import('@/lib/escrow')
+        await createEscrowContract(
+          paymentId,
+          buyerWallet,
+          sellerWallet,
+          parseFloat(amount),
+          token,
+          description,
+          wallet.publicKey,
+          wallet.privateKey,
+          milestones.map(m => ({ description: m.description, percentage: m.percentage }))
+        )
+        console.log('✅ Escrow created successfully in database')
+      } catch (dbError: any) {
+        console.error('❌ Database error:', dbError)
+        alert(`Database error: ${dbError.message || 'Unknown error'}. Check console for details.`)
+        setLoading(false)
+        return
+      }
 
       router.push(`/pay/${paymentId}`)
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error creating escrow:', error)
-      alert('Failed to create escrow. Please try again.')
+      alert(`Failed to create escrow: ${error.message || 'Unknown error'}`)
       setLoading(false)
     }
   }
