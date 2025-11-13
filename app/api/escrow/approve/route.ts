@@ -24,7 +24,8 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ 
       success: true,
-      message: 'Milestone approved. Awaiting admin review for fund release.'
+      message: 'Milestone approved. Funds will be released automatically.',
+      shouldRelease: true // Signal to frontend to trigger release
     })
   } catch (error: any) {
     console.error('Approve milestone error:', error)

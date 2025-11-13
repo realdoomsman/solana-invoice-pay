@@ -17,7 +17,7 @@ interface EscrowQueueItem {
   created_at: string
   funded_at: string
   open_disputes: number
-  pending_releases: number
+  disputed_milestones: number
   total_milestones: number
   completed_milestones: number
   last_dispute_at: string | null
@@ -127,10 +127,10 @@ export default function AdminEscrowDashboard() {
           </div>
           <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6">
             <div className="text-sm text-slate-600 dark:text-slate-400 mb-1">
-              Pending Releases
+              Disputed Milestones
             </div>
             <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
-              {escrows.reduce((sum, e) => sum + e.pending_releases, 0)}
+              {escrows.reduce((sum, e) => sum + (e.disputed_milestones || 0), 0)}
             </div>
           </div>
           <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6">
@@ -147,8 +147,11 @@ export default function AdminEscrowDashboard() {
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow">
           <div className="p-6 border-b border-slate-200 dark:border-slate-700">
             <h2 className="text-xl font-bold text-slate-900 dark:text-white">
-              Escrows Needing Attention
+              Disputed Escrows
             </h2>
+            <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+              Only escrows with active disputes are shown. Normal escrows auto-release.
+            </p>
           </div>
 
           {loading ? (
@@ -159,7 +162,10 @@ export default function AdminEscrowDashboard() {
           ) : escrows.length === 0 ? (
             <div className="p-12 text-center">
               <p className="text-slate-600 dark:text-slate-400">
-                No escrows need attention right now. Great job! 🎉
+                No disputes right now. All escrows are running smoothly! 🎉
+              </p>
+              <p className="text-sm text-slate-500 dark:text-slate-500 mt-2">
+                Normal escrows auto-release when buyer approves. You only see disputes here.
               </p>
             </div>
           ) : (
@@ -180,9 +186,9 @@ export default function AdminEscrowDashboard() {
                             {escrow.open_disputes} Dispute{escrow.open_disputes > 1 ? 's' : ''}
                           </span>
                         )}
-                        {escrow.pending_releases > 0 && (
-                          <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-xs font-semibold rounded-full">
-                            {escrow.pending_releases} Pending
+                        {(escrow.disputed_milestones || 0) > 0 && (
+                          <span className="px-2 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 text-xs font-semibold rounded-full">
+                            {escrow.disputed_milestones} Disputed
                           </span>
                         )}
                       </div>
@@ -229,16 +235,7 @@ export default function AdminEscrowDashboard() {
                       </p>
                     </div>
                   )}
-                  {escrow.pending_releases > 0 && !escrow.open_disputes && (
-                    <div className="mt-3 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-                      <p className="text-sm text-blue-800 dark:text-blue-300">
-                        ✓ <strong>Buyer approved</strong> - Ready for fund release
-                        {escrow.last_approval_at && (
-                          <span> - {new Date(escrow.last_approval_at).toLocaleString()}</span>
-                        )}
-                      </p>
-                    </div>
-                  )}
+
                 </div>
               ))}
             </div>

@@ -174,7 +174,7 @@ export async function submitMilestone(
   return true
 }
 
-// Approve milestone (buyer action) - NO AUTO-RELEASE, needs admin review
+// Approve milestone (buyer action) - AUTO-RELEASE unless disputed
 export async function approveMilestone(
   milestoneId: string,
   buyerWallet: string,
@@ -198,7 +198,7 @@ export async function approveMilestone(
     throw new Error('Milestone must be submitted before approval')
   }
 
-  // Update milestone - mark as approved but NOT released (needs admin)
+  // Update milestone - mark as approved (will auto-release)
   const { error } = await supabase
     .from('escrow_milestones')
     .update({
@@ -216,7 +216,7 @@ export async function approveMilestone(
     milestoneId,
     buyerWallet,
     'approved',
-    notes || 'Milestone approved by buyer, awaiting admin review for release'
+    notes || 'Milestone approved by buyer, ready for automatic release'
   )
 
   return true
@@ -276,7 +276,7 @@ export async function releaseMilestoneFunds(
   return true
 }
 
-// Raise dispute
+// Raise dispute - BLOCKS AUTO-RELEASE, requires admin intervention
 export async function raiseDispute(
   escrowId: string,
   milestoneId: string | null,
@@ -296,13 +296,19 @@ export async function raiseDispute(
     throw new Error('Unauthorized: Only buyer or seller can raise dispute')
   }
 
+  // Determine party role
+  const partyRole = escrow.buyer_wallet === actorWallet ? 'buyer' : 'seller'
+
+  // Create dispute record
+  await createDispute(escrowId, milestoneId, actorWallet, partyRole, reason, reason)
+
   // Update escrow status
   await supabase
     .from('escrow_contracts')
     .update({ status: 'disputed' })
     .eq('id', escrowId)
 
-  // Update milestone if specified
+  // Update milestone if specified - BLOCKS AUTO-RELEASE
   if (milestoneId) {
     await supabase
       .from('escrow_milestones')

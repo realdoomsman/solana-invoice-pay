@@ -249,12 +249,13 @@ export default function PaymentPage() {
   const handleApproveMilestone = async (milestoneId: string) => {
     if (!publicKey || !escrow) return
     
-    if (!confirm('Approve this milestone? NOVIQ admin will review and release funds.')) return
+    if (!confirm('Approve this milestone and release funds to the seller?')) return
     
     const notes = prompt('Add approval notes (optional):')
     
     setApprovingMilestone(milestoneId)
     try {
+      // First approve
       const approveResponse = await fetch('/api/escrow/approve', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -266,17 +267,32 @@ export default function PaymentPage() {
       })
 
       const approveResult = await approveResponse.json()
-      if (approveResult.success) {
-        alert('Milestone approved! NOVIQ admin will review and release funds to seller.')
+      if (!approveResult.success) {
+        alert(`Error: ${approveResult.error}`)
+        return
+      }
+
+      // Then auto-release funds
+      setReleasingMilestone(milestoneId)
+      const releaseResponse = await fetch('/api/escrow/release', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ milestoneId }),
+      })
+
+      const releaseResult = await releaseResponse.json()
+      if (releaseResult.success) {
+        alert(`Milestone approved! ${releaseResult.amount} ${payment!.token} released to seller.`)
         await loadEscrowData(payment!.id)
       } else {
-        alert(`Error: ${approveResult.error}`)
+        alert(`Error releasing funds: ${releaseResult.error}`)
       }
     } catch (error) {
       console.error('Error approving milestone:', error)
       alert('Failed to approve milestone')
     } finally {
       setApprovingMilestone(null)
+      setReleasingMilestone(null)
     }
   }
 
@@ -315,9 +331,9 @@ export default function PaymentPage() {
     const badges: Record<string, { bg: string; text: string; label: string }> = {
       pending: { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-700 dark:text-gray-300', label: 'Pending' },
       work_submitted: { bg: 'bg-yellow-100 dark:bg-yellow-900/30', text: 'text-yellow-700 dark:text-yellow-400', label: 'Awaiting Buyer' },
-      approved: { bg: 'bg-blue-100 dark:bg-blue-900/30', text: 'text-blue-700 dark:text-blue-400', label: 'Admin Review' },
+      approved: { bg: 'bg-blue-100 dark:bg-blue-900/30', text: 'text-blue-700 dark:text-blue-400', label: 'Approved' },
       released: { bg: 'bg-green-100 dark:bg-green-900/30', text: 'text-green-700 dark:text-green-400', label: 'Released' },
-      disputed: { bg: 'bg-red-100 dark:bg-red-900/30', text: 'text-red-700 dark:text-red-400', label: 'Disputed' },
+      disputed: { bg: 'bg-red-100 dark:bg-red-900/30', text: 'text-red-700 dark:text-red-400', label: 'Disputed - Admin Review' },
     }
     const badge = badges[status] || badges.pending
     return (
@@ -529,7 +545,7 @@ export default function PaymentPage() {
                   {milestone.status === 'approved' && (
                     <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 p-3 rounded-lg">
                       <p className="text-sm text-blue-800 dark:text-blue-300">
-                        ✓ Buyer approved! NOVIQ admin is reviewing this milestone for fund release.
+                        ✓ Buyer approved! Funds are being released to seller...
                       </p>
                       {milestone.buyer_notes && (
                         <p className="text-sm mt-2 text-blue-700 dark:text-blue-400">
@@ -560,7 +576,10 @@ export default function PaymentPage() {
                   {milestone.status === 'disputed' && (
                     <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 p-3 rounded-lg">
                       <p className="text-sm text-red-800 dark:text-red-300">
-                        ⚠️ This milestone is under dispute. NOVIQ admin is reviewing the case.
+                        ⚠️ This milestone is under dispute. Funds are frozen. NOVIQ admin will review and make a decision.
+                      </p>
+                      <p className="text-sm mt-2 text-red-700 dark:text-red-400">
+                        Both parties can submit evidence. Admin will decide to release funds to seller or refund to buyer.
                       </p>
                     </div>
                   )}
