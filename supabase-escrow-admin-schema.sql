@@ -138,7 +138,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- View for admin dashboard (all escrows needing attention)
+-- View for admin dashboard (ONLY DISPUTED ESCROWS)
 CREATE OR REPLACE VIEW admin_escrow_queue AS
 SELECT 
   ec.id,
@@ -152,7 +152,7 @@ SELECT
   ec.created_at,
   ec.funded_at,
   COUNT(DISTINCT ed.id) as open_disputes,
-  COUNT(DISTINCT CASE WHEN em.status = 'approved' THEN em.id END) as pending_releases,
+  COUNT(DISTINCT CASE WHEN em.status = 'disputed' THEN em.id END) as disputed_milestones,
   COUNT(DISTINCT em.id) as total_milestones,
   COUNT(DISTINCT CASE WHEN em.status = 'released' THEN em.id END) as completed_milestones,
   MAX(ed.created_at) as last_dispute_at,
@@ -160,14 +160,12 @@ SELECT
 FROM escrow_contracts ec
 LEFT JOIN escrow_disputes ed ON ec.id = ed.escrow_id AND ed.status IN ('open', 'under_review')
 LEFT JOIN escrow_milestones em ON ec.id = em.escrow_id
-WHERE ec.status NOT IN ('completed', 'cancelled')
+WHERE ec.status = 'disputed' -- ONLY show disputed escrows
 GROUP BY ec.id, ec.payment_id, ec.buyer_wallet, ec.seller_wallet, ec.total_amount, 
          ec.token, ec.description, ec.status, ec.created_at, ec.funded_at
-HAVING COUNT(DISTINCT ed.id) > 0 OR COUNT(DISTINCT CASE WHEN em.status = 'approved' THEN em.id END) > 0
+HAVING COUNT(DISTINCT ed.id) > 0 -- Must have at least one open dispute
 ORDER BY 
-  COUNT(DISTINCT ed.id) DESC, -- disputes first
-  MAX(ed.created_at) DESC NULLS LAST,
-  MAX(em.buyer_approved_at) ASC NULLS LAST;
+  MAX(ed.created_at) DESC; -- Most recent disputes first
 
 -- Comments
 COMMENT ON TABLE escrow_evidence IS 'Evidence uploaded by parties during disputes';
