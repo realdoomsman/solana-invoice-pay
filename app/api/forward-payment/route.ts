@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { paymentId, privateKey, merchantWallet } = body
+    const { paymentId, privateKey, merchantWallet, splitRecipients } = body
 
     if (!paymentId) {
       return NextResponse.json({ error: 'Missing payment ID' }, { status: 400 })
@@ -26,15 +26,17 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing private key' }, { status: 400 })
     }
 
-    if (!merchantWallet) {
-      return NextResponse.json({ error: 'Missing merchant wallet' }, { status: 400 })
+    if (!merchantWallet && !splitRecipients) {
+      return NextResponse.json({ error: 'Missing merchant wallet or split recipients' }, { status: 400 })
     }
 
-    // Validate merchant wallet address
-    try {
-      new PublicKey(merchantWallet)
-    } catch (err) {
-      return NextResponse.json({ error: 'Invalid merchant wallet address' }, { status: 400 })
+    // Validate merchant wallet address (if not split payment)
+    if (merchantWallet && !splitRecipients) {
+      try {
+        new PublicKey(merchantWallet)
+      } catch (err) {
+        return NextResponse.json({ error: 'Invalid merchant wallet address' }, { status: 400 })
+      }
     }
 
     const network = process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'devnet'
@@ -112,14 +114,39 @@ export async function POST(request: NextRequest) {
     // Create transfer transaction
     const transaction = new Transaction()
     
-    // Transfer to merchant
-    transaction.add(
-      SystemProgram.transfer({
-        fromPubkey: paymentKeypair.publicKey,
-        toPubkey: merchantWalletPubkey,
-        lamports: amountToSend,
-      })
-    )
+    // Handle split payments
+    if (splitRecipients && Array.isArray(splitRecipients) && splitRecipients.length > 0) {
+      console.log('[Forward] Split payment detected with', splitRecipients.length, 'recipients')
+      
+      // Calculate amounts for each recipient based on percentage
+      for (const recipient of splitRecipients) {
+        try {
+          const recipientPubkey = new PublicKey(recipient.address)
+          const recipientAmount = Math.floor(amountToSend * (recipient.percentage / 100))
+          
+          console.log(`[Forward] Sending ${recipientAmount} lamports (${recipient.percentage}%) to ${recipient.name || recipient.address}`)
+          
+          transaction.add(
+            SystemProgram.transfer({
+              fromPubkey: paymentKeypair.publicKey,
+              toPubkey: recipientPubkey,
+              lamports: recipientAmount,
+            })
+          )
+        } catch (err) {
+          console.error(`Invalid recipient address: ${recipient.address}`)
+        }
+      }
+    } else {
+      // Single recipient (normal payment)
+      transaction.add(
+        SystemProgram.transfer({
+          fromPubkey: paymentKeypair.publicKey,
+          toPubkey: merchantWalletPubkey,
+          lamports: amountToSend,
+        })
+      )
+    }
     
     // Transfer platform fee if configured
     if (platformFeeAmount > 0 && platformFeeWallet) {
