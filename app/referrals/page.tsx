@@ -3,9 +3,11 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { getCurrentUser } from '@/lib/auth'
-import { getOrCreateReferralCode, getReferralStats, getReferralLeaderboard } from '@/lib/referrals'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic'
 
 export default function ReferralsPage() {
   const router = useRouter()
@@ -29,15 +31,14 @@ export default function ReferralsPage() {
 
   const loadReferralData = async (wallet: string) => {
     try {
-      const code = await getOrCreateReferralCode(wallet)
+      // Generate a simple referral code from wallet
+      const code = wallet.slice(0, 4) + wallet.slice(-4) + '-' + Math.random().toString(36).substring(2, 8).toUpperCase()
       setReferralCode(code)
 
-      const { stats: referralStats, earnings: referralEarnings } = await getReferralStats(wallet)
-      setStats(referralStats)
-      setEarnings(referralEarnings)
-
-      const board = await getReferralLeaderboard()
-      setLeaderboard(board)
+      // Mock data for now - will be replaced when Supabase is set up
+      setStats({ total_referrals: 0, total_earned: 0 })
+      setEarnings([])
+      setLeaderboard([])
     } catch (error) {
       console.error('Error loading referral data:', error)
     } finally {
