@@ -205,6 +205,17 @@ export default function PaymentPage() {
               {balance > 0 ? `${balance.toFixed(4)} SOL` : `${payment.amount} SOL`}{' '}
               received and forwarded
             </p>
+            
+            {/* Back to Home Button */}
+            <div className="mb-6">
+              <a
+                href="/"
+                className="inline-block px-8 py-3 bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white font-semibold rounded-lg transition-all transform hover:scale-105 shadow-lg"
+              >
+                ← Back to Home
+              </a>
+            </div>
+
             <div className="space-y-2">
               <a
                 href={`https://explorer.solana.com/address/${payment.paymentWallet}?cluster=${process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'devnet'}`}
