@@ -1,10 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Connection, Keypair, PublicKey, SystemProgram, Transaction, LAMPORTS_PER_SOL, sendAndConfirmTransaction } from '@solana/web3.js'
-import { supabaseAdmin } from '@/lib/supabase'
-import { releaseMilestoneFunds } from '@/lib/escrow'
 
 export async function POST(request: NextRequest) {
   try {
+    // Check if Supabase is configured
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
+      return NextResponse.json(
+        { error: 'Escrow system not configured. Please set up Supabase.' },
+        { status: 503 }
+      )
+    }
+
+    const { supabaseAdmin } = await import('@/lib/supabase')
+    const { releaseMilestoneFunds } = await import('@/lib/escrow')
     const { milestoneId } = await request.json()
 
     if (!milestoneId) {

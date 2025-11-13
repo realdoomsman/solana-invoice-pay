@@ -1,8 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { raiseDispute } from '@/lib/escrow'
 
 export async function POST(request: NextRequest) {
   try {
+    // Check if Supabase is configured
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
+      return NextResponse.json(
+        { error: 'Escrow system not configured. Please set up Supabase.' },
+        { status: 503 }
+      )
+    }
+
+    const { raiseDispute } = await import('@/lib/escrow')
     const { escrowId, milestoneId, actorWallet, reason } = await request.json()
 
     if (!escrowId || !actorWallet || !reason) {
