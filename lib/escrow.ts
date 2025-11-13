@@ -174,7 +174,7 @@ export async function submitMilestone(
   return true
 }
 
-// Approve milestone (buyer action)
+// Approve milestone (buyer action) - NO AUTO-RELEASE, needs admin review
 export async function approveMilestone(
   milestoneId: string,
   buyerWallet: string,
@@ -198,7 +198,7 @@ export async function approveMilestone(
     throw new Error('Milestone must be submitted before approval')
   }
 
-  // Update milestone
+  // Update milestone - mark as approved but NOT released (needs admin)
   const { error } = await supabase
     .from('escrow_milestones')
     .update({
@@ -216,7 +216,7 @@ export async function approveMilestone(
     milestoneId,
     buyerWallet,
     'approved',
-    notes || 'Milestone approved, ready for release'
+    notes || 'Milestone approved by buyer, awaiting admin review for release'
   )
 
   return true
@@ -362,4 +362,222 @@ export async function markEscrowFunded(escrowId: string) {
   await logEscrowAction(escrowId, null, 'system', 'funded', 'Escrow funded by buyer')
 
   return true
+}
+
+// ============================================
+// ADMIN FUNCTIONS (Manual Control)
+// ============================================
+
+// Submit evidence for dispute
+export async function submitEvidence(
+  escrowId: string,
+  milestoneId: string | null,
+  submittedBy: string,
+  partyRole: 'buyer' | 'seller',
+  evidenceType: string,
+  description: string,
+  fileUrl?: string,
+  metadata?: any
+) {
+  const { error } = await supabase
+    .from('escrow_evidence')
+    .insert({
+      escrow_id: escrowId,
+      milestone_id: milestoneId,
+      submitted_by: submittedBy,
+      party_role: partyRole,
+      evidence_type: evidenceType,
+      file_url: fileUrl,
+      description,
+      metadata,
+    })
+
+  if (error) throw error
+
+  await logEscrowAction(
+    escrowId,
+    milestoneId,
+    submittedBy,
+    'evidence_submitted',
+    `${partyRole} submitted evidence: ${description}`
+  )
+
+  return true
+}
+
+// Create dispute record
+export async function createDispute(
+  escrowId: string,
+  milestoneId: string | null,
+  raisedBy: string,
+  partyRole: 'buyer' | 'seller',
+  reason: string,
+  description: string
+) {
+  const { data, error } = await supabase
+    .from('escrow_disputes')
+    .insert({
+      escrow_id: escrowId,
+      milestone_id: milestoneId,
+      raised_by: raisedBy,
+      party_role: partyRole,
+      reason,
+      description,
+      status: 'open',
+    })
+    .select()
+    .single()
+
+  if (error) throw error
+
+  // Update escrow status
+  await supabase
+    .from('escrow_contracts')
+    .update({ status: 'disputed' })
+    .eq('id', escrowId)
+
+  // Update milestone if specified
+  if (milestoneId) {
+    await supabase
+      .from('escrow_milestones')
+      .update({ status: 'disputed' })
+      .eq('id', milestoneId)
+  }
+
+  await logEscrowAction(escrowId, milestoneId, raisedBy, 'disputed', description)
+
+  return data
+}
+
+// Admin: Manually release funds to seller
+export async function adminReleaseFunds(
+  milestoneId: string,
+  adminWallet: string,
+  notes: string
+) {
+  const { data: milestone } = await supabase
+    .from('escrow_milestones')
+    .select('*, escrow_contracts(*)')
+    .eq('id', milestoneId)
+    .single()
+
+  if (!milestone) throw new Error('Milestone not found')
+
+  // Log admin action
+  await supabase.from('escrow_admin_actions').insert({
+    escrow_id: milestone.escrow_id,
+    milestone_id: milestoneId,
+    admin_wallet: adminWallet,
+    action: 'approved_release',
+    decision: 'release_to_seller',
+    notes,
+  })
+
+  await logEscrowAction(
+    milestone.escrow_id,
+    milestoneId,
+    adminWallet,
+    'admin_approved_release',
+    notes
+  )
+
+  return milestone
+}
+
+// Admin: Refund to buyer
+export async function adminRefundToBuyer(
+  escrowId: string,
+  milestoneId: string | null,
+  adminWallet: string,
+  notes: string
+) {
+  const { data: escrow } = await supabase
+    .from('escrow_contracts')
+    .select('*')
+    .eq('id', escrowId)
+    .single()
+
+  if (!escrow) throw new Error('Escrow not found')
+
+  // Log admin action
+  await supabase.from('escrow_admin_actions').insert({
+    escrow_id: escrowId,
+    milestone_id: milestoneId,
+    admin_wallet: adminWallet,
+    action: 'approved_refund',
+    decision: 'refund_to_buyer',
+    notes,
+  })
+
+  await logEscrowAction(escrowId, milestoneId, adminWallet, 'admin_approved_refund', notes)
+
+  return escrow
+}
+
+// Admin: Resolve dispute
+export async function adminResolveDispute(
+  disputeId: string,
+  adminWallet: string,
+  resolution: string,
+  notes: string
+) {
+  const { error } = await supabase
+    .from('escrow_disputes')
+    .update({
+      status: 'resolved',
+      resolution,
+      resolved_by: adminWallet,
+      resolved_at: new Date().toISOString(),
+    })
+    .eq('id', disputeId)
+
+  if (error) throw error
+
+  return true
+}
+
+// Get all escrows needing admin review
+export async function getEscrowsNeedingReview() {
+  const { data, error } = await supabase
+    .from('admin_escrow_queue')
+    .select('*')
+
+  if (error) throw error
+  return data || []
+}
+
+// Get dispute details
+export async function getDisputeDetails(disputeId: string) {
+  const { data, error } = await supabase
+    .from('escrow_disputes')
+    .select('*, escrow_evidence(*)')
+    .eq('id', disputeId)
+    .single()
+
+  if (error) throw error
+  return data
+}
+
+// Get all evidence for an escrow
+export async function getEscrowEvidence(escrowId: string) {
+  const { data, error } = await supabase
+    .from('escrow_evidence')
+    .select('*')
+    .eq('escrow_id', escrowId)
+    .order('created_at', { ascending: false })
+
+  if (error) throw error
+  return data || []
+}
+
+// Get admin actions for an escrow
+export async function getAdminActions(escrowId: string) {
+  const { data, error } = await supabase
+    .from('escrow_admin_actions')
+    .select('*')
+    .eq('escrow_id', escrowId)
+    .order('created_at', { ascending: false })
+
+  if (error) throw error
+  return data || []
 }
