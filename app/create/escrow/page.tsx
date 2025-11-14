@@ -127,6 +127,7 @@ export default function CreateEscrowPayment() {
       }
 
       toast.success('Escrow created successfully!', { id: loadingToast })
+      // First go to payment page to fund, then will redirect to escrow management
       router.push(`/pay/${paymentId}`)
     } catch (error: any) {
       console.error('Error creating escrow:', error)
