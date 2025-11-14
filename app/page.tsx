@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { nanoid } from 'nanoid'
+import toast from 'react-hot-toast'
 import { generatePaymentWallet } from '@/lib/payment-wallet'
 import { getCurrentUser } from '@/lib/auth'
 import Footer from '@/components/Footer'
@@ -27,12 +28,12 @@ export default function Home() {
 
   const createPaymentLink = async () => {
     if (!amount || parseFloat(amount) <= 0) {
-      alert('Please enter a valid amount')
+      toast.error('Please enter a valid amount')
       return
     }
 
     if (!merchantWallet || merchantWallet.length < 32) {
-      alert('Please enter a valid Solana wallet address')
+      toast.error('Please enter a valid Solana wallet address')
       return
     }
 
@@ -63,7 +64,7 @@ export default function Home() {
       router.push(`/pay/${paymentId}`)
     } catch (error) {
       console.error('Error creating payment:', error)
-      alert('Failed to create payment link. Please try again.')
+      toast.error('Failed to create payment link. Please try again.')
       setLoading(false)
     }
   }

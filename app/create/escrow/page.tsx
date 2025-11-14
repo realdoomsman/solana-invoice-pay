@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { nanoid } from 'nanoid'
+import toast from 'react-hot-toast'
 import { generatePaymentWallet } from '@/lib/payment-wallet'
 import { getCurrentUser } from '@/lib/auth'
 import { Milestone } from '@/lib/types'
@@ -48,31 +49,32 @@ export default function CreateEscrowPayment() {
 
   const createPayment = async () => {
     if (!amount || parseFloat(amount) <= 0) {
-      alert('Please enter a valid amount')
+      toast.error('Please enter a valid amount')
       return
     }
 
     if (!buyerWallet) {
-      alert('Please enter buyer wallet address')
+      toast.error('Please enter buyer wallet address')
       return
     }
 
     if (!sellerWallet) {
-      alert('Please enter seller wallet address')
+      toast.error('Please enter seller wallet address')
       return
     }
 
     const total = getTotalPercentage()
     if (total !== 100) {
-      alert(`Milestone percentages must equal 100% (currently ${total}%)`)
+      toast.error(`Milestone percentages must equal 100% (currently ${total}%)`)
       return
     }
 
     if (milestones.some(m => !m.description)) {
-      alert('Please fill in all milestone descriptions')
+      toast.error('Please fill in all milestone descriptions')
       return
     }
 
+    const loadingToast = toast.loading('Creating escrow...')
     setLoading(true)
 
     try {
@@ -124,10 +126,11 @@ export default function CreateEscrowPayment() {
         // Don't block - continue anyway
       }
 
+      toast.success('Escrow created successfully!', { id: loadingToast })
       router.push(`/pay/${paymentId}`)
     } catch (error: any) {
       console.error('Error creating escrow:', error)
-      alert(`Failed to create escrow: ${error.message || 'Unknown error'}`)
+      toast.error(`Failed to create escrow: ${error.message || 'Unknown error'}`, { id: loadingToast })
       setLoading(false)
     }
   }
