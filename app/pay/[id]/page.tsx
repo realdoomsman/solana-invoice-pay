@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
 import {
@@ -36,6 +36,7 @@ interface PaymentData {
 
 export default function PaymentPage() {
   const params = useParams()
+  const router = useRouter()
   const { publicKey, sendTransaction } = useWallet()
   const [payment, setPayment] = useState<PaymentData | null>(null)
   const [checking, setChecking] = useState(false)
@@ -55,6 +56,12 @@ export default function PaymentPage() {
     const payments = JSON.parse(localStorage.getItem('payments') || '[]')
     const found = payments.find((p: PaymentData) => p.id === params.id)
     if (found) {
+      // Redirect to escrow management page if this is an escrow payment
+      if (found.type === 'escrow' && found.status !== 'pending') {
+        router.push(`/escrow/${params.id}`)
+        return
+      }
+      
       setPayment(found)
       if (found.status === 'pending') {
         startBalanceCheck(found)
