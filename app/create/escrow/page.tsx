@@ -99,26 +99,29 @@ export default function CreateEscrowPayment() {
       payments.push(paymentData)
       localStorage.setItem('payments', JSON.stringify(payments))
 
-      // Create escrow contract in database
+      // Create escrow contract in database (skip for now if Supabase not configured)
       try {
-        const { createEscrowContract } = await import('@/lib/escrow')
-        await createEscrowContract(
-          paymentId,
-          buyerWallet,
-          sellerWallet,
-          parseFloat(amount),
-          token,
-          description,
-          wallet.publicKey,
-          wallet.privateKey,
-          milestones.map(m => ({ description: m.description, percentage: m.percentage }))
-        )
-        console.log('✅ Escrow created successfully in database')
+        if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+          const { createEscrowContract } = await import('@/lib/escrow')
+          await createEscrowContract(
+            paymentId,
+            buyerWallet,
+            sellerWallet,
+            parseFloat(amount),
+            token,
+            description,
+            wallet.publicKey,
+            wallet.privateKey,
+            milestones.map(m => ({ description: m.description, percentage: m.percentage }))
+          )
+          console.log('✅ Escrow created successfully in database')
+        } else {
+          console.warn('⚠️ Supabase not configured, escrow saved to localStorage only')
+        }
       } catch (dbError: any) {
         console.error('❌ Database error:', dbError)
-        alert(`Database error: ${dbError.message || 'Unknown error'}. Check console for details.`)
-        setLoading(false)
-        return
+        console.warn('Continuing without database...')
+        // Don't block - continue anyway
       }
 
       router.push(`/pay/${paymentId}`)
