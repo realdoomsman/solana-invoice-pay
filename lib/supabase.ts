@@ -1,20 +1,51 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient, SupabaseClient } from '@sutml:supabase-js'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+let supabaseInstance: SupabaseClient | null = null
+let supabaseAdminInstance: SupabaseClient | null = null
 
-console.log('🔍 Supabase Init:', { supabaseUrl, hasKey: !!supabaseAnonKey })
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
-
-// Server-side client with service role (for admin operations)
-export const supabaseAdmin = createClient(
-  supabaseUrl,
-  process.env.SUPABASE_SERVICE_ROLE_KEY || '',
-  {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false
+// Lazy initialization - only create client when actually used
+export function getSupabase() {
+  if (!supabaseInstance) {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    
+    if (!supabaseUrl || !supabaseAnonKey) {
+      throw new Error('Supabase credentials not configured. Please set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY')
     }
+    
+    supabaseInstance = createClient(supabaseUrl, supabaseAnonKey)
   }
-)
+  return supabaseInstance
+}
+
+export function getSupabaseAdmin() {
+  if (!supabaseAdminInstance) {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+    
+    if (!supabaseUrl || !serviceRoleKey) {
+      throw new Error('Supabase admin credentials not configured')
+    }
+    
+    supabaseAdminInstance = createClient(supabaseUrl, serviceRoleKey, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false
+      }
+    })
+  }
+  return supabaseAdminInstance
+}
+
+// Backwards compatibility - but these will throw if not configured
+export const supabase = new Proxy({} as SupabaseClient, {
+  get: (target, prop) => {
+    return getSupabase()[prop as keyof SupabaseClient]
+  }
+})
+
+export const supabaseAdmin = new Proxy({} as SupabaseClient, {
+  get: (target, prop) => {
+    return getSupabaseAdmin()[prop as keyof SupabaseClient]
+  }
+})
