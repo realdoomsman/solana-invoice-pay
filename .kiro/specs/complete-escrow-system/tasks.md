@@ -1,19 +1,19 @@
 # Implementation Plan: Complete Escrow System
 
-- [-] 1. Set up database schema and core types
+- [x] 1. Set up database schema and core types
   - Create Supabase migration for all escrow tables
   - Define TypeScript interfaces for all escrow types
   - Create shared type definitions file
   - _Requirements: 1.5, 13.1, 13.2_
 
-- [ ] 2. Implement escrow wallet management
-- [ ] 2.1 Create wallet generation utilities
+- [-] 2. Implement escrow wallet management
+- [x] 2.1 Create wallet generation utilities
   - Write function to generate unique Solana keypairs
   - Implement AES-256-GCM encryption for private keys
   - Create secure key storage functions
   - _Requirements: 13.1, 13.2, 13.3_
 
-- [ ] 2.2 Build wallet decryption and signing
+- [-] 2.2 Build wallet decryption and signing
   - Implement private key decryption
   - Create transaction signing utilities
   - Add error handling for key operations
