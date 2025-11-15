@@ -6,7 +6,7 @@
   - Create shared type definitions file
   - _Requirements: 1.5, 13.1, 13.2_
 
-- [-] 2. Implement escrow wallet management
+- [x] 2. Implement escrow wallet management
 - [x] 2.1 Create wallet generation utilities
   - Write function to generate unique Solana keypairs
   - Implement AES-256-GCM encryption for private keys
@@ -19,14 +19,14 @@
   - Add error handling for key operations
   - _Requirements: 13.4, 13.5_
 
-- [-] 2.3 Write wallet security tests
+- [x] 2.3 Write wallet security tests
   - Test key generation randomness
   - Verify encryption/decryption
   - Test unauthorized access prevention
   - _Requirements: 13.6_
 
-- [ ] 3. Build Traditional Escrow system
-- [ ] 3.1 Create traditional escrow contract creation
+- [-] 3. Build Traditional Escrow system
+- [-] 3.1 Create traditional escrow contract creation
   - Implement dual-party escrow creation API
   - Add buyer and seller amount validation
   - Generate unique escrow wallet
