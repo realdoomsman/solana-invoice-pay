@@ -13,13 +13,13 @@
   - Create secure key storage functions
   - _Requirements: 13.1, 13.2, 13.3_
 
-- [-] 2.2 Build wallet decryption and signing
+- [x] 2.2 Build wallet decryption and signing
   - Implement private key decryption
   - Create transaction signing utilities
   - Add error handling for key operations
   - _Requirements: 13.4, 13.5_
 
-- [ ] 2.3 Write wallet security tests
+- [-] 2.3 Write wallet security tests
   - Test key generation randomness
   - Verify encryption/decryption
   - Test unauthorized access prevention
