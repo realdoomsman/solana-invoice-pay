@@ -18,6 +18,7 @@ import {
   TOKEN_PROGRAM_ID
 } from '@solana/spl-token'
 import { recoverKeypairFromEncrypted, logKeyAccess, hashForLogging } from './wallet-manager'
+import { transactionMonitor } from '@/lib/transaction-monitor'
 
 // ============================================
 // CONFIGURATION
@@ -46,7 +47,8 @@ function getSolanaConnection(): Connection {
 export async function transferSOL(
   encryptedPrivateKey: string,
   toAddress: string,
-  amountSOL: number
+  amountSOL: number,
+  escrowId?: string
 ): Promise<string> {
   try {
     // Log key access
@@ -61,6 +63,11 @@ export async function transferSOL(
     
     // Get connection
     const connection = getSolanaConnection()
+    
+    // Initialize transaction monitor if not already done
+    if (!transactionMonitor['connection']) {
+      transactionMonitor.initialize(connection)
+    }
     
     // Convert SOL to lamports
     const lamports = Math.floor(amountSOL * LAMPORTS_PER_SOL)
@@ -84,6 +91,14 @@ export async function transferSOL(
         preflightCommitment: 'confirmed'
       }
     )
+    
+    // Register transaction for monitoring
+    transactionMonitor.registerTransaction(signature, 'release', escrowId, {
+      from: fromKeypair.publicKey.toBase58(),
+      to: toAddress,
+      amount: amountSOL,
+      token: 'SOL',
+    })
     
     console.log(`✅ SOL transfer successful: ${signature}`)
     console.log(`   From: ${fromKeypair.publicKey.toBase58()}`)
@@ -115,7 +130,8 @@ export async function transferSPLToken(
   encryptedPrivateKey: string,
   toAddress: string,
   amount: number,
-  tokenMint: string
+  tokenMint: string,
+  escrowId?: string
 ): Promise<string> {
   try {
     logKeyAccess({
@@ -130,6 +146,11 @@ export async function transferSPLToken(
     
     // Get connection
     const connection = getSolanaConnection()
+    
+    // Initialize transaction monitor if not already done
+    if (!transactionMonitor['connection']) {
+      transactionMonitor.initialize(connection)
+    }
     
     // Get associated token accounts
     const fromTokenAccount = await getAssociatedTokenAddress(
@@ -169,6 +190,14 @@ export async function transferSPLToken(
       }
     )
     
+    // Register transaction for monitoring
+    transactionMonitor.registerTransaction(signature, 'release', escrowId, {
+      from: fromKeypair.publicKey.toBase58(),
+      to: toAddress,
+      amount,
+      tokenMint,
+    })
+    
     console.log(`✅ SPL token transfer successful: ${signature}`)
     console.log(`   From: ${fromKeypair.publicKey.toBase58()}`)
     console.log(`   To: ${toAddress}`)
@@ -200,7 +229,8 @@ export async function transferSPLToken(
 export async function transferToMultiple(
   encryptedPrivateKey: string,
   recipients: Array<{ address: string; amount: number }>,
-  token: 'SOL' | string
+  token: 'SOL' | string,
+  escrowId?: string
 ): Promise<string> {
   try {
     logKeyAccess({
@@ -210,6 +240,11 @@ export async function transferToMultiple(
     
     const fromKeypair = recoverKeypairFromEncrypted(encryptedPrivateKey)
     const connection = getSolanaConnection()
+    
+    // Initialize transaction monitor if not already done
+    if (!transactionMonitor['connection']) {
+      transactionMonitor.initialize(connection)
+    }
     
     const transaction = new Transaction()
     
@@ -266,6 +301,14 @@ export async function transferToMultiple(
         preflightCommitment: 'confirmed'
       }
     )
+    
+    // Register transaction for monitoring
+    transactionMonitor.registerTransaction(signature, 'release', escrowId, {
+      from: fromKeypair.publicKey.toBase58(),
+      recipients: recipients.map(r => ({ address: r.address, amount: r.amount })),
+      token,
+      totalAmount: recipients.reduce((sum, r) => sum + r.amount, 0),
+    })
     
     console.log(`✅ Multi-recipient transfer successful: ${signature}`)
     console.log(`   Recipients: ${recipients.length}`)

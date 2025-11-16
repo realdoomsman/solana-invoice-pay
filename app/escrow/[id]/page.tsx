@@ -4,26 +4,38 @@ import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
-import { Connection, PublicKey, Transaction, SystemProgram, LAMPORTS_PER_SOL } from '@solana/web3.js'
-import toast from 'react-hot-toast'
+import { useEnhancedToast } from '@/hooks/useToast'
 import { 
   getEscrowByPaymentId, 
   getEscrowMilestones, 
   getEscrowActions,
-  submitMilestone,
-  approveMilestone,
-  raiseDispute,
-  EscrowContract,
-  EscrowMilestone,
-  EscrowAction
+  raiseDispute
 } from '@/lib/escrow'
+import type { EscrowContract, EscrowMilestone, EscrowAction } from '@/lib/escrow/types'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import { PageLoadingSkeleton } from '@/components/ui/LoadingState'
+import { ErrorMessage } from '@/components/ui/ErrorMessage'
+import { SuccessAnimation } from '@/components/ui/SuccessAnimation'
+import TraditionalEscrowDepositStatus from '@/components/TraditionalEscrowDepositStatus'
+import TraditionalEscrowConfirmation from '@/components/TraditionalEscrowConfirmation'
+import MilestoneWorkSubmission from '@/components/MilestoneWorkSubmission'
+import MilestoneApproval from '@/components/MilestoneApproval'
+import MilestoneProgress from '@/components/MilestoneProgress'
+import AtomicSwapStatus from '@/components/AtomicSwapStatus'
+import EscrowTypeDisplay from '@/components/EscrowTypeDisplay'
+import EscrowStatusBadge from '@/components/EscrowStatusBadge'
+import EscrowPartyInfo from '@/components/EscrowPartyInfo'
+import EscrowAmountDisplay from '@/components/EscrowAmountDisplay'
+import EscrowActivityTimeline from '@/components/EscrowActivityTimeline'
+import EscrowActionButtons from '@/components/EscrowActionButtons'
+import MultiSigTransactionStatus from '@/components/MultiSigTransactionStatus'
 
 export default function EscrowManagementPage() {
   const params = useParams()
   const router = useRouter()
-  const { publicKey, sendTransaction } = useWallet()
+  const { publicKey } = useWallet()
+  const toast = useEnhancedToast()
   
   const [escrow, setEscrow] = useState<EscrowContract | null>(null)
   const [milestones, setMilestones] = useState<EscrowMilestone[]>([])
@@ -33,6 +45,12 @@ export default function EscrowManagementPage() {
   const [notes, setNotes] = useState('')
   const [disputeReason, setDisputeReason] = useState('')
   const [showDisputeModal, setShowDisputeModal] = useState(false)
+  const [showConfirmModal, setShowConfirmModal] = useState(false)
+  const [showWorkSubmissionModal, setShowWorkSubmissionModal] = useState(false)
+  const [showApprovalModal, setShowApprovalModal] = useState(false)
+  const [depositStatus, setDepositStatus] = useState<any>(null)
+  const [showSuccess, setShowSuccess] = useState(false)
+  const [successMessage, setSuccessMessage] = useState('')
 
   useEffect(() => {
     loadEscrowData()
@@ -48,104 +66,65 @@ export default function EscrowManagementPage() {
         setMilestones(milestonesData)
         const actionsData = await getEscrowActions(escrowData.id)
         setActions(actionsData)
+        
+        // Load deposit status for traditional escrow
+        if (escrowData.escrow_type === 'traditional') {
+          const depositResponse = await fetch(`/api/escrow/deposit?escrowId=${escrowData.id}`)
+          if (depositResponse.ok) {
+            const depositData = await depositResponse.json()
+            setDepositStatus(depositData)
+          }
+        }
       }
     } catch (error) {
       console.error('Error loading escrow:', error)
-      toast.error('Failed to load escrow data')
+      toast.handleError(error, 'Failed to load escrow data')
     } finally {
       setLoading(false)
     }
   }
 
-  const handleSubmitWork = async (milestone: EscrowMilestone) => {
+
+
+
+
+  const handleConfirmEscrow = async () => {
     if (!publicKey || !escrow) return
-    
-    if (publicKey.toString() !== escrow.seller_wallet) {
-      toast.error('Only the seller can submit work')
-      return
-    }
 
-    const loadingToast = toast.loading('Submitting work...')
     try {
-      await submitMilestone(milestone.id, publicKey.toString(), notes)
-      toast.success('Work submitted for review!', { id: loadingToast })
-      setNotes('')
-      setSelectedMilestone(null)
-      await loadEscrowData()
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to submit work', { id: loadingToast })
-    }
-  }
-
-  const handleApproveWork = async (milestone: EscrowMilestone) => {
-    if (!publicKey || !escrow) return
-    
-    if (publicKey.toString() !== escrow.buyer_wallet) {
-      toast.error('Only the buyer can approve work')
-      return
-    }
-
-    const loadingToast = toast.loading('Approving work...')
-    try {
-      // First approve in database
-      await approveMilestone(milestone.id, publicKey.toString(), notes)
-      
-      // Then release funds on-chain
-      await releaseFunds(milestone)
-      
-      toast.success('Work approved and funds released!', { id: loadingToast })
-      setNotes('')
-      setSelectedMilestone(null)
-      await loadEscrowData()
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to approve work', { id: loadingToast })
-    }
-  }
-
-  const releaseFunds = async (milestone: EscrowMilestone) => {
-    if (!publicKey || !escrow || !sendTransaction) {
-      throw new Error('Wallet not connected')
-    }
-
-    const network = process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'devnet'
-    const rpcUrl = process.env.NEXT_PUBLIC_SOLANA_RPC_URL
-    const endpoint = rpcUrl || (
-      network === 'mainnet-beta'
-        ? 'https://api.mainnet-beta.solana.com'
-        : `https://api.${network}.solana.com`
-    )
-    const connection = new Connection(endpoint, 'confirmed')
-
-    // Decrypt escrow wallet private key and send funds
-    const escrowWallet = new PublicKey(escrow.payment_wallet)
-    const sellerWallet = new PublicKey(escrow.seller_wallet)
-    const amountLamports = milestone.amount * LAMPORTS_PER_SOL
-
-    // Create transaction to send from escrow wallet to seller
-    const transaction = new Transaction().add(
-      SystemProgram.transfer({
-        fromPubkey: escrowWallet,
-        toPubkey: sellerWallet,
-        lamports: amountLamports,
+      const response = await fetch('/api/escrow/confirm', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          escrowId: escrow.id,
+          confirmerWallet: publicKey.toString(),
+          notes: notes || undefined
+        })
       })
-    )
 
-    // Note: In production, this would need proper key management
-    // For now, we'll use the buyer's wallet to sign (simplified)
-    const signature = await sendTransaction(transaction, connection)
-    await connection.confirmTransaction(signature, 'confirmed')
+      const data = await response.json()
 
-    // Update milestone with tx signature
-    const { releaseMilestoneFunds } = await import('@/lib/escrow')
-    await releaseMilestoneFunds(milestone.id, signature)
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to confirm')
+      }
 
-    return signature
+      setShowConfirmModal(false)
+      setNotes('')
+      setSuccessMessage('Transaction confirmed!')
+      setShowSuccess(true)
+      
+      setTimeout(async () => {
+        await loadEscrowData()
+        setShowSuccess(false)
+      }, 2000)
+    } catch (error: any) {
+      toast.handleError(error, 'Failed to confirm escrow')
+    }
   }
 
   const handleRaiseDispute = async () => {
     if (!publicKey || !escrow || !disputeReason) return
 
-    const loadingToast = toast.loading('Raising dispute...')
     try {
       await raiseDispute(
         escrow.id,
@@ -153,12 +132,18 @@ export default function EscrowManagementPage() {
         publicKey.toString(),
         disputeReason
       )
-      toast.success('Dispute raised. Admin will review.', { id: loadingToast })
+      
       setShowDisputeModal(false)
       setDisputeReason('')
-      await loadEscrowData()
+      setSuccessMessage('Dispute raised successfully')
+      setShowSuccess(true)
+      
+      setTimeout(async () => {
+        await loadEscrowData()
+        setShowSuccess(false)
+      }, 2000)
     } catch (error: any) {
-      toast.error(error.message || 'Failed to raise dispute', { id: loadingToast })
+      toast.handleError(error, 'Failed to raise dispute')
     }
   }
 
@@ -178,24 +163,34 @@ export default function EscrowManagementPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="text-white">Loading escrow...</div>
+      <div className="min-h-screen bg-black">
+        <Header />
+        <div className="max-w-6xl mx-auto px-4 py-12">
+          <PageLoadingSkeleton />
+        </div>
+        <Footer />
       </div>
     )
   }
 
   if (!escrow) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-white mb-4">Escrow Not Found</h1>
-          <button
-            onClick={() => router.push('/')}
-            className="text-blue-400 hover:underline"
-          >
-            Go Home
-          </button>
+      <div className="min-h-screen bg-black">
+        <Header />
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="text-center max-w-md">
+            <ErrorMessage
+              type="error"
+              title="Escrow Not Found"
+              message="The escrow you're looking for doesn't exist or has been removed."
+              action={{
+                label: 'Go Home',
+                onClick: () => router.push('/')
+              }}
+            />
+          </div>
         </div>
+        <Footer />
       </div>
     )
   }
@@ -208,50 +203,193 @@ export default function EscrowManagementPage() {
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
-            <h1 className="text-3xl font-bold text-white">Escrow Management</h1>
+            <h1 className="text-3xl font-bold text-white">Escrow Details</h1>
             <WalletMultiButton />
           </div>
-          <p className="text-slate-400">{escrow.description}</p>
+          {escrow.description && (
+            <p className="text-slate-400">{escrow.description}</p>
+          )}
         </div>
 
-        {/* Escrow Status */}
+        {/* Escrow Overview Card */}
         <div className="bg-slate-900 rounded-xl p-6 mb-8 border border-slate-800">
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-6 mb-4">
             <div>
-              <div className="text-slate-400 text-sm mb-1">Status</div>
-              <div className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(escrow.status)}`}>
-                {escrow.status.toUpperCase()}
-              </div>
+              <div className="text-slate-400 text-sm mb-2">Escrow Type</div>
+              <EscrowTypeDisplay type={escrow.escrow_type} />
             </div>
             <div>
-              <div className="text-slate-400 text-sm mb-1">Total Amount</div>
-              <div className="text-2xl font-bold text-white">{escrow.total_amount} {escrow.token}</div>
+              <div className="text-slate-400 text-sm mb-2">Status</div>
+              <EscrowStatusBadge status={escrow.status} />
             </div>
             <div>
-              <div className="text-slate-400 text-sm mb-1">Your Role</div>
-              <div className="text-white font-semibold">
-                {isSeller ? '🛠️ Seller' : isBuyer ? '💰 Buyer' : '👀 Observer'}
+              <div className="text-slate-400 text-sm mb-2">Escrow ID</div>
+              <div className="font-mono text-sm text-white break-all">
+                {escrow.payment_id}
               </div>
             </div>
           </div>
+          
+          {/* Timestamps */}
+          <div className="pt-4 border-t border-slate-800 grid md:grid-cols-3 gap-4 text-sm">
+            <div>
+              <span className="text-slate-500">Created:</span>{' '}
+              <span className="text-slate-300">
+                {new Date(escrow.created_at).toLocaleDateString()}
+              </span>
+            </div>
+            {escrow.funded_at && (
+              <div>
+                <span className="text-slate-500">Funded:</span>{' '}
+                <span className="text-slate-300">
+                  {new Date(escrow.funded_at).toLocaleDateString()}
+                </span>
+              </div>
+            )}
+            {escrow.completed_at && (
+              <div>
+                <span className="text-slate-500">Completed:</span>{' '}
+                <span className="text-slate-300">
+                  {new Date(escrow.completed_at).toLocaleDateString()}
+                </span>
+              </div>
+            )}
+            {escrow.expires_at && !escrow.completed_at && (
+              <div>
+                <span className="text-slate-500">Expires:</span>{' '}
+                <span className="text-yellow-400">
+                  {new Date(escrow.expires_at).toLocaleDateString()}
+                </span>
+              </div>
+            )}
+          </div>
+          
+          {/* Evidence Link - Show for parties involved */}
+          {(isBuyer || isSeller) && (
+            <div className="pt-4 border-t border-slate-800 mt-4">
+              <button
+                onClick={() => router.push(`/escrow/${params.id}/evidence`)}
+                className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold text-sm transition-colors"
+              >
+                📎 View & Submit Evidence
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Amount Display */}
+        <div className="mb-8">
+          <EscrowAmountDisplay
+            type={escrow.escrow_type}
+            buyerAmount={escrow.buyer_amount}
+            sellerAmount={escrow.seller_amount}
+            token={escrow.token}
+            swapAssetBuyer={escrow.swap_asset_buyer}
+            swapAssetSeller={escrow.swap_asset_seller}
+            currentUserWallet={publicKey?.toString()}
+            buyerWallet={escrow.buyer_wallet}
+            sellerWallet={escrow.seller_wallet}
+          />
         </div>
 
         {/* Parties */}
-        <div className="grid md:grid-cols-2 gap-6 mb-8">
-          <div className="bg-slate-900 rounded-xl p-6 border border-slate-800">
-            <div className="text-slate-400 text-sm mb-2">Buyer</div>
-            <div className="font-mono text-sm text-white break-all">{escrow.buyer_wallet}</div>
-          </div>
-          <div className="bg-slate-900 rounded-xl p-6 border border-slate-800">
-            <div className="text-slate-400 text-sm mb-2">Seller</div>
-            <div className="font-mono text-sm text-white break-all">{escrow.seller_wallet}</div>
-          </div>
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold text-white mb-4">Parties</h2>
+          <EscrowPartyInfo
+            type={escrow.escrow_type}
+            buyerWallet={escrow.buyer_wallet}
+            sellerWallet={escrow.seller_wallet}
+            buyerAmount={escrow.buyer_amount}
+            sellerAmount={escrow.seller_amount}
+            swapAssetBuyer={escrow.swap_asset_buyer}
+            swapAssetSeller={escrow.swap_asset_seller}
+            token={escrow.token}
+            currentUserWallet={publicKey?.toString()}
+          />
         </div>
 
-        {/* Milestones */}
+        {/* Action Buttons */}
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-white mb-4">Milestones</h2>
-          <div className="space-y-4">
+          <h2 className="text-2xl font-bold text-white mb-4">Actions</h2>
+          <EscrowActionButtons
+            escrow={escrow}
+            milestones={milestones}
+            currentUserWallet={publicKey?.toString()}
+            depositStatus={depositStatus}
+            onConfirm={() => setShowConfirmModal(true)}
+            onDispute={() => setShowDisputeModal(true)}
+          />
+        </div>
+
+        {/* Multi-Sig Transaction Status */}
+        {(isBuyer || isSeller) && (
+          <div className="mb-8">
+            <MultiSigTransactionStatus
+              escrowId={escrow.id}
+              userWallet={publicKey?.toString()}
+              onSignatureAdded={loadEscrowData}
+            />
+          </div>
+        )}
+
+        {/* Traditional Escrow - Deposit Status */}
+        {escrow.escrow_type === 'traditional' && depositStatus && !depositStatus.fully_funded && (
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold text-white mb-4">Deposit Status</h2>
+            <TraditionalEscrowDepositStatus
+              escrowId={escrow.id}
+              escrowWallet={escrow.escrow_wallet}
+              buyerWallet={escrow.buyer_wallet}
+              sellerWallet={escrow.seller_wallet}
+              buyerAmount={depositStatus.buyer_amount}
+              sellerAmount={depositStatus.seller_amount}
+              token={depositStatus.token}
+              buyerDeposited={depositStatus.buyer_deposited}
+              sellerDeposited={depositStatus.seller_deposited}
+              fullyFunded={depositStatus.fully_funded}
+              onDepositDetected={loadEscrowData}
+            />
+          </div>
+        )}
+
+        {/* Traditional Escrow - Confirmation */}
+        {escrow.escrow_type === 'traditional' && depositStatus?.fully_funded && (
+          <div className="mb-8">
+            <TraditionalEscrowConfirmation
+              escrowId={escrow.id}
+              buyerWallet={escrow.buyer_wallet}
+              sellerWallet={escrow.seller_wallet}
+              buyerConfirmed={escrow.buyer_confirmed || false}
+              sellerConfirmed={escrow.seller_confirmed || false}
+              fullyFunded={depositStatus.fully_funded}
+              status={escrow.status}
+              onConfirmationSuccess={loadEscrowData}
+            />
+          </div>
+        )}
+
+        {/* Atomic Swap Status */}
+        {escrow.escrow_type === 'atomic_swap' && (
+          <div className="mb-8">
+            <AtomicSwapStatus
+              escrow={escrow}
+              onRefresh={loadEscrowData}
+            />
+          </div>
+        )}
+
+        {/* Milestone Progress (for simple_buyer escrow) */}
+        {escrow.escrow_type === 'simple_buyer' && milestones.length > 0 && (
+          <div className="mb-8">
+            <MilestoneProgress milestones={milestones} token={escrow.token} />
+          </div>
+        )}
+
+        {/* Milestones */}
+        {milestones.length > 0 && (
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold text-white mb-4">Milestones</h2>
+            <div className="space-y-4">
             {milestones.map((milestone, index) => (
               <div key={milestone.id} className="bg-slate-900 rounded-xl p-6 border border-slate-800">
                 <div className="flex items-start justify-between mb-4">
@@ -273,10 +411,37 @@ export default function EscrowManagementPage() {
                 {isSeller && milestone.status === 'pending' && (
                   <div className="mt-4 pt-4 border-t border-slate-800">
                     <button
-                      onClick={() => setSelectedMilestone(milestone)}
-                      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold"
+                      onClick={() => {
+                        setSelectedMilestone(milestone)
+                        setShowWorkSubmissionModal(true)
+                      }}
+                      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors"
                     >
-                      Submit Work
+                      📝 Submit Work
+                    </button>
+                  </div>
+                )}
+
+                {/* Work Submitted - Seller can see status */}
+                {isSeller && milestone.status === 'work_submitted' && (
+                  <div className="mt-4 pt-4 border-t border-slate-800">
+                    <div className="flex items-center gap-3 mb-3">
+                      <span className="text-blue-400 text-sm">✓ Work submitted - waiting for buyer review</span>
+                    </div>
+                    {milestone.seller_notes && (
+                      <div className="p-3 bg-slate-800 rounded-lg mb-3">
+                        <div className="text-slate-400 text-xs mb-1">Your submission:</div>
+                        <div className="text-white text-sm">{milestone.seller_notes}</div>
+                      </div>
+                    )}
+                    <button
+                      onClick={() => {
+                        setSelectedMilestone(milestone)
+                        setShowWorkSubmissionModal(true)
+                      }}
+                      className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+                    >
+                      Update Submission
                     </button>
                   </div>
                 )}
@@ -284,27 +449,36 @@ export default function EscrowManagementPage() {
                 {/* Buyer Actions */}
                 {isBuyer && milestone.status === 'work_submitted' && (
                   <div className="mt-4 pt-4 border-t border-slate-800">
-                    {milestone.seller_notes && (
-                      <div className="mb-4 p-3 bg-slate-800 rounded-lg">
-                        <div className="text-slate-400 text-xs mb-1">Seller's Notes:</div>
-                        <div className="text-white text-sm">{milestone.seller_notes}</div>
+                    <div className="mb-4 p-4 bg-blue-900/20 border border-blue-800 rounded-lg">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-blue-400 text-lg">👀</span>
+                        <span className="text-blue-300 font-semibold text-sm">Work submitted - awaiting your review</span>
                       </div>
-                    )}
+                      {milestone.seller_notes && (
+                        <div className="mt-3 p-3 bg-slate-900 rounded border border-slate-700">
+                          <div className="text-slate-400 text-xs mb-1">Seller's Notes:</div>
+                          <div className="text-white text-sm">{milestone.seller_notes}</div>
+                        </div>
+                      )}
+                    </div>
                     <div className="flex gap-3">
                       <button
-                        onClick={() => setSelectedMilestone(milestone)}
-                        className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold"
+                        onClick={() => {
+                          setSelectedMilestone(milestone)
+                          setShowApprovalModal(true)
+                        }}
+                        className="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold transition-colors"
                       >
-                        ✓ Approve & Release Funds
+                        ✓ Review & Approve
                       </button>
                       <button
                         onClick={() => {
                           setSelectedMilestone(milestone)
                           setShowDisputeModal(true)
                         }}
-                        className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold"
+                        className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold transition-colors"
                       >
-                        ⚠ Raise Dispute
+                        ⚠ Dispute
                       </button>
                     </div>
                   </div>
@@ -328,96 +502,107 @@ export default function EscrowManagementPage() {
                 )}
               </div>
             ))}
-          </div>
-        </div>
-
-        {/* Activity Log */}
-        <div>
-          <h2 className="text-2xl font-bold text-white mb-4">Activity Log</h2>
-          <div className="bg-slate-900 rounded-xl p-6 border border-slate-800">
-            <div className="space-y-3">
-              {actions.length === 0 ? (
-                <div className="text-slate-400 text-center py-4">No activity yet</div>
-              ) : (
-                actions.map((action) => (
-                  <div key={action.id} className="flex gap-3 text-sm">
-                    <div className="text-slate-500">
-                      {new Date(action.created_at).toLocaleString()}
-                    </div>
-                    <div className="text-slate-400">•</div>
-                    <div className="text-white flex-1">
-                      <span className="font-semibold">{action.action}</span>
-                      {action.notes && <span className="text-slate-400"> - {action.notes}</span>}
-                    </div>
-                  </div>
-                ))
-              )}
             </div>
           </div>
+        )}
+
+        {/* Activity Timeline */}
+        <div>
+          <h2 className="text-2xl font-bold text-white mb-4">Activity Timeline</h2>
+          <EscrowActivityTimeline 
+            actions={actions} 
+            network={process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'devnet'}
+          />
         </div>
       </div>
 
-      {/* Submit Work Modal */}
-      {selectedMilestone && selectedMilestone.status === 'pending' && isSeller && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
-          <div className="bg-slate-900 rounded-xl p-6 max-w-md w-full border border-slate-800">
-            <h3 className="text-xl font-bold text-white mb-4">Submit Work</h3>
-            <p className="text-slate-400 mb-4">
-              Submit your completed work for milestone: {selectedMilestone.description}
-            </p>
-            <textarea
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              placeholder="Add notes about the completed work..."
-              rows={4}
-              className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white mb-4"
-            />
-            <div className="flex gap-3">
-              <button
-                onClick={() => handleSubmitWork(selectedMilestone)}
-                className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold"
-              >
-                Submit for Review
-              </button>
-              <button
-                onClick={() => {
-                  setSelectedMilestone(null)
-                  setNotes('')
-                }}
-                className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
+      {/* Work Submission Modal */}
+      {showWorkSubmissionModal && selectedMilestone && isSeller && escrow && (
+        <MilestoneWorkSubmission
+          milestone={{
+            id: selectedMilestone.id,
+            description: selectedMilestone.description,
+            percentage: selectedMilestone.percentage,
+            amount: selectedMilestone.amount,
+            status: selectedMilestone.status,
+            milestone_order: selectedMilestone.milestone_order,
+          }}
+          escrowId={escrow.id}
+          sellerWallet={publicKey?.toString() || ''}
+          token={escrow.token}
+          onSubmitSuccess={() => {
+            setShowWorkSubmissionModal(false)
+            setSelectedMilestone(null)
+            loadEscrowData()
+          }}
+          onCancel={() => {
+            setShowWorkSubmissionModal(false)
+            setSelectedMilestone(null)
+          }}
+        />
       )}
 
-      {/* Approve Work Modal */}
-      {selectedMilestone && selectedMilestone.status === 'work_submitted' && isBuyer && !showDisputeModal && (
+      {/* Milestone Approval Modal */}
+      {showApprovalModal && selectedMilestone && isBuyer && escrow && (
+        <MilestoneApproval
+          milestone={{
+            id: selectedMilestone.id,
+            description: selectedMilestone.description,
+            percentage: selectedMilestone.percentage,
+            amount: selectedMilestone.amount,
+            status: selectedMilestone.status,
+            milestone_order: selectedMilestone.milestone_order,
+            seller_notes: selectedMilestone.seller_notes,
+            seller_evidence_urls: selectedMilestone.seller_evidence_urls,
+            seller_submitted_at: selectedMilestone.seller_submitted_at,
+          }}
+          escrowId={escrow.id}
+          buyerWallet={publicKey?.toString() || ''}
+          token={escrow.token}
+          onApprovalSuccess={() => {
+            setShowApprovalModal(false)
+            setSelectedMilestone(null)
+            loadEscrowData()
+          }}
+          onDisputeClick={() => {
+            setShowApprovalModal(false)
+            setShowDisputeModal(true)
+          }}
+          onCancel={() => {
+            setShowApprovalModal(false)
+            setSelectedMilestone(null)
+          }}
+        />
+      )}
+
+      {/* Confirmation Modal */}
+      {showConfirmModal && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
-          <div className="bg-slate-900 rounded-xl p-6 max-w-md w-full border border-slate-800">
-            <h3 className="text-xl font-bold text-white mb-4">Approve Work</h3>
+          <div className="bg-slate-900 rounded-xl p-6 max-w-md w-full border border-green-800">
+            <h3 className="text-xl font-bold text-white mb-4">Confirm Transaction</h3>
             <p className="text-slate-400 mb-4">
-              Approving will release {selectedMilestone.amount} {escrow.token} to the seller.
+              By confirming, you acknowledge that the transaction has been completed successfully. 
+              {escrow.buyer_confirmed || escrow.seller_confirmed 
+                ? ' Once both parties confirm, funds will be automatically released.'
+                : ' You are the first to confirm. Waiting for counterparty confirmation.'}
             </p>
             <textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              placeholder="Add approval notes (optional)..."
+              placeholder="Add confirmation notes (optional)..."
               rows={3}
               className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white mb-4"
             />
             <div className="flex gap-3">
               <button
-                onClick={() => handleApproveWork(selectedMilestone)}
+                onClick={handleConfirmEscrow}
                 className="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold"
               >
-                Approve & Release Funds
+                Confirm Transaction
               </button>
               <button
                 onClick={() => {
-                  setSelectedMilestone(null)
+                  setShowConfirmModal(false)
                   setNotes('')
                 }}
                 className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg"
@@ -468,6 +653,14 @@ export default function EscrowManagementPage() {
       )}
 
       <Footer />
+
+      {/* Success Animation */}
+      <SuccessAnimation
+        show={showSuccess}
+        title={successMessage}
+        icon="check"
+        duration={2000}
+      />
     </div>
   )
 }

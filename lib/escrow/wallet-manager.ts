@@ -6,6 +6,7 @@
 import { Keypair } from '@solana/web3.js'
 import * as crypto from 'crypto'
 import { EscrowWallet } from './types'
+import { logKeyAccess as logKeyAccessToSystem, logSecurityEvent } from '@/lib/logging'
 
 // ============================================
 // CONFIGURATION
@@ -95,13 +96,24 @@ export function encryptPrivateKey(privateKey: string): string {
 /**
  * Decrypt an encrypted private key
  */
-export function decryptPrivateKey(encryptedData: string): string {
+export function decryptPrivateKey(encryptedData: string, escrowId?: string, accessor?: string): string {
   try {
+    // Log key access for audit trail
+    if (escrowId && accessor) {
+      logKeyAccessToSystem(escrowId, accessor, 'decrypt_for_transaction')
+    }
+    
     const key = getEncryptionKey()
     
     // Split the encrypted data
     const parts = encryptedData.split(':')
     if (parts.length !== 3) {
+      logSecurityEvent({
+        type: 'suspicious_activity',
+        severity: 'high',
+        description: 'Invalid encrypted data format detected',
+        metadata: { escrowId, accessor },
+      })
       throw new Error('Invalid encrypted data format')
     }
     
@@ -122,6 +134,12 @@ export function decryptPrivateKey(encryptedData: string): string {
     return decrypted
   } catch (error) {
     console.error('Decryption error:', error)
+    logSecurityEvent({
+      type: 'key_access',
+      severity: 'critical',
+      description: 'Failed to decrypt private key',
+      metadata: { escrowId, accessor, error: (error as Error).message },
+    })
     throw new Error('Failed to decrypt private key')
   }
 }

@@ -9,12 +9,18 @@ export interface EscrowContract {
   total_amount: number
   token: string
   description: string
-  status: 'created' | 'funded' | 'active' | 'completed' | 'disputed' | 'cancelled'
+  status: 'created' | 'funded' | 'active' | 'completed' | 'disputed' | 'cancelled' | 'fully_funded'
   payment_wallet: string
   encrypted_private_key: string
   created_at: string
   funded_at?: string
   completed_at?: string
+  // Traditional escrow fields
+  escrow_type?: 'traditional' | 'simple_buyer' | 'atomic_swap'
+  buyer_confirmed?: boolean
+  seller_confirmed?: boolean
+  buyer_deposited?: boolean
+  seller_deposited?: boolean
 }
 
 export interface EscrowMilestone {
@@ -27,6 +33,7 @@ export interface EscrowMilestone {
   status: 'pending' | 'work_submitted' | 'approved' | 'released' | 'disputed'
   seller_submitted_at?: string
   seller_notes?: string
+  seller_evidence_urls?: string[]
   buyer_approved_at?: string
   buyer_notes?: string
   released_at?: string

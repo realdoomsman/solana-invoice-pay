@@ -1,4 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { submitMilestoneWork } from '@/lib/escrow/simple-buyer'
+import { sendWorkSubmissionNotification } from '@/lib/notifications/send-notification'
+import { supabase } from '@/lib/supabase'
 
 export async function POST(request: NextRequest) {
   try {
@@ -10,19 +13,63 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { submitMilestone } = await import('@/lib/escrow')
-    const { milestoneId, sellerWallet, notes } = await request.json()
+    const { milestoneId, sellerWallet, notes, evidenceUrls } = await request.json()
 
     if (!milestoneId || !sellerWallet) {
       return NextResponse.json(
-        { error: 'Missing required fields' },
+        { error: 'Missing required fields: milestoneId and sellerWallet are required' },
         { status: 400 }
       )
     }
 
-    await submitMilestone(milestoneId, sellerWallet, notes)
+    const result = await submitMilestoneWork({
+      milestoneId,
+      sellerWallet,
+      notes,
+      evidenceUrls,
+    })
 
-    return NextResponse.json({ success: true })
+    if (!result.success) {
+      return NextResponse.json(
+        { error: result.error },
+        { status: 400 }
+      )
+    }
+
+    // Send work submission notification to buyer
+    try {
+      const { data: milestone } = await supabase
+        .from('escrow_milestones')
+        .select('escrow_id, description')
+        .eq('id', milestoneId)
+        .single()
+      
+      if (milestone) {
+        const { data: escrow } = await supabase
+          .from('escrow_contracts')
+          .select('buyer_wallet')
+          .eq('id', milestone.escrow_id)
+          .single()
+        
+        if (escrow) {
+          await sendWorkSubmissionNotification(
+            escrow.buyer_wallet,
+            milestone.escrow_id,
+            milestoneId,
+            milestone.description
+          )
+        }
+      }
+    } catch (notifError) {
+      console.error('Failed to send work submission notification:', notifError)
+      // Don't fail the request if notification fails
+    }
+
+    return NextResponse.json({
+      success: true,
+      milestone: result.milestone,
+      message: 'Work submitted successfully. Buyer will be notified for review.',
+    })
   } catch (error: any) {
     console.error('Submit milestone error:', error)
     return NextResponse.json(
