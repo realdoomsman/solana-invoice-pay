@@ -40,30 +40,30 @@ export async function POST(request: NextRequest) {
     }
 
     // Send refund notifications if cancellation was executed
-    if (result.executed && result.refundDetails) {
+    if (result.executed) {
       try {
         const { data: escrow } = await supabase
           .from('escrow_contracts')
-          .select('buyer_wallet, seller_wallet, token, id')
-          .eq('id', result.refundDetails.escrowId)
+          .select('buyer_wallet, seller_wallet, token, id, buyer_amount, seller_amount')
+          .eq('id', escrowId)
           .single()
         
         if (escrow) {
           // Notify both parties about refunds
-          if (result.refundDetails.buyerRefund > 0) {
+          if (escrow.buyer_amount > 0) {
             await sendRefundNotification(
               escrow.buyer_wallet,
               escrow.id,
-              result.refundDetails.buyerRefund,
+              escrow.buyer_amount,
               escrow.token,
               'Mutual cancellation approved'
             )
           }
-          if (result.refundDetails.sellerRefund > 0) {
+          if (escrow.seller_amount > 0) {
             await sendRefundNotification(
               escrow.seller_wallet,
               escrow.id,
-              result.refundDetails.sellerRefund,
+              escrow.seller_amount,
               escrow.token,
               'Mutual cancellation approved'
             )

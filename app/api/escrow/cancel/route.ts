@@ -50,22 +50,29 @@ export async function POST(request: NextRequest) {
     }
 
     // Send refund notification if deposits were refunded
-    if (result.refunded && result.refundAmount && result.refundAmount > 0) {
+    if (result.refunded) {
       try {
         const { data: escrow } = await supabase
           .from('escrow_contracts')
-          .select('token')
+          .select('token, buyer_amount, seller_amount, buyer_wallet, seller_wallet')
           .eq('id', escrowId)
           .single()
         
         if (escrow) {
-          await sendRefundNotification(
-            creatorWallet,
-            escrowId,
-            result.refundAmount,
-            escrow.token,
-            reason || 'Escrow cancelled by creator'
-          )
+          // Determine refund amount based on who is cancelling
+          const refundAmount = escrow.buyer_wallet === creatorWallet 
+            ? escrow.buyer_amount 
+            : escrow.seller_amount
+          
+          if (refundAmount > 0) {
+            await sendRefundNotification(
+              creatorWallet,
+              escrowId,
+              refundAmount,
+              escrow.token,
+              reason || 'Escrow cancelled by creator'
+            )
+          }
         }
       } catch (notifError) {
         console.error('Failed to send refund notification:', notifError)
