@@ -92,8 +92,14 @@ export async function createTraditionalEscrow(
     await logEscrowAction(escrowId, params.buyerWallet, 'created', 
       `Traditional escrow created: ${params.buyerAmount} ${params.token} from buyer, ${params.sellerSecurityDeposit} ${params.token} security deposit from seller`)
     
-    // Create timeout monitoring
-    await createTimeoutMonitor(escrowId, 'deposit_timeout', timeoutHours)
+    // Create timeout monitoring using new timeout config system
+    const { createTimeoutMonitor: createTimeout } = await import('./timeout-config')
+    await createTimeout({
+      escrowId,
+      timeoutType: 'deposit_timeout',
+      customHours: timeoutHours,
+      expectedAction: 'Both parties must deposit funds',
+    })
     
     // Create notifications
     await createNotification(escrowId, params.buyerWallet, 'action_required',
@@ -124,6 +130,7 @@ export async function createTraditionalEscrow(
 
 /**
  * Record a deposit into escrow wallet
+ * @deprecated Use deposit-monitor.ts recordAndVerifyDeposit instead
  */
 export async function recordDeposit(
   escrowId: string,
@@ -133,57 +140,20 @@ export async function recordDeposit(
   txSignature: string
 ): Promise<boolean> {
   try {
-    const supabase = getSupabase()
+    // Import the new deposit monitor
+    const { recordAndVerifyDeposit } = await import('./deposit-monitor')
     
-    // Get escrow details
-    const { data: escrow, error: escrowError } = await supabase
-      .from('escrow_contracts')
-      .select('*')
-      .eq('id', escrowId)
-      .single()
+    const result = await recordAndVerifyDeposit(
+      escrowId,
+      depositorWallet,
+      amount,
+      token,
+      txSignature
+    )
     
-    if (escrowError || !escrow) {
-      throw new Error('Escrow not found')
+    if (!result.success) {
+      throw new Error(result.error || 'Failed to record deposit')
     }
-    
-    // Determine party role
-    let partyRole: 'buyer' | 'seller'
-    if (depositorWallet === escrow.buyer_wallet) {
-      partyRole = 'buyer'
-    } else if (depositorWallet === escrow.seller_wallet) {
-      partyRole = 'seller'
-    } else {
-      throw new Error('Depositor is not a party in this escrow')
-    }
-    
-    // Record deposit
-    const depositId = nanoid(10)
-    const { error: depositError } = await supabase
-      .from('escrow_deposits')
-      .insert({
-        id: depositId,
-        escrow_id: escrowId,
-        depositor_wallet: depositorWallet,
-        party_role: partyRole,
-        amount,
-        token,
-        tx_signature: txSignature,
-        confirmed: true,
-        confirmation_count: 1
-      })
-    
-    if (depositError) {
-      throw new Error(`Failed to record deposit: ${depositError.message}`)
-    }
-    
-    // Log action
-    await logEscrowAction(escrowId, depositorWallet, 'deposited',
-      `${partyRole} deposited ${amount} ${token}`)
-    
-    // Notify counterparty
-    const counterparty = partyRole === 'buyer' ? escrow.seller_wallet : escrow.buyer_wallet
-    await createNotification(escrowId, counterparty, 'deposit_received',
-      'Deposit Received', `${partyRole} has deposited their funds`)
     
     return true
   } catch (error: any) {
@@ -281,6 +251,10 @@ export async function confirmEscrow(
 
 /**
  * Release funds when both parties confirm
+ * Releases buyer payment to seller and returns seller's security deposit
+ * Requirement 9.2: Deducts 3% platform fee from buyer's payment only
+ * Requirement 9.5: Automatically deducts fees during fund release
+ * Requirement 9.6: Sends platform fees to designated treasury wallet
  */
 export async function releaseTraditionalEscrowFunds(escrowId: string): Promise<boolean> {
   try {
@@ -302,40 +276,68 @@ export async function releaseTraditionalEscrowFunds(escrowId: string): Promise<b
       throw new Error('Both parties must confirm before release')
     }
     
-    // Import transaction signer
+    // Verify escrow is fully funded
+    if (escrow.status !== 'fully_funded') {
+      throw new Error('Escrow must be fully funded before release')
+    }
+    
+    // Import fee handler and transaction signer
+    const { calculateTraditionalEscrowFees, recordFeeTransaction } = await import('./fee-handler')
     const { transferToMultiple } = await import('./transaction-signer')
     
-    // Prepare recipients
+    // Calculate fees - deduct from buyer payment only, security deposit returned in full
+    const fees = calculateTraditionalEscrowFees(escrow.buyer_amount, escrow.seller_amount)
+    
+    console.log(`🔄 Releasing traditional escrow funds for ${escrowId}`)
+    console.log(`   Buyer payment (gross): ${escrow.buyer_amount} ${escrow.token}`)
+    console.log(`   Platform fee (${fees.buyerPayment.feePercentage}%): ${fees.buyerPayment.platformFee} ${escrow.token}`)
+    console.log(`   Net to seller: ${fees.buyerPayment.netAmount} ${escrow.token}`)
+    console.log(`   Security deposit (returned in full): ${escrow.seller_amount} ${escrow.token}`)
+    console.log(`   Total to seller: ${fees.buyerPayment.netAmount + escrow.seller_amount} ${escrow.token}`)
+    
+    // Prepare recipients with fee deduction
     const recipients = [
       {
         address: escrow.seller_wallet,
-        amount: escrow.buyer_amount // Buyer's payment goes to seller
+        amount: fees.buyerPayment.netAmount // Net buyer payment after fee
       },
       {
         address: escrow.seller_wallet,
-        amount: escrow.seller_amount // Seller's security deposit returns to seller
+        amount: escrow.seller_amount // Security deposit returned in full
       }
     ]
     
-    // Execute transfer
+    // Add treasury fee transfer if fee > 0
+    if (fees.buyerPayment.platformFee > 0) {
+      const { getTreasuryWallet } = await import('./fee-handler')
+      recipients.push({
+        address: getTreasuryWallet(),
+        amount: fees.buyerPayment.platformFee
+      })
+    }
+    
+    // Execute transfer as on-chain transaction
     const txSignature = await transferToMultiple(
       escrow.encrypted_private_key,
       recipients,
-      escrow.token
+      escrow.token,
+      escrowId
     )
     
-    // Record releases
+    console.log(`✅ Funds released successfully. TX: ${txSignature}`)
+    
+    // Record releases in database
     const releaseId1 = nanoid(10)
     const releaseId2 = nanoid(10)
     
-    await supabase.from('escrow_releases').insert([
+    const { error: releaseError } = await supabase.from('escrow_releases').insert([
       {
         id: releaseId1,
         escrow_id: escrowId,
         release_type: 'full_release',
         from_wallet: escrow.escrow_wallet,
         to_wallet: escrow.seller_wallet,
-        amount: escrow.buyer_amount,
+        amount: fees.buyerPayment.netAmount,
         token: escrow.token,
         tx_signature: txSignature,
         confirmed: true,
@@ -355,8 +357,28 @@ export async function releaseTraditionalEscrowFunds(escrowId: string): Promise<b
       }
     ])
     
-    // Update escrow status
-    await supabase
+    if (releaseError) {
+      console.error('Failed to record releases:', releaseError)
+      throw new Error(`Failed to record releases: ${releaseError.message}`)
+    }
+    
+    // Record fee transaction
+    if (fees.buyerPayment.platformFee > 0) {
+      await recordFeeTransaction({
+        escrowId,
+        feeAmount: fees.buyerPayment.platformFee,
+        grossAmount: fees.buyerPayment.grossAmount,
+        netAmount: fees.buyerPayment.netAmount,
+        feePercentage: fees.buyerPayment.feePercentage,
+        txSignature,
+        feeType: 'platform_fee',
+        paidBy: escrow.buyer_wallet,
+        releaseType: 'full_release'
+      })
+    }
+    
+    // Update escrow status to completed
+    const { error: updateError } = await supabase
       .from('escrow_contracts')
       .update({
         status: 'completed',
@@ -364,20 +386,30 @@ export async function releaseTraditionalEscrowFunds(escrowId: string): Promise<b
       })
       .eq('id', escrowId)
     
-    // Log action
+    if (updateError) {
+      console.error('Failed to update escrow status:', updateError)
+      throw new Error(`Failed to update escrow status: ${updateError.message}`)
+    }
+    
+    // Log action with fee details
     await logEscrowAction(escrowId, 'system', 'released',
-      `Funds released: ${escrow.buyer_amount + escrow.seller_amount} ${escrow.token} to seller`)
+      `Funds released: ${fees.buyerPayment.netAmount} ${escrow.token} payment to seller (after ${fees.buyerPayment.platformFee} ${escrow.token} fee) + ${escrow.seller_amount} ${escrow.token} security deposit returned. TX: ${txSignature}`)
     
     // Notify both parties
     await createNotification(escrowId, escrow.buyer_wallet, 'escrow_completed',
-      'Escrow Completed', 'Funds have been released to seller')
+      'Escrow Completed', `Funds have been released to seller. Platform fee: ${fees.buyerPayment.platformFee} ${escrow.token}. Transaction: ${txSignature}`)
     
     await createNotification(escrowId, escrow.seller_wallet, 'escrow_completed',
-      'Escrow Completed', `You received ${escrow.buyer_amount + escrow.seller_amount} ${escrow.token}`)
+      'Escrow Completed', `You received ${fees.buyerPayment.netAmount + escrow.seller_amount} ${escrow.token} (${fees.buyerPayment.netAmount} payment + ${escrow.seller_amount} security deposit). Transaction: ${txSignature}`)
     
     return true
   } catch (error: any) {
     console.error('Release funds error:', error)
+    
+    // Log failed release attempt
+    await logEscrowAction(escrowId, 'system', 'released',
+      `Failed to release funds: ${error.message}`)
+    
     throw error
   }
 }
@@ -402,23 +434,7 @@ async function logEscrowAction(
   })
 }
 
-async function createTimeoutMonitor(
-  escrowId: string,
-  timeoutType: string,
-  hours: number
-) {
-  const supabase = getSupabase()
-  const expiresAt = new Date()
-  expiresAt.setHours(expiresAt.getHours() + hours)
-  
-  await supabase.from('escrow_timeouts').insert({
-    id: nanoid(10),
-    escrow_id: escrowId,
-    timeout_type: timeoutType,
-    expected_action: 'Both parties must deposit',
-    expires_at: expiresAt.toISOString()
-  })
-}
+
 
 async function createNotification(
   escrowId: string,

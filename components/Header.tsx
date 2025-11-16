@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import NotificationPanel from './NotificationPanel'
 
 function LogoIcon({ className = "h-8 w-8" }: { className?: string }) {
   return (
@@ -34,6 +35,7 @@ export default function Header() {
 
           {/* Navigation */}
           <nav className="flex items-center gap-6">
+            <NotificationPanel />
             <Link
               href="/escrow"
               className={`text-sm font-medium transition-colors ${

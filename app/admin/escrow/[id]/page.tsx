@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
+import AdminAuditLog from '@/components/AdminAuditLog'
+import DisputeResolutionInterface, { ResolutionData } from '@/components/DisputeResolutionInterface'
 
 export default function AdminEscrowDetail() {
   const params = useParams()
@@ -14,8 +16,11 @@ export default function AdminEscrowDetail() {
   const [actions, setActions] = useState<any[]>([])
   const [evidence, setEvidence] = useState<any[]>([])
   const [adminActions, setAdminActions] = useState<any[]>([])
+  const [disputes, setDisputes] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [processing, setProcessing] = useState(false)
+  const [showResolutionModal, setShowResolutionModal] = useState(false)
+  const [selectedDispute, setSelectedDispute] = useState<any>(null)
   const [adminWallets] = useState<string[]>([
     process.env.NEXT_PUBLIC_ADMIN_WALLET || '',
   ])
@@ -36,6 +41,13 @@ export default function AdminEscrowDetail() {
         setActions(data.actions)
         setEvidence(data.evidence)
         setAdminActions(data.adminActions)
+      }
+
+      // Load disputes for this escrow
+      const disputesResponse = await fetch(`/api/admin/escrow/disputes?escrowId=${params.id}`)
+      const disputesData = await disputesResponse.json()
+      if (disputesData.success) {
+        setDisputes(disputesData.disputes || [])
       }
     } catch (error) {
       console.error('Error loading escrow:', error)
@@ -109,6 +121,32 @@ export default function AdminEscrowDetail() {
     } catch (error) {
       console.error('Error processing refund:', error)
       alert('Failed to process refund')
+    } finally {
+      setProcessing(false)
+    }
+  }
+
+  const handleResolveDispute = async (resolutionData: ResolutionData) => {
+    setProcessing(true)
+    try {
+      const response = await fetch('/api/admin/escrow/resolve', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(resolutionData),
+      })
+
+      const result = await response.json()
+      if (result.success) {
+        alert('Dispute resolved successfully!')
+        setShowResolutionModal(false)
+        setSelectedDispute(null)
+        await loadEscrowDetails()
+      } else {
+        alert(`Error: ${result.error}`)
+      }
+    } catch (error) {
+      console.error('Error resolving dispute:', error)
+      alert('Failed to resolve dispute')
     } finally {
       setProcessing(false)
     }
@@ -230,6 +268,56 @@ export default function AdminEscrowDetail() {
                 </div>
               </div>
             </div>
+
+            {/* Disputes */}
+            {disputes.length > 0 && (
+              <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6">
+                <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4">
+                  Active Disputes
+                </h2>
+                <div className="space-y-4">
+                  {disputes.map((dispute) => (
+                    <div
+                      key={dispute.id}
+                      className="border-2 border-red-200 dark:border-red-800 rounded-lg p-4 bg-red-50 dark:bg-red-900/20"
+                    >
+                      <div className="flex justify-between items-start mb-3">
+                        <div>
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="px-2 py-1 bg-red-600 text-white text-xs font-semibold rounded-full">
+                              {dispute.priority.toUpperCase()}
+                            </span>
+                            <span className="px-2 py-1 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold rounded-full">
+                              {dispute.status.replace('_', ' ').toUpperCase()}
+                            </span>
+                          </div>
+                          <h3 className="font-bold text-slate-900 dark:text-white mb-1">
+                            {dispute.reason}
+                          </h3>
+                          <p className="text-sm text-slate-700 dark:text-slate-300 mb-2">
+                            {dispute.description}
+                          </p>
+                          <p className="text-xs text-slate-600 dark:text-slate-400">
+                            Raised by {dispute.party_role} on {new Date(dispute.created_at).toLocaleString()}
+                          </p>
+                        </div>
+                      </div>
+                      {dispute.status !== 'resolved' && dispute.status !== 'closed' && (
+                        <button
+                          onClick={() => {
+                            setSelectedDispute(dispute)
+                            setShowResolutionModal(true)
+                          }}
+                          className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors"
+                        >
+                          Resolve Dispute →
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Milestones */}
             <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6">
@@ -355,6 +443,11 @@ export default function AdminEscrowDetail() {
                 </div>
               </div>
             )}
+
+            {/* Admin Audit Log for this Escrow */}
+            <div className="mt-6">
+              <AdminAuditLog escrowId={params.id as string} limit={20} />
+            </div>
           </div>
 
           {/* Sidebar */}
@@ -414,6 +507,28 @@ export default function AdminEscrowDetail() {
             </div>
           </div>
         </div>
+
+        {/* Resolution Modal */}
+        {showResolutionModal && selectedDispute && publicKey && (
+          <DisputeResolutionInterface
+            dispute={selectedDispute}
+            escrow={{
+              id: escrow.id,
+              total_amount: escrow.total_amount,
+              buyer_amount: escrow.buyer_amount || escrow.total_amount,
+              token: escrow.token,
+              buyer_wallet: escrow.buyer_wallet,
+              seller_wallet: escrow.seller_wallet,
+            }}
+            adminWallet={publicKey.toString()}
+            onResolve={handleResolveDispute}
+            onCancel={() => {
+              setShowResolutionModal(false)
+              setSelectedDispute(null)
+            }}
+            processing={processing}
+          />
+        )}
       </div>
     </div>
   )

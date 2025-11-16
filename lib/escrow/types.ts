@@ -309,6 +309,50 @@ export interface EscrowNotification {
   created_at: string
 }
 
+export interface EscrowMultiSigTransaction {
+  id: string
+  escrow_id: string
+  
+  multisig_wallet: string
+  provider: 'squads' | 'goki' | 'serum' | 'unknown'
+  
+  transaction_data: string
+  required_signatures: number
+  current_signatures: number
+  
+  signers: string[]
+  signed_by: string[]
+  
+  status: 'pending' | 'partially_signed' | 'ready' | 'executed' | 'cancelled'
+  
+  tx_signature?: string
+  executed_at?: string
+  
+  metadata?: Record<string, any>
+  
+  created_at: string
+  updated_at: string
+}
+
+export interface EscrowMultiSigWallet {
+  id: string
+  wallet_address: string
+  
+  is_multisig: boolean
+  provider?: 'squads' | 'goki' | 'serum' | 'unknown'
+  
+  threshold?: number
+  total_signers?: number
+  signers?: string[]
+  
+  program_id?: string
+  metadata?: Record<string, any>
+  
+  last_checked_at: string
+  created_at: string
+  updated_at: string
+}
+
 // ============================================
 // CREATION INTERFACES
 // ============================================
@@ -433,6 +477,23 @@ export interface DepositStatusResponse {
   seller_deposited: boolean
   fully_funded: boolean
   deposits: EscrowDeposit[]
+  buyer_amount: number
+  seller_amount?: number
+  token: string
+  escrow_wallet: string
+}
+
+export interface DepositMonitorResult {
+  buyerDeposited: boolean
+  sellerDeposited: boolean
+  fullyFunded: boolean
+  deposits: EscrowDeposit[]
+}
+
+export interface RecordDepositResult {
+  success: boolean
+  deposit?: EscrowDeposit
+  error?: string
 }
 
 export interface EscrowDetailsResponse {
