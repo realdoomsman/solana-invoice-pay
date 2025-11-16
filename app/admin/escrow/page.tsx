@@ -680,7 +680,7 @@ export default function AdminEscrowDashboard() {
                   {escrow.open_disputes > 0 && (
                     <div className="mt-3 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
                       <p className="text-sm text-red-800 dark:text-red-300">
-                        ⚠️ <strong>Dispute raised</strong>
+                        <strong>Dispute raised</strong>
                         {escrow.last_dispute_at && (
                           <span> - {new Date(escrow.last_dispute_at).toLocaleString()}</span>
                         )}
