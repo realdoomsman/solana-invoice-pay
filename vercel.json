@@ -3,7 +3,7 @@
   "crons": [
     {
       "path": "/api/escrow/process-timeouts",
-      "schedule": "*/15 * * * *"
+      "schedule": "0 0 * * *"
     }
   ]
 }
