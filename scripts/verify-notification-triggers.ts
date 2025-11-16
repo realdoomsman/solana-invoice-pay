@@ -112,7 +112,7 @@ async function verifyNotificationTriggers() {
   console.log('\n6️⃣ Checking Timeout Warning Notifications...')
   try {
     const timeoutMonitor = await import('../lib/escrow/timeout-monitor')
-    if (timeoutMonitor.sendPreExpirationWarning) {
+    if (typeof timeoutMonitor.sendPreExpirationWarning === 'function') {
       addResult(
         'Timeout Monitor',
         'pass',
@@ -213,7 +213,7 @@ async function verifyNotificationTriggers() {
     ]
 
     for (const funcName of functions) {
-      if (notificationModule[funcName]) {
+      if ((notificationModule as any)[funcName]) {
         addResult(
           funcName,
           'pass',
