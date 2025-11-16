@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'NOVIQ - Payment Links for Solana Degens',
-    description: 'OTC trades, group buys, profit splits. Non-custodial. No KYC. ⚡',
+    description: 'OTC trades, group buys, profit splits. Non-custodial. No KYC. Fast & secure.',
   },
   robots: {
     index: true,

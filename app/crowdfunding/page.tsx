@@ -35,7 +35,7 @@ export default function CrowdfundingPage() {
 
         {/* The Problem */}
         <div className="bg-red-900/20 border border-red-500/30 rounded-2xl p-8 mb-12">
-          <h2 className="text-2xl font-bold text-white mb-4">❌ The Problem</h2>
+          <h2 className="text-2xl font-bold text-white mb-4">The Problem</h2>
           <div className="space-y-3 text-slate-300">
             <p>• Want to do a group buy for a presale? Hard to coordinate.</p>
             <p>• Need to track who contributed and how much? Messy spreadsheets.</p>
@@ -46,7 +46,7 @@ export default function CrowdfundingPage() {
 
         {/* The Solution */}
         <div className="bg-green-900/20 border border-green-500/30 rounded-2xl p-8 mb-12">
-          <h2 className="text-2xl font-bold text-white mb-4">✅ The Solution: Funding Goals</h2>
+          <h2 className="text-2xl font-bold text-white mb-4">The Solution: Funding Goals</h2>
           <p className="text-slate-300 mb-4">
             Set a goal, share the link, track progress in real-time. If goal is reached, funds release. If not, automatic refunds.
           </p>
@@ -139,7 +139,7 @@ export default function CrowdfundingPage() {
           <h2 className="text-3xl font-bold text-white mb-8 text-center">Perfect For</h2>
           <div className="grid md:grid-cols-2 gap-6">
             <div className="bg-slate-900/50 rounded-xl p-6 border border-slate-800">
-              <h3 className="text-lg font-bold text-white mb-2">🚀 Presale Group Buys</h3>
+              <h3 className="text-lg font-bold text-white mb-2">Presale Group Buys</h3>
               <p className="text-slate-400 text-sm">
                 Pool funds to participate in token presales together.
               </p>

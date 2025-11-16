@@ -188,7 +188,7 @@ export default function AdminEscrowDashboard() {
                 : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'
             }`}
           >
-            📊 Overview
+            Overview
           </button>
           <button
             onClick={() => setActiveTab('disputes')}
@@ -214,7 +214,7 @@ export default function AdminEscrowDashboard() {
             onClick={() => router.push('/admin/escrow/audit-log')}
             className="px-6 py-3 rounded-lg font-semibold transition-colors bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700"
           >
-            📋 Audit Log
+            Audit Log
           </button>
         </div>
 
@@ -510,7 +510,7 @@ export default function AdminEscrowDashboard() {
             ) : disputes.length === 0 ? (
               <div className="p-12 text-center">
                 <p className="text-slate-600 dark:text-slate-400">
-                  No active disputes. All escrows are running smoothly! 🎉
+                  No active disputes. All escrows are running smoothly!
                 </p>
               </div>
             ) : (
@@ -614,7 +614,7 @@ export default function AdminEscrowDashboard() {
           ) : escrows.length === 0 ? (
             <div className="p-12 text-center">
               <p className="text-slate-600 dark:text-slate-400">
-                No disputes right now. All escrows are running smoothly! 🎉
+                No disputes right now. All escrows are running smoothly!
               </p>
               <p className="text-sm text-slate-500 dark:text-slate-500 mt-2">
                 Normal escrows auto-release when buyer approves. You only see disputes here.

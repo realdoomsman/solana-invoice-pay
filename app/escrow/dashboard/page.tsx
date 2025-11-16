@@ -417,7 +417,7 @@ export default function EscrowDashboard() {
                         </span>
                         <span>•</span>
                         <span>
-                          {escrow.user_role === 'buyer' ? '💰 Buyer' : '🛠️ Seller'}
+                          {escrow.user_role === 'buyer' ? 'Buyer' : 'Seller'}
                         </span>
                         <span>•</span>
                         <span>

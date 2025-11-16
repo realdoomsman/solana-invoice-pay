@@ -139,7 +139,7 @@ export default function EscrowPage() {
               </p>
             </div>
             <div className="bg-slate-900/50 rounded-xl p-6 border border-slate-800">
-              <h3 className="text-lg font-bold text-white mb-2">🤝 Any P2P Deal</h3>
+              <h3 className="text-lg font-bold text-white mb-2">Any P2P Deal</h3>
               <p className="text-slate-400 text-sm">
                 Any trade where both parties need protection.
               </p>
