@@ -449,7 +449,7 @@ export default function PaymentPage() {
                 )}
                 {isSeller && (
                   <div className="flex items-center gap-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
-                    <span className="text-3xl">🛠️</span>
+                    <span className="text-3xl font-bold">S</span>
                     <div>
                       <div className="font-bold text-green-900 dark:text-green-300">You are the SELLER</div>
                       <div className="text-sm text-green-700 dark:text-green-400">
@@ -460,7 +460,7 @@ export default function PaymentPage() {
                 )}
                 {!isParty && (
                   <div className="flex items-center gap-3 bg-gray-50 dark:bg-gray-900/20 border border-gray-200 dark:border-gray-800 rounded-lg p-4">
-                    <span className="text-3xl">👁️</span>
+                    <span className="text-3xl font-bold">V</span>
                     <div>
                       <div className="font-bold text-gray-900 dark:text-gray-300">You are viewing this escrow</div>
                       <div className="text-sm text-gray-700 dark:text-gray-400">
@@ -542,7 +542,7 @@ export default function PaymentPage() {
                             onClick={() => handleRaiseDispute(milestone.id)}
                             className="px-4 py-3 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 font-semibold rounded-lg hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors"
                           >
-                            ⚠️ Dispute
+                            Dispute
                           </button>
                         </div>
                       )}
@@ -583,7 +583,7 @@ export default function PaymentPage() {
                   {milestone.status === 'disputed' && (
                     <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 p-3 rounded-lg">
                       <p className="text-sm text-red-800 dark:text-red-300">
-                        ⚠️ This milestone is under dispute. Funds are frozen. NOVIQ admin will review and make a decision.
+                        <strong>Warning:</strong> This milestone is under dispute. Funds are frozen. NOVIQ admin will review and make a decision.
                       </p>
                       <p className="text-sm mt-2 text-red-700 dark:text-red-400">
                         Both parties can submit evidence. Admin will decide to release funds to seller or refund to buyer.
