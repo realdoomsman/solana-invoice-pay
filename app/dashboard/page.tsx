@@ -106,7 +106,7 @@ export default function Dashboard() {
                   : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'
               }`}
             >
-              📊 Analytics
+              Analytics
             </button>
           </div>
           

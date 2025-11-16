@@ -80,7 +80,7 @@ export default function ReferralsPage() {
         {/* Hero Section */}
         <div className="text-center mb-12">
           <h1 className="text-5xl font-bold text-white mb-4">
-            💰 Referral Program
+            Referral Program
           </h1>
           <p className="text-xl text-slate-400 max-w-2xl mx-auto">
             Earn 5% commission on every payment your referrals make. Forever.
@@ -224,7 +224,7 @@ export default function ReferralsPage() {
 
         {/* Leaderboard */}
         <div className="bg-slate-900 rounded-2xl p-8 border border-slate-800">
-          <h3 className="text-xl font-bold text-white mb-6">🏆 Top Referrers</h3>
+          <h3 className="text-xl font-bold text-white mb-6">Top Referrers</h3>
           <div className="space-y-3">
             {leaderboard.map((entry, index) => (
               <div

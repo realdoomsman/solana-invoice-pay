@@ -35,7 +35,7 @@ export default function SplitsPage() {
 
         {/* The Problem */}
         <div className="bg-red-900/20 border border-red-500/30 rounded-2xl p-8 mb-12">
-          <h2 className="text-2xl font-bold text-white mb-4">❌ The Problem</h2>
+          <h2 className="text-2xl font-bold text-white mb-4">The Problem</h2>
           <div className="space-y-3 text-slate-300">
             <p>• Made profits with your team? Now you have to manually split it.</p>
             <p>• Calculate percentages, send multiple transactions, hope you didn't mess up.</p>
@@ -46,7 +46,7 @@ export default function SplitsPage() {
 
         {/* The Solution */}
         <div className="bg-green-900/20 border border-green-500/30 rounded-2xl p-8 mb-12">
-          <h2 className="text-2xl font-bold text-white mb-4">✅ The Solution: Auto-Splits</h2>
+          <h2 className="text-2xl font-bold text-white mb-4">The Solution: Auto-Splits</h2>
           <p className="text-slate-300 mb-4">
             Set up percentages once. One payment automatically distributes to all wallets. Fair, instant, transparent.
           </p>
@@ -146,7 +146,7 @@ export default function SplitsPage() {
               </p>
             </div>
             <div className="bg-slate-900/50 rounded-xl p-6 border border-slate-800">
-              <h3 className="text-lg font-bold text-white mb-2">🤝 Revenue Sharing</h3>
+              <h3 className="text-lg font-bold text-white mb-2">Revenue Sharing</h3>
               <p className="text-slate-400 text-sm">
                 Automatically split revenue with partners or investors.
               </p>

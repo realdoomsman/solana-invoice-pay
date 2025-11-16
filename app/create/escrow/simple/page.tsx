@@ -303,7 +303,7 @@ export default function CreateSimpleBuyerEscrow() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="text-2xl">
-                      {getTotalPercentage() === 100 ? '✓' : getTotalPercentage() > 100 ? '⚠️' : '📊'}
+                      {getTotalPercentage() === 100 ? '✓' : getTotalPercentage() > 100 ? '!' : '%'}
                     </span>
                     <div>
                       <p className={`text-sm font-semibold ${
