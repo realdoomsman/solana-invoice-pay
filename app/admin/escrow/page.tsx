@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { useWallet } from '@solana/wallet-adapter-react'
+import { useWallet, useConnection } from '@solana/wallet-adapter-react'
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
+import { PublicKey, LAMPORTS_PER_SOL } from '@solana/web3.js'
 
 interface EscrowQueueItem {
   id: string
@@ -67,10 +68,12 @@ interface OverviewStats {
 export default function AdminEscrowDashboard() {
   const router = useRouter()
   const { publicKey } = useWallet()
+  const { connection } = useConnection()
   const [escrows, setEscrows] = useState<EscrowQueueItem[]>([])
   const [disputes, setDisputes] = useState<DisputeQueueItem[]>([])
   const [disputeStats, setDisputeStats] = useState<any>(null)
   const [overviewStats, setOverviewStats] = useState<OverviewStats | null>(null)
+  const [treasuryBalance, setTreasuryBalance] = useState<number>(0)
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<'overview' | 'disputes' | 'escrows'>('overview')
   const [adminWallets] = useState<string[]>([
@@ -82,7 +85,21 @@ export default function AdminEscrowDashboard() {
     loadOverview()
     loadEscrows()
     loadDisputes()
+    loadTreasuryBalance()
   }, [])
+
+  const loadTreasuryBalance = async () => {
+    try {
+      const feeWallet = process.env.NEXT_PUBLIC_FEE_WALLET
+      if (!feeWallet) return
+      
+      const pubkey = new PublicKey(feeWallet)
+      const balance = await connection.getBalance(pubkey)
+      setTreasuryBalance(balance / LAMPORTS_PER_SOL)
+    } catch (error) {
+      console.error('Error loading treasury balance:', error)
+    }
+  }
 
   const loadOverview = async () => {
     try {
@@ -222,7 +239,19 @@ export default function AdminEscrowDashboard() {
         {activeTab === 'overview' && overviewStats && (
           <>
             {/* Primary Metrics */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
+              <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-lg shadow-lg p-6 text-white">
+                <div className="text-sm opacity-90 mb-1">
+                  Treasury Balance
+                </div>
+                <div className="text-3xl font-bold mb-2">
+                  {treasuryBalance.toFixed(4)} SOL
+                </div>
+                <div className="text-xs opacity-75">
+                  Platform fees collected
+                </div>
+              </div>
+              
               <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg shadow-lg p-6 text-white">
                 <div className="text-sm opacity-90 mb-1">
                   Total Escrow Volume
