@@ -67,7 +67,6 @@ interface OverviewStats {
 export default function AdminEscrowDashboard() {
   const router = useRouter()
   const { publicKey } = useWallet()
-  const { connection } = useConnection()
   const [escrows, setEscrows] = useState<EscrowQueueItem[]>([])
   const [disputes, setDisputes] = useState<DisputeQueueItem[]>([])
   const [disputeStats, setDisputeStats] = useState<any>(null)
