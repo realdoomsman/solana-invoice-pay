@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
 import NotificationPanel from './NotificationPanel'
 
 function LogoIcon({ className = "h-8 w-8" }: { className?: string }) {
@@ -34,7 +35,7 @@ export default function Header() {
           </Link>
 
           {/* Navigation */}
-          <nav className="flex items-center gap-6">
+          <nav className="flex items-center gap-4">
             <NotificationPanel />
             <Link
               href="/escrow"
@@ -86,6 +87,7 @@ export default function Header() {
             >
               Earn
             </Link>
+            <WalletMultiButton />
           </nav>
         </div>
       </div>
