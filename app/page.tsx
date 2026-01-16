@@ -9,6 +9,41 @@ import { getCurrentUser } from '@/lib/auth'
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
 
+// Window Component
+function Window({
+  title,
+  children,
+  className = '',
+  onClose,
+  showControls = true
+}: {
+  title: string
+  children: React.ReactNode
+  className?: string
+  onClose?: () => void
+  showControls?: boolean
+}) {
+  return (
+    <div className={`win95-window ${className}`}>
+      <div className="win95-title-bar">
+        <div className="flex items-center gap-1">
+          <span className="text-sm">{title}</span>
+        </div>
+        {showControls && (
+          <div className="flex gap-[2px]">
+            <button className="win95-control-btn">_</button>
+            <button className="win95-control-btn">□</button>
+            <button className="win95-control-btn" onClick={onClose}>×</button>
+          </div>
+        )}
+      </div>
+      <div className="p-2">
+        {children}
+      </div>
+    </div>
+  )
+}
+
 export default function Home() {
   const router = useRouter()
   const [amount, setAmount] = useState('')
@@ -17,6 +52,7 @@ export default function Home() {
   const [merchantWallet, setMerchantWallet] = useState('')
   const [loading, setLoading] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [showWelcome, setShowWelcome] = useState(true)
 
   useEffect(() => {
     const user = getCurrentUser()
@@ -56,7 +92,6 @@ export default function Home() {
         type: 'simple',
       }
 
-      // Save to localStorage
       const payments = JSON.parse(localStorage.getItem('payments') || '[]')
       payments.push(paymentData)
       localStorage.setItem('payments', JSON.stringify(payments))
@@ -70,228 +105,134 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen pb-10" style={{ background: 'var(--win95-cyan)' }}>
       <Header />
-      {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-b from-slate-900 via-black to-black pt-20 md:pt-16">
-        {/* Animated Background Grid */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px]"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
 
-        {/* Glowing Orbs - smaller on mobile */}
-        <div className="absolute top-0 left-1/4 w-48 h-48 md:w-96 md:h-96 bg-blue-500/20 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 right-1/4 w-48 h-48 md:w-96 md:h-96 bg-purple-500/20 rounded-full blur-3xl"></div>
-
-        <div className="max-w-7xl mx-auto px-4 py-16 md:py-32 relative z-10">
-          <div className="text-center mb-12 md:mb-20">
-            {/* Logo/Brand */}
-            <div className="mb-8 md:mb-12">
-              <div className="flex justify-center">
-                <span className="text-5xl md:text-7xl font-semibold tracking-tight bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
-                  NOVIQ
-                </span>
-              </div>
-            </div>
-
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold mb-4 md:mb-6 text-white leading-tight px-2">
-              Payment infrastructure for Solana
-            </h1>
-            <p className="text-base md:text-xl text-slate-400 max-w-2xl mx-auto mb-6 md:mb-8 px-4">
-              Escrow for secure transactions. Automated payment distribution. Collective fundraising.
-            </p>
-
-
-            {/* 3 Main Features - Simple */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 max-w-5xl mx-auto mt-8 md:mt-16 px-2">
-              <div className="border border-slate-800 rounded-lg p-6 hover:border-slate-700 transition-colors">
-                <h3 className="text-xl font-bold mb-2 text-white">Escrow</h3>
-                <p className="text-slate-400 text-sm mb-4">
-                  Trustless peer-to-peer transactions. Both parties deposit funds into escrow. Automated release upon mutual confirmation.
-                </p>
-                <div className="flex gap-3">
-                  <button
-                    onClick={() => router.push('/escrow')}
-                    className="text-sm text-slate-400 hover:text-white"
-                  >
-                    Learn more →
-                  </button>
-                  <button
-                    onClick={() => router.push('/create/escrow')}
-                    className="text-sm text-blue-400 hover:text-blue-300 font-medium"
-                  >
-                    Create
-                  </button>
-                </div>
-              </div>
-
-              <div className="border border-slate-800 rounded-lg p-6 hover:border-slate-700 transition-colors">
-                <h3 className="text-xl font-bold mb-2 text-white">Splits</h3>
-                <p className="text-slate-400 text-sm mb-4">
-                  Multi-recipient payment distribution. Define allocation percentages. Instant settlement to all recipients.
-                </p>
-                <div className="flex gap-3">
-                  <button
-                    onClick={() => router.push('/splits')}
-                    className="text-sm text-slate-400 hover:text-white"
-                  >
-                    Learn more →
-                  </button>
-                  <button
-                    onClick={() => router.push('/create/split')}
-                    className="text-sm text-purple-400 hover:text-purple-300 font-medium"
-                  >
-                    Create
-                  </button>
-                </div>
-              </div>
-
-              <div className="border border-slate-800 rounded-lg p-6 hover:border-slate-700 transition-colors">
-                <h3 className="text-xl font-bold mb-2 text-white">Funding Goals</h3>
-                <p className="text-slate-400 text-sm mb-4">
-                  Collective fundraising with transparency. Real-time progress tracking. Automatic refunds if target not reached.
-                </p>
-                <div className="flex gap-3">
-                  <button
-                    onClick={() => router.push('/crowdfunding')}
-                    className="text-sm text-slate-400 hover:text-white"
-                  >
-                    Learn more →
-                  </button>
-                  <button
-                    onClick={() => router.push('/create/goal')}
-                    className="text-sm text-green-400 hover:text-green-300 font-medium"
-                  >
-                    Create
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Features Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mt-12 md:mt-20 px-2">
-            <div className="group relative bg-slate-900/50 backdrop-blur-sm rounded-2xl p-8 border border-slate-800 hover:border-blue-500/50 transition-all">
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-6">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold mb-3 text-white">Lightning Fast</h3>
-              <p className="text-slate-400 leading-relaxed">Sub-second confirmations. Instant settlements. No waiting.</p>
-            </div>
-            <div className="group relative bg-slate-900/50 backdrop-blur-sm rounded-2xl p-8 border border-slate-800 hover:border-purple-500/50 transition-all">
-              <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mb-6">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold mb-3 text-white">Enterprise Security</h3>
-              <p className="text-slate-400 leading-relaxed">Non-custodial. Encrypted. Audited. Bank-grade protection.</p>
-            </div>
-            <div className="group relative bg-slate-900/50 backdrop-blur-sm rounded-2xl p-8 border border-slate-800 hover:border-green-500/50 transition-all">
-              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center mb-6">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold mb-3 text-white">AI-Powered</h3>
-              <p className="text-slate-400 leading-relaxed">Smart insights. Fraud detection. Automated optimization.</p>
-            </div>
-          </div>
+      {/* Desktop Area */}
+      <div className="p-4 md:p-8">
+        {/* Desktop Icons */}
+        <div className="flex flex-wrap gap-4 mb-8">
+          <button
+            onClick={() => router.push('/dashboard')}
+            className="flex flex-col items-center gap-1 p-2 hover:bg-[var(--win95-blue)]/30 rounded w-[80px]"
+          >
+            <span className="text-4xl">📁</span>
+            <span className="text-white text-xs text-center drop-shadow-[1px_1px_0_black]">My Payments</span>
+          </button>
+          <button
+            onClick={() => router.push('/escrow')}
+            className="flex flex-col items-center gap-1 p-2 hover:bg-[var(--win95-blue)]/30 rounded w-[80px]"
+          >
+            <span className="text-4xl">🔒</span>
+            <span className="text-white text-xs text-center drop-shadow-[1px_1px_0_black]">Escrow</span>
+          </button>
+          <button
+            onClick={() => router.push('/splits')}
+            className="flex flex-col items-center gap-1 p-2 hover:bg-[var(--win95-blue)]/30 rounded w-[80px]"
+          >
+            <span className="text-4xl">📊</span>
+            <span className="text-white text-xs text-center drop-shadow-[1px_1px_0_black]">Splits</span>
+          </button>
+          <button
+            onClick={() => router.push('/crowdfunding')}
+            className="flex flex-col items-center gap-1 p-2 hover:bg-[var(--win95-blue)]/30 rounded w-[80px]"
+          >
+            <span className="text-4xl">🎯</span>
+            <span className="text-white text-xs text-center drop-shadow-[1px_1px_0_black]">Goals</span>
+          </button>
         </div>
-      </div>
 
-      {/* Main Content */}
-      <div className="max-w-6xl mx-auto px-4 py-12 md:py-20 bg-black">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-start">
-          {/* Left: Form */}
-          <div>
-            <div className="bg-slate-900 rounded-2xl shadow-2xl p-5 md:p-8 sticky top-20 md:top-8 border border-slate-800">
-              <div className="mb-6 md:mb-8">
-                <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
-                  Create Payment
-                </h2>
-                <p className="text-slate-400 text-sm md:text-base">Generate a payment link in seconds</p>
-              </div>
+        {/* Main Windows */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 max-w-6xl mx-auto">
 
-              <div className="space-y-5">
-                {!isLoggedIn && (
-                  <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 mb-4">
-                    <div className="flex items-start gap-3">
-                      <svg
-                        className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
+          {/* Welcome Window */}
+          {showWelcome && (
+            <Window
+              title="Welcome to PAYDOS 95"
+              className="lg:col-span-2"
+              onClose={() => setShowWelcome(false)}
+            >
+              <div className="p-4">
+                <div className="flex items-start gap-4">
+                  <span className="text-6xl">💸</span>
+                  <div>
+                    <h1 className="text-2xl md:text-3xl mb-2">Welcome to PAYDOS</h1>
+                    <p className="text-sm mb-4">
+                      The retro payment infrastructure for Solana. Create payment links,
+                      escrow transactions, split payments, and fund goals - all on the fastest blockchain.
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      <button
+                        onClick={() => setShowWelcome(false)}
+                        className="win95-button"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                        />
-                      </svg>
-                      <div>
-                        <p className="text-sm font-medium text-blue-900 dark:text-blue-100">
-                          Want to save your payment links?
-                        </p>
-                        <button
-                          onClick={() => router.push('/login')}
-                          className="text-sm text-blue-600 dark:text-blue-400 hover:underline mt-1"
-                        >
-                          Sign in with your wallet
-                        </button>
-                      </div>
+                        Get Started
+                      </button>
+                      <button
+                        onClick={() => window.open('https://solana.com', '_blank')}
+                        className="win95-button"
+                      >
+                        Learn About Solana
+                      </button>
                     </div>
                   </div>
-                )}
+                </div>
+              </div>
+            </Window>
+          )}
 
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-                      Your Wallet Address
-                    </label>
-                    {isLoggedIn && (
-                      <span className="text-xs text-green-600 dark:text-green-400">
-                        Connected
-                      </span>
-                    )}
+          {/* Create Payment Window */}
+          <Window title="💳 Create Payment - PAYDOS">
+            <div className="p-2">
+              {!isLoggedIn && (
+                <div className="win95-inset p-2 mb-4">
+                  <div className="flex items-start gap-2">
+                    <span>ℹ️</span>
+                    <div className="text-sm">
+                      <p className="font-bold">Tip:</p>
+                      <p>Connect your wallet to save payment links.</p>
+                      <button
+                        onClick={() => router.push('/login')}
+                        className="text-[var(--win95-blue)] underline"
+                      >
+                        Connect Wallet
+                      </button>
+                    </div>
                   </div>
+                </div>
+              )}
+
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-sm mb-1">Your Wallet Address:</label>
                   <input
                     type="text"
                     value={merchantWallet}
                     onChange={(e) => setMerchantWallet(e.target.value)}
                     placeholder="Enter your Solana wallet address"
                     disabled={isLoggedIn}
-                    className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-slate-700 text-slate-900 dark:text-white font-mono text-sm disabled:opacity-60 disabled:cursor-not-allowed"
+                    className="win95-input w-full"
                   />
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                    Payments will be forwarded to this address
-                  </p>
                 </div>
 
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-3 gap-2">
                   <div className="col-span-2">
-                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                      Amount
-                    </label>
+                    <label className="block text-sm mb-1">Amount:</label>
                     <input
                       type="number"
                       step="0.01"
                       value={amount}
                       onChange={(e) => setAmount(e.target.value)}
                       placeholder="0.00"
-                      className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
+                      className="win95-input w-full"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                      Token
-                    </label>
+                    <label className="block text-sm mb-1">Token:</label>
                     <select
                       value={token}
                       onChange={(e) => setToken(e.target.value)}
-                      className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
+                      className="win95-select w-full"
                     >
                       <option value="SOL">SOL</option>
                       <option value="USDC">USDC</option>
@@ -301,222 +242,185 @@ export default function Home() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                    Description (Optional)
-                  </label>
+                  <label className="block text-sm mb-1">Description (Optional):</label>
                   <textarea
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder="What is this payment for?"
-                    rows={3}
-                    className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-slate-700 text-slate-900 dark:text-white resize-none"
+                    rows={2}
+                    className="win95-input w-full resize-none"
                   />
                 </div>
 
                 <button
                   onClick={createPaymentLink}
                   disabled={loading}
-                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-4 px-6 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:scale-[1.02]"
+                  className="win95-button w-full py-2"
                 >
-                  {loading ? (
-                    <span className="flex items-center justify-center gap-2">
-                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                      Creating...
-                    </span>
-                  ) : (
-                    'Create Payment Link'
-                  )}
+                  {loading ? '⏳ Creating...' : '✨ Create Payment Link'}
                 </button>
 
-                <div className="relative my-4 md:my-6">
-                  <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-slate-200 dark:border-slate-700"></div>
-                  </div>
-                  <div className="relative flex justify-center text-xs md:text-sm">
-                    <span className="px-2 bg-white dark:bg-slate-800 text-slate-500">
-                      or choose advanced options
-                    </span>
-                  </div>
-                </div>
+                <div className="win95-divider"></div>
 
-                <div className="grid grid-cols-3 gap-2 md:gap-3">
+                <p className="text-sm text-center">Or choose a payment type:</p>
+                <div className="grid grid-cols-3 gap-2">
                   <button
                     onClick={() => router.push('/create/split')}
-                    className="group px-4 py-3 border-2 border-blue-600 text-blue-600 dark:text-blue-400 hover:bg-blue-600 hover:text-white dark:hover:text-white rounded-xl font-semibold transition-all transform hover:scale-105"
+                    className="win95-button text-sm py-2"
                   >
-                    <div className="text-sm">Split</div>
+                    📊 Split
                   </button>
                   <button
                     onClick={() => router.push('/create/escrow')}
-                    className="group px-4 py-3 border-2 border-purple-600 text-purple-600 dark:text-purple-400 hover:bg-purple-600 hover:text-white dark:hover:text-white rounded-xl font-semibold transition-all transform hover:scale-105"
+                    className="win95-button text-sm py-2"
                   >
-                    <div className="text-sm">Escrow</div>
+                    🔒 Escrow
                   </button>
                   <button
                     onClick={() => router.push('/create/goal')}
-                    className="group px-4 py-3 border-2 border-green-600 text-green-600 dark:text-green-400 hover:bg-green-600 hover:text-white dark:hover:text-white rounded-xl font-semibold transition-all transform hover:scale-105"
+                    className="win95-button text-sm py-2"
                   >
-                    <div className="text-sm">Goal</div>
+                    🎯 Goal
                   </button>
                 </div>
               </div>
+            </div>
+          </Window>
 
-              <div className="mt-6 text-center">
-                <button
-                  onClick={() => router.push('/dashboard')}
-                  className="text-blue-600 dark:text-blue-400 hover:underline font-medium text-sm"
-                >
-                  View Dashboard →
-                </button>
+          {/* Features Window */}
+          <Window title="📋 Features - README.txt">
+            <div className="win95-inset p-3 h-[300px] overflow-y-auto">
+              <pre className="text-sm whitespace-pre-wrap">
+                {`PAYDOS v1.0 - Payment Infrastructure for Solana
+================================================
+
+FEATURES:
+---------
+🔒 ESCROW
+   Trustless P2P transactions. Both 
+   parties deposit into escrow. Auto
+   release on mutual confirmation.
+
+📊 SPLITS  
+   Multi-recipient distribution. Set
+   percentages. Instant settlement.
+
+🎯 FUNDING GOALS
+   Crowdfunding with transparency.
+   Real-time tracking. Auto refunds.
+
+💳 SIMPLE PAYMENTS
+   Create payment links in seconds.
+   Share via any channel.
+
+STATS:
+------
+⚡ <1s    - Average confirmation
+💰 $0.0003 - Average transaction fee
+🔒 100%   - Non-custodial
+
+REQUIREMENTS:
+-------------
+- Solana Wallet (Phantom, Solflare)
+- SOL for transaction fees
+
+Press F1 for help...`}
+              </pre>
+            </div>
+          </Window>
+
+          {/* How It Works Window */}
+          <Window title="❓ How It Works - HELP.exe" className="lg:col-span-2">
+            <div className="p-2">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="win95-inset p-3">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-2xl">1️⃣</span>
+                    <span className="font-bold">Create Your Link</span>
+                  </div>
+                  <p className="text-sm">
+                    Enter amount and description. We generate a unique payment wallet.
+                  </p>
+                </div>
+                <div className="win95-inset p-3">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-2xl">2️⃣</span>
+                    <span className="font-bold">Share with Customer</span>
+                  </div>
+                  <p className="text-sm">
+                    Send via email, text, or social. They scan QR or connect wallet.
+                  </p>
+                </div>
+                <div className="win95-inset p-3">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-2xl">3️⃣</span>
+                    <span className="font-bold">Get Paid Instantly</span>
+                  </div>
+                  <p className="text-sm">
+                    Funds auto-forward to your wallet. Track in dashboard.
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
+          </Window>
 
-          {/* Right: How it Works */}
-          <div className="space-y-8">
-            <div>
-              <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-4 md:mb-6">
-                How It Works
-              </h2>
-              <div className="space-y-6">
-                <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-10 h-10 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center font-bold">
-                    1
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-slate-900 dark:text-white mb-1">
-                      Create Your Link
-                    </h3>
-                    <p className="text-slate-600 dark:text-slate-400 text-sm">
-                      Enter the amount and description. We generate a unique payment wallet for this transaction.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-10 h-10 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center font-bold">
-                    2
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-slate-900 dark:text-white mb-1">
-                      Share with Customer
-                    </h3>
-                    <p className="text-slate-600 dark:text-slate-400 text-sm">
-                      Send the payment link via email, text, or social media. They can scan the QR code or connect their wallet.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-10 h-10 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center font-bold">
-                    3
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-slate-900 dark:text-white mb-1">
-                      Get Paid Instantly
-                    </h3>
-                    <p className="text-slate-600 dark:text-slate-400 text-sm">
-                      Once payment is received, funds automatically forward to your merchant wallet. Track everything in your dashboard.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Use Cases */}
-            <div className="bg-slate-100 dark:bg-slate-800 rounded-lg p-6">
-              <h3 className="font-semibold text-slate-900 dark:text-white mb-4">
-                Perfect For:
-              </h3>
-              <ul className="space-y-3">
-                <li className="flex items-start gap-3">
-                  <svg className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span className="text-sm text-slate-700 dark:text-slate-300">
-                    <strong>Freelancers</strong> - Invoice clients and get paid in crypto
-                  </span>
+          {/* Use Cases Window */}
+          <Window title="💼 Use Cases - ABOUT.txt">
+            <div className="win95-inset p-3">
+              <ul className="space-y-2 text-sm">
+                <li className="flex items-center gap-2">
+                  <span>✅</span>
+                  <span><strong>Freelancers</strong> - Invoice clients in crypto</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <svg className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span className="text-sm text-slate-700 dark:text-slate-300">
-                    <strong>Online Stores</strong> - Accept crypto payments for products
-                  </span>
+                <li className="flex items-center gap-2">
+                  <span>✅</span>
+                  <span><strong>Online Stores</strong> - Accept crypto payments</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <svg className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span className="text-sm text-slate-700 dark:text-slate-300">
-                    <strong>Content Creators</strong> - Receive tips and donations
-                  </span>
+                <li className="flex items-center gap-2">
+                  <span>✅</span>
+                  <span><strong>Creators</strong> - Receive tips & donations</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <svg className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span className="text-sm text-slate-700 dark:text-slate-300">
-                    <strong>Service Providers</strong> - Get paid for consulting, coaching, etc.
-                  </span>
+                <li className="flex items-center gap-2">
+                  <span>✅</span>
+                  <span><strong>Teams</strong> - Split revenue automatically</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span>✅</span>
+                  <span><strong>P2P Trades</strong> - Secure escrow transactions</span>
                 </li>
               </ul>
             </div>
+          </Window>
 
-            {/* Stats */}
-            <div className="grid grid-cols-2 gap-3 md:gap-4">
-              <div className="bg-white dark:bg-slate-800 rounded-lg p-4 md:p-6 shadow">
-                <div className="text-2xl md:text-3xl font-bold text-blue-600 dark:text-blue-400 mb-1">
-                  &lt;1s
-                </div>
-                <div className="text-xs md:text-sm text-slate-600 dark:text-slate-400">
-                  Average confirmation time
-                </div>
+          {/* Stats Window */}
+          <Window title="📈 System Monitor - STATS.exe">
+            <div className="grid grid-cols-2 gap-2 p-2">
+              <div className="win95-inset p-3 text-center">
+                <div className="text-2xl font-bold text-[var(--win95-blue)]">&lt;1s</div>
+                <div className="text-xs">Confirmation Time</div>
               </div>
-              <div className="bg-white dark:bg-slate-800 rounded-lg p-4 md:p-6 shadow">
-                <div className="text-2xl md:text-3xl font-bold text-blue-600 dark:text-blue-400 mb-1">
-                  $0.00025
-                </div>
-                <div className="text-xs md:text-sm text-slate-600 dark:text-slate-400">
-                  Average transaction fee
-                </div>
+              <div className="win95-inset p-3 text-center">
+                <div className="text-2xl font-bold text-[var(--win95-blue)]">$0.0003</div>
+                <div className="text-xs">Avg Tx Fee</div>
+              </div>
+              <div className="win95-inset p-3 text-center">
+                <div className="text-2xl font-bold text-green-700">ONLINE</div>
+                <div className="text-xs">Network Status</div>
+              </div>
+              <div className="win95-inset p-3 text-center">
+                <div className="text-2xl font-bold text-[var(--win95-blue)]">65,000</div>
+                <div className="text-xs">TPS Capacity</div>
               </div>
             </div>
 
-            {/* FAQ */}
-            <div>
-              <h3 className="font-semibold text-slate-900 dark:text-white mb-4">
-                Frequently Asked Questions
-              </h3>
-              <div className="space-y-4">
-                <div>
-                  <h4 className="font-medium text-slate-900 dark:text-white mb-1 text-sm">
-                    Do customers need a wallet?
-                  </h4>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">
-                    Yes, customers need a Solana wallet like Phantom or Solflare to send payment. They can either scan the QR code or connect their wallet directly.
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-medium text-slate-900 dark:text-white mb-1 text-sm">
-                    How does auto-forwarding work?
-                  </h4>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">
-                    Each payment link creates a temporary wallet. Once payment is received, funds automatically forward to your configured merchant wallet.
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-medium text-slate-900 dark:text-white mb-1 text-sm">
-                    What tokens are supported?
-                  </h4>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">
-                    Currently SOL is fully supported. USDC and USDT support coming soon.
-                  </p>
-                </div>
+            {/* Fake Progress Bar */}
+            <div className="p-2">
+              <p className="text-xs mb-1">Network Load:</p>
+              <div className="win95-progress">
+                <div className="win95-progress-bar" style={{ width: '35%' }}></div>
               </div>
             </div>
-          </div>
+          </Window>
         </div>
       </div>
 
