@@ -73,36 +73,36 @@ export default function Home() {
     <div className="min-h-screen bg-black">
       <Header />
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-b from-slate-900 via-black to-black pt-16">
+      <div className="relative overflow-hidden bg-gradient-to-b from-slate-900 via-black to-black pt-20 md:pt-16">
         {/* Animated Background Grid */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px]"></div>
         <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
-        
-        {/* Glowing Orbs */}
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"></div>
-        
-        <div className="max-w-7xl mx-auto px-4 py-32 relative z-10">
-          <div className="text-center mb-20">
+
+        {/* Glowing Orbs - smaller on mobile */}
+        <div className="absolute top-0 left-1/4 w-48 h-48 md:w-96 md:h-96 bg-blue-500/20 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 right-1/4 w-48 h-48 md:w-96 md:h-96 bg-purple-500/20 rounded-full blur-3xl"></div>
+
+        <div className="max-w-7xl mx-auto px-4 py-16 md:py-32 relative z-10">
+          <div className="text-center mb-12 md:mb-20">
             {/* Logo/Brand */}
-            <div className="mb-12">
+            <div className="mb-8 md:mb-12">
               <div className="flex justify-center">
-                <span className="text-6xl md:text-7xl font-semibold tracking-tight bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
+                <span className="text-5xl md:text-7xl font-semibold tracking-tight bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
                   NOVIQ
                 </span>
               </div>
             </div>
-            
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 text-white leading-tight">
+
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold mb-4 md:mb-6 text-white leading-tight px-2">
               Payment infrastructure for Solana
             </h1>
-            <p className="text-xl text-slate-400 max-w-2xl mx-auto mb-8">
+            <p className="text-base md:text-xl text-slate-400 max-w-2xl mx-auto mb-6 md:mb-8 px-4">
               Escrow for secure transactions. Automated payment distribution. Collective fundraising.
             </p>
-            
+
 
             {/* 3 Main Features - Simple */}
-            <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto mt-16">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 max-w-5xl mx-auto mt-8 md:mt-16 px-2">
               <div className="border border-slate-800 rounded-lg p-6 hover:border-slate-700 transition-colors">
                 <h3 className="text-xl font-bold mb-2 text-white">Escrow</h3>
                 <p className="text-slate-400 text-sm mb-4">
@@ -169,7 +169,7 @@ export default function Home() {
           </div>
 
           {/* Features Grid */}
-          <div className="grid md:grid-cols-3 gap-6 mt-20">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mt-12 md:mt-20 px-2">
             <div className="group relative bg-slate-900/50 backdrop-blur-sm rounded-2xl p-8 border border-slate-800 hover:border-blue-500/50 transition-all">
               <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-6">
                 <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -202,16 +202,16 @@ export default function Home() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-6xl mx-auto px-4 py-20 bg-black">
-        <div className="grid lg:grid-cols-2 gap-12 items-start">
+      <div className="max-w-6xl mx-auto px-4 py-12 md:py-20 bg-black">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-start">
           {/* Left: Form */}
           <div>
-            <div className="bg-slate-900 rounded-2xl shadow-2xl p-8 sticky top-8 border border-slate-800">
-              <div className="mb-8">
-                <h2 className="text-3xl font-bold text-white mb-2">
+            <div className="bg-slate-900 rounded-2xl shadow-2xl p-5 md:p-8 sticky top-20 md:top-8 border border-slate-800">
+              <div className="mb-6 md:mb-8">
+                <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
                   Create Payment
                 </h2>
-                <p className="text-slate-400">Generate a payment link in seconds</p>
+                <p className="text-slate-400 text-sm md:text-base">Generate a payment link in seconds</p>
               </div>
 
               <div className="space-y-5">
@@ -328,18 +328,18 @@ export default function Home() {
                   )}
                 </button>
 
-                <div className="relative my-6">
+                <div className="relative my-4 md:my-6">
                   <div className="absolute inset-0 flex items-center">
                     <div className="w-full border-t border-slate-200 dark:border-slate-700"></div>
                   </div>
-                  <div className="relative flex justify-center text-sm">
+                  <div className="relative flex justify-center text-xs md:text-sm">
                     <span className="px-2 bg-white dark:bg-slate-800 text-slate-500">
                       or choose advanced options
                     </span>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-3 gap-2 md:gap-3">
                   <button
                     onClick={() => router.push('/create/split')}
                     className="group px-4 py-3 border-2 border-blue-600 text-blue-600 dark:text-blue-400 hover:bg-blue-600 hover:text-white dark:hover:text-white rounded-xl font-semibold transition-all transform hover:scale-105"
@@ -375,7 +375,7 @@ export default function Home() {
           {/* Right: How it Works */}
           <div className="space-y-8">
             <div>
-              <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-6">
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-4 md:mb-6">
                 How It Works
               </h2>
               <div className="space-y-6">
@@ -465,20 +465,20 @@ export default function Home() {
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white dark:bg-slate-800 rounded-lg p-6 shadow">
-                <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-1">
+            <div className="grid grid-cols-2 gap-3 md:gap-4">
+              <div className="bg-white dark:bg-slate-800 rounded-lg p-4 md:p-6 shadow">
+                <div className="text-2xl md:text-3xl font-bold text-blue-600 dark:text-blue-400 mb-1">
                   &lt;1s
                 </div>
-                <div className="text-sm text-slate-600 dark:text-slate-400">
+                <div className="text-xs md:text-sm text-slate-600 dark:text-slate-400">
                   Average confirmation time
                 </div>
               </div>
-              <div className="bg-white dark:bg-slate-800 rounded-lg p-6 shadow">
-                <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-1">
+              <div className="bg-white dark:bg-slate-800 rounded-lg p-4 md:p-6 shadow">
+                <div className="text-2xl md:text-3xl font-bold text-blue-600 dark:text-blue-400 mb-1">
                   $0.00025
                 </div>
-                <div className="text-sm text-slate-600 dark:text-slate-400">
+                <div className="text-xs md:text-sm text-slate-600 dark:text-slate-400">
                   Average transaction fee
                 </div>
               </div>
@@ -519,7 +519,7 @@ export default function Home() {
           </div>
         </div>
       </div>
-      
+
       <Footer />
     </div>
   )
