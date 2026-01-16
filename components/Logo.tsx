@@ -21,11 +21,18 @@ export function LogoIcon({ className = "h-8 w-8" }: { className?: string }) {
         </linearGradient>
       </defs>
       <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M8 6C8 4.89543 8.89543 4 10 4H18C22.4183 4 26 7.58172 26 12C26 16.4183 22.4183 20 18 20H13V26C13 27.1046 12.1046 28 11 28C9.89543 28 9 27.1046 9 26V19V6H8ZM13 16H18C20.2091 16 22 14.2091 22 12C22 9.79086 20.2091 8 18 8H13V16Z"
-        fill="url(#logoGrad)"
+        d="M6 18C6 11.3726 11.3726 6 18 6H28"
+        stroke="url(#logoGrad)"
+        strokeWidth="4"
+        strokeLinecap="round"
       />
+      <path
+        d="M6 18C6 24.6274 11.3726 30 18 30H28"
+        stroke="url(#logoGrad)"
+        strokeWidth="4"
+        strokeLinecap="round"
+      />
+      <circle cx="18" cy="18" r="3.5" fill="url(#logoGrad)" />
     </svg>
   )
 }
