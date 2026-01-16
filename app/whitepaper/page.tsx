@@ -296,10 +296,10 @@ Network Fee        ~$0.0003/tx`}
                     <Window title="06 — Roadmap" className="mb-4" id="roadmap">
                         <div className="space-y-4">
                             {[
-                                { q: 'Q1 2025', status: 'Complete', color: 'var(--success)', desc: 'Payment links, escrow, splits, and crowdfunding MVP' },
-                                { q: 'Q2 2025', status: 'In Progress', color: 'var(--warning)', desc: 'API access, webhooks, merchant integrations' },
-                                { q: 'Q3 2025', status: null, color: 'var(--text-subtle)', desc: 'Multi-chain expansion, fiat on/off ramps' },
-                                { q: 'Q4 2025', status: null, color: 'var(--text-subtle)', desc: 'DAO governance, protocol token' },
+                                { q: 'Q1 2026', status: 'Complete', color: 'var(--success)', desc: 'Payment links, escrow, splits, and crowdfunding MVP' },
+                                { q: 'Q2 2026', status: 'In Progress', color: 'var(--warning)', desc: 'API access, webhooks, merchant integrations' },
+                                { q: 'Q3 2026', status: null, color: 'var(--text-subtle)', desc: 'Multi-chain expansion, fiat on/off ramps' },
+                                { q: 'Q4 2026', status: null, color: 'var(--text-subtle)', desc: 'DAO governance, protocol token' },
                             ].map((item, i) => (
                                 <div key={i} className="flex items-start gap-4">
                                     <div
