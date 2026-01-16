@@ -238,7 +238,7 @@ export default function MultiSigTransactionStatus({
             {tx.current_signatures < tx.required_signatures && (
               <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
                 <p className="text-sm text-yellow-800">
-                  ⏳ Waiting for {tx.required_signatures - tx.current_signatures} more{' '}
+                  ... Waiting for {tx.required_signatures - tx.current_signatures} more{' '}
                   {tx.required_signatures - tx.current_signatures === 1 ? 'signature' : 'signatures'}
                 </p>
               </div>

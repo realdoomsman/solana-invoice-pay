@@ -288,7 +288,7 @@ export default function MilestoneWorkSubmission({
         {/* Submission Status Info */}
         <div className="mb-6 p-4 bg-blue-900/20 border border-blue-800 rounded-lg">
           <div className="flex items-start gap-3">
-            <span className="text-blue-400 text-xl">ℹ️</span>
+            <span className="text-blue-400 font-bold">i</span>
             <div className="flex-1">
               <p className="text-sm text-blue-300 font-medium mb-1">What happens next?</p>
               <ul className="text-xs text-blue-400 space-y-1 list-disc list-inside">

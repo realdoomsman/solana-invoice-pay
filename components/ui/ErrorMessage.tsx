@@ -39,7 +39,7 @@ export function ErrorMessage({
     error: {
       bg: 'bg-red-900/20',
       border: 'border-red-800',
-      icon: '❌',
+      icon: '!',
       iconBg: 'bg-red-500',
       text: 'text-red-400',
       title: title || 'Error'
@@ -47,7 +47,7 @@ export function ErrorMessage({
     warning: {
       bg: 'bg-yellow-900/20',
       border: 'border-yellow-800',
-      icon: '⚠️',
+      icon: '!',
       iconBg: 'bg-yellow-500',
       text: 'text-yellow-400',
       title: title || 'Warning'
@@ -55,7 +55,7 @@ export function ErrorMessage({
     info: {
       bg: 'bg-blue-900/20',
       border: 'border-blue-800',
-      icon: 'ℹ️',
+      icon: 'i',
       iconBg: 'bg-blue-500',
       text: 'text-blue-400',
       title: title || 'Information'
@@ -77,7 +77,7 @@ export function ErrorMessage({
             <div className={`${style.iconBg} w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0`}>
               <span className="text-white text-sm">{style.icon}</span>
             </div>
-            
+
             <div className="flex-1 min-w-0">
               <h4 className={`${style.text} font-semibold mb-1`}>
                 {style.title}
@@ -138,12 +138,12 @@ export function ErrorMessage({
   )
 }
 
-export function ErrorBoundaryFallback({ 
-  error, 
-  resetError 
-}: { 
+export function ErrorBoundaryFallback({
+  error,
+  resetError
+}: {
   error: Error
-  resetError: () => void 
+  resetError: () => void
 }) {
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-4">

@@ -137,7 +137,7 @@ export function EscrowList() {
                   {escrow.description || 'Escrow Contract'}
                 </h3>
                 <div className="text-sm text-slate-600 dark:text-slate-400">
-                  {escrow.amount} {escrow.token} • {escrow.role === 'buyer' ? '💰 Buyer' : '🛠️ Seller'}
+                  {escrow.amount} {escrow.token} • {escrow.role === 'buyer' ? 'Buyer' : '🛠️ Seller'}
                 </div>
               </div>
               <div className="flex items-center gap-2">

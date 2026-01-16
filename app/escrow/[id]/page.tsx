@@ -451,7 +451,7 @@ export default function EscrowManagementPage() {
                   <div className="mt-4 pt-4 border-t border-slate-800">
                     <div className="mb-4 p-4 bg-blue-900/20 border border-blue-800 rounded-lg">
                       <div className="flex items-center gap-2 mb-2">
-                        <span className="text-blue-400 text-lg">👀</span>
+                        <span className="text-blue-400 text-lg"></span>
                         <span className="text-blue-300 font-semibold text-sm">Work submitted - awaiting your review</span>
                       </div>
                       {milestone.seller_notes && (

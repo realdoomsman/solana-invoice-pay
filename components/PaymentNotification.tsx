@@ -18,7 +18,7 @@ export default function PaymentNotification() {
     const handlePayment = (event: CustomEvent) => {
       const notification: Notification = {
         id: Date.now().toString(),
-        title: '💰 Payment Received!',
+        title: 'Payment Received!',
         message: `${event.detail.amount} ${event.detail.token} received`,
         type: 'success',
         timestamp: new Date(),

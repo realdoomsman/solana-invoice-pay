@@ -311,7 +311,7 @@ export default function CreateTraditionalEscrow() {
               {/* Info Box */}
               <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
                 <h4 className="font-semibold text-blue-900 dark:text-blue-100 mb-2 flex items-center gap-2">
-                  <span>ℹ️</span>
+                  <span>i</span>
                   How Traditional Escrow Works:
                 </h4>
                 <ol className="text-sm text-blue-800 dark:text-blue-200 space-y-1 list-decimal list-inside">

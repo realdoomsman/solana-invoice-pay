@@ -12,49 +12,49 @@ export default function EscrowStatusBadge({ status, className = '' }: EscrowStat
         return {
           label: 'Created',
           color: 'bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-300',
-          icon: '📝'
+          icon: ''
         }
       case 'buyer_deposited':
         return {
           label: 'Buyer Deposited',
           color: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400',
-          icon: '💰'
+          icon: 'money'
         }
       case 'seller_deposited':
         return {
           label: 'Seller Deposited',
           color: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400',
-          icon: '💰'
+          icon: 'money'
         }
       case 'fully_funded':
         return {
           label: 'Fully Funded',
           color: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
-          icon: '✅'
+          icon: 'check'
         }
       case 'active':
         return {
           label: 'Active',
           color: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
-          icon: '⚡'
+          icon: 'zap'
         }
       case 'completed':
         return {
           label: 'Completed',
           color: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400',
-          icon: '🎉'
+          icon: ''
         }
       case 'disputed':
         return {
           label: 'Disputed',
           color: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400',
-          icon: '⚠️'
+          icon: 'warning'
         }
       case 'cancelled':
         return {
           label: 'Cancelled',
           color: 'bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-400',
-          icon: '❌'
+          icon: 'error'
         }
       case 'refunded':
         return {

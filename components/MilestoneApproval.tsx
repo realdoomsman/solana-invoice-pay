@@ -58,8 +58,8 @@ export default function MilestoneApproval({
 
       if (data.signature) {
         toast.success(
-          data.escrowCompleted 
-            ? '🎉 All milestones completed! Escrow finished.' 
+          data.escrowCompleted
+            ? ' All milestones completed! Escrow finished.'
             : '✓ Milestone approved and funds released!',
           { id: loadingToast, duration: 5000 }
         )
@@ -96,10 +96,10 @@ export default function MilestoneApproval({
         {/* Submitted Work Details */}
         <div className="mb-6 p-4 bg-slate-800 rounded-lg border border-slate-700">
           <div className="flex items-center gap-2 mb-3">
-            <span className="text-blue-400 text-lg">📋</span>
+            <span className="text-blue-400 text-lg"></span>
             <h4 className="text-white font-semibold">Seller's Submission</h4>
           </div>
-          
+
           {milestone.seller_submitted_at && (
             <div className="text-xs text-slate-500 mb-3">
               Submitted {new Date(milestone.seller_submitted_at).toLocaleString()}
@@ -131,7 +131,7 @@ export default function MilestoneApproval({
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 text-sm text-blue-400 hover:text-blue-300 transition-colors"
                   >
-                    <span>🔗</span>
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
                     <span className="truncate">{url}</span>
                     <span className="text-slate-500">↗</span>
                   </a>
@@ -159,7 +159,7 @@ export default function MilestoneApproval({
         {/* Milestone Progress Indicator */}
         <div className="mb-6 p-4 bg-green-900/20 border border-green-800 rounded-lg">
           <div className="flex items-start gap-3">
-            <span className="text-green-400 text-xl">💰</span>
+            <span className="text-green-400 font-bold text-xl">$</span>
             <div className="flex-1">
               <p className="text-sm text-green-300 font-medium mb-1">Payment Release</p>
               <p className="text-xs text-green-400 mb-2">
@@ -183,7 +183,7 @@ export default function MilestoneApproval({
           >
             {approving ? (
               <>
-                <span className="animate-spin">⏳</span>
+                <span className="animate-spin">...</span>
                 <span>Processing...</span>
               </>
             ) : (
@@ -215,9 +215,9 @@ export default function MilestoneApproval({
         {/* Warning */}
         <div className="mt-4 p-3 bg-yellow-900/20 border border-yellow-800 rounded-lg">
           <div className="flex items-start gap-2">
-            <span className="text-yellow-400 text-sm">⚠️</span>
+            <span className="text-yellow-400 font-bold">!</span>
             <p className="text-xs text-yellow-400">
-              Once approved, funds will be immediately released to the seller. This action cannot be undone. 
+              Once approved, funds will be immediately released to the seller. This action cannot be undone.
               If you're not satisfied with the work, raise a dispute instead.
             </p>
           </div>

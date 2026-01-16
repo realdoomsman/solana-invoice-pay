@@ -121,19 +121,19 @@ export default function EscrowPage() {
           <h2 className="text-3xl font-bold text-white mb-8 text-center">Perfect For</h2>
           <div className="grid md:grid-cols-2 gap-6">
             <div className="bg-slate-900/50 rounded-xl p-6 border border-slate-800">
-              <h3 className="text-lg font-bold text-white mb-2">🔄 OTC Trading</h3>
+              <h3 className="text-lg font-bold text-white mb-2">OTC Trading</h3>
               <p className="text-slate-400 text-sm">
                 Buying/selling large amounts of SOL, USDC, or other tokens safely.
               </p>
             </div>
             <div className="bg-slate-900/50 rounded-xl p-6 border border-slate-800">
-              <h3 className="text-lg font-bold text-white mb-2">🖼️ NFT Sales</h3>
+              <h3 className="text-lg font-bold text-white mb-2">NFT Sales</h3>
               <p className="text-slate-400 text-sm">
                 Selling NFTs to buyers you don't know. Both protected.
               </p>
             </div>
             <div className="bg-slate-900/50 rounded-xl p-6 border border-slate-800">
-              <h3 className="text-lg font-bold text-white mb-2">💼 Freelance Work</h3>
+              <h3 className="text-lg font-bold text-white mb-2">Freelance Work</h3>
               <p className="text-slate-400 text-sm">
                 Client pays upfront, funds release when work is delivered.
               </p>
