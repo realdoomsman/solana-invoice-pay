@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
     const { milestone, escrow, releaseAmounts } = releaseDetails
 
     // Setup Solana connection
-    const network = process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'devnet'
+    const network = process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'mainnet-beta'
     const rpcUrl = process.env.NEXT_PUBLIC_SOLANA_RPC_URL || `https://api.${network}.solana.com`
     const connection = new Connection(rpcUrl, 'confirmed')
 

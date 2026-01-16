@@ -184,7 +184,7 @@ export default function EscrowPage() {
               </svg>
               <div>
                 <p className="text-white font-semibold">Cheap</p>
-                <p className="text-slate-400 text-sm">3% platform fee + $0.0003 network fee. Way cheaper than alternatives.</p>
+                <p className="text-slate-400 text-sm">1% platform fee + $0.0003 network fee. Way cheaper than alternatives.</p>
               </div>
             </div>
           </div>

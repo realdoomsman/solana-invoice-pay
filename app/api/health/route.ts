@@ -6,7 +6,7 @@ export async function GET() {
     const startTime = Date.now()
     
     // Check Solana RPC connection
-    const rpcUrl = process.env.NEXT_PUBLIC_SOLANA_RPC_URL || 'https://api.devnet.solana.com'
+    const rpcUrl = process.env.NEXT_PUBLIC_SOLANA_RPC_URL || 'https://api.mainnet-beta.solana.com'
     const connection = new Connection(rpcUrl)
     
     let solanaStatus = 'healthy'
@@ -32,7 +32,7 @@ export async function GET() {
         solana: {
           status: solanaStatus,
           latency: rpcLatency,
-          network: process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'devnet',
+          network: process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'mainnet-beta',
         },
         platform: {
           status: 'healthy',

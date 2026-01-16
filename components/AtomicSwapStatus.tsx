@@ -402,7 +402,7 @@ export default function AtomicSwapStatus({ escrow, onRefresh }: AtomicSwapStatus
               <span className="text-xs text-slate-500 dark:text-slate-400 pt-1">Signature</span>
               <div className="flex-1 text-right">
                 <a
-                  href={`https://explorer.solana.com/tx/${escrow.swap_tx_signature}?cluster=${process.env.NEXT_PUBLIC_SOLANA_NETWORK === 'mainnet-beta' ? 'mainnet-beta' : 'devnet'}`}
+                  href={`https://explorer.solana.com/tx/${escrow.swap_tx_signature}?cluster=${process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'mainnet-beta'}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-xs text-blue-600 dark:text-blue-400 hover:underline font-mono break-all inline-flex items-center gap-1"
@@ -436,7 +436,7 @@ export default function AtomicSwapStatus({ escrow, onRefresh }: AtomicSwapStatus
           </div>
           
           <a
-            href={`https://explorer.solana.com/tx/${escrow.swap_tx_signature}?cluster=${process.env.NEXT_PUBLIC_SOLANA_NETWORK === 'mainnet-beta' ? 'mainnet-beta' : 'devnet'}`}
+            href={`https://explorer.solana.com/tx/${escrow.swap_tx_signature}?cluster=${process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'mainnet-beta'}`}
             target="_blank"
             rel="noopener noreferrer"
             className="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded transition-colors"

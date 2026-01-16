@@ -33,7 +33,7 @@ export default function StatusPage() {
       const startTime = Date.now()
       
       // Check Solana RPC
-      const rpcUrl = process.env.NEXT_PUBLIC_SOLANA_RPC_URL || 'https://api.devnet.solana.com'
+      const rpcUrl = process.env.NEXT_PUBLIC_SOLANA_RPC_URL || 'https://api.mainnet-beta.solana.com'
       const connection = new Connection(rpcUrl)
       
       const version = await connection.getVersion()
@@ -227,7 +227,7 @@ export default function StatusPage() {
           <div className="space-y-2 text-sm text-blue-800 dark:text-blue-200">
             <div className="flex justify-between">
               <span>Network:</span>
-              <span className="font-mono">{process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'devnet'}</span>
+              <span className="font-mono">{process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'mainnet-beta'}</span>
             </div>
             <div className="flex justify-between">
               <span>Last Updated:</span>

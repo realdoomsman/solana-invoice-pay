@@ -40,9 +40,7 @@ export default function Footer() {
             <div className="flex items-center gap-2 text-sm">
               <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
               <span className="text-green-400 font-medium">
-                {process.env.NEXT_PUBLIC_SOLANA_NETWORK === 'mainnet-beta' 
-                  ? 'Mainnet Live' 
-                  : 'Devnet Active'}
+                Mainnet Live
               </span>
             </div>
             <p className="text-xs text-slate-500 mt-2">

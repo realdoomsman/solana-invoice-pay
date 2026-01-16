@@ -2,8 +2,8 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
 import NotificationPanel from './NotificationPanel'
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
 
 function LogoIcon({ className = "h-8 w-8" }: { className?: string }) {
   return (

@@ -921,7 +921,7 @@ export function calculateMilestoneReleaseAmount(
       feePercentage = parseFloat(envFee)
     } else {
       // Default based on network
-      const network = process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'devnet'
+      const network = process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'mainnet-beta'
       feePercentage = network === 'mainnet-beta' ? 1 : 3
     }
   }
