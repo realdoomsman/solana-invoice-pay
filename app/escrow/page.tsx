@@ -38,7 +38,7 @@ export default function EscrowPage() {
           <h2 className="text-2xl font-bold text-white mb-4">How Escrow Protects Both Parties</h2>
           <p className="text-slate-300 mb-6 leading-relaxed">
             Traditional peer-to-peer transactions require trust. One party must send funds first, creating risk. 
-            NOVIQ escrow eliminates this risk by holding funds until both parties confirm successful completion.
+            PayOS escrow eliminates this risk by holding funds until both parties confirm successful completion.
           </p>
           <div className="grid md:grid-cols-2 gap-6">
             <div>
@@ -51,7 +51,7 @@ export default function EscrowPage() {
               </ul>
             </div>
             <div>
-              <h3 className="text-white font-semibold mb-2">With NOVIQ Escrow</h3>
+              <h3 className="text-white font-semibold mb-2">With PayOS Escrow</h3>
               <ul className="space-y-2 text-green-400 text-sm">
                 <li>• Both parties protected</li>
                 <li>• Automated fund release</li>
@@ -147,9 +147,9 @@ export default function EscrowPage() {
           </div>
         </div>
 
-        {/* Why NOVIQ */}
+        {/* Why PayOS */}
         <div className="bg-gradient-to-r from-blue-900/20 to-purple-900/20 rounded-2xl p-8 border border-blue-500/20 mb-12">
-          <h2 className="text-2xl font-bold text-white mb-6">Why Use NOVIQ Escrow?</h2>
+          <h2 className="text-2xl font-bold text-white mb-6">Why Use PayOS Escrow?</h2>
           <div className="space-y-4">
             <div className="flex items-start gap-3">
               <svg className="w-6 h-6 text-green-400 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

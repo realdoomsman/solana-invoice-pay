@@ -35,7 +35,7 @@ export default function Logo({ className = "", showText = true }: LogoProps) {
       <LogoIcon className="h-7 w-7" />
       {showText && (
         <span className="text-xl font-semibold tracking-tight bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
-          NOVIQ
+          PayOS
         </span>
       )}
     </div>

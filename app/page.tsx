@@ -118,8 +118,8 @@ function Window({
                   key={tab.id}
                   onClick={() => onTabChange?.(tab.id)}
                   className={`px-4 py-1.5 text-xs font-medium rounded-md transition-all ${activeTab === tab.id
-                      ? 'bg-[var(--accent)] text-white'
-                      : 'text-[var(--text-muted)] hover:text-[var(--text)]'
+                    ? 'bg-[var(--accent)] text-white'
+                    : 'text-[var(--text-muted)] hover:text-[var(--text)]'
                     }`}
                 >
                   {tab.label}
@@ -158,8 +158,8 @@ function SidebarButton({
     <button
       onClick={onClick}
       className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${active
-          ? 'bg-[var(--bg-elevated)] shadow-lg'
-          : 'hover:bg-[var(--bg-subtle)]'
+        ? 'bg-[var(--bg-elevated)] shadow-lg'
+        : 'hover:bg-[var(--bg-subtle)]'
         }`}
       style={active ? { borderLeft: `3px solid ${color}` } : {}}
     >
@@ -480,7 +480,7 @@ export default function Home() {
               ))}
             </div>
 
-            {/* Why PAYDOS */}
+            {/* Why PayOS */}
             <div className="window mt-6">
               <div className="window-header">
                 <div className="traffic-lights">
@@ -488,7 +488,7 @@ export default function Home() {
                   <span className="traffic-light traffic-light-yellow"></span>
                   <span className="traffic-light traffic-light-green"></span>
                 </div>
-                <span className="window-title">Why PAYDOS</span>
+                <span className="window-title">Why PayOS</span>
                 <div style={{ width: '54px' }}></div>
               </div>
               <div className="p-5">

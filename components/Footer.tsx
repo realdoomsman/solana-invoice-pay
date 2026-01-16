@@ -31,7 +31,7 @@ export default function Footer() {
               <span className="traffic-light traffic-light-yellow"></span>
               <span className="traffic-light traffic-light-green"></span>
             </div>
-            <span className="window-title">About PAYDOS</span>
+            <span className="window-title">About PayOS</span>
             <div style={{ width: '54px' }}></div>
           </div>
 
@@ -40,7 +40,7 @@ export default function Footer() {
               <div>
                 <div className="flex items-center gap-2 mb-4">
                   <LogoIcon />
-                  <span className="font-semibold text-sm">PAYDOS</span>
+                  <span className="font-semibold text-sm">PayOS</span>
                 </div>
                 <p className="text-xs" style={{ color: 'var(--text-subtle)' }}>
                   Payment infrastructure for Solana. Fast, secure, non-custodial.
@@ -89,7 +89,7 @@ export default function Footer() {
                 <Link href="/faq" className="hover:text-[var(--text)] transition-colors">Help</Link>
               </div>
               <p className="text-xs" style={{ color: 'var(--text-subtle)' }}>
-                2025 PAYDOS. All rights reserved.
+                2025 PayOS. All rights reserved.
               </p>
             </div>
           </div>

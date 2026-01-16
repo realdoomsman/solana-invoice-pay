@@ -1,7 +1,7 @@
 import NotificationPreferences from '@/components/NotificationPreferences'
 
 export const metadata = {
-  title: 'Notification Preferences - NOVIQ',
+  title: 'Notification Preferences - PayOS',
   description: 'Manage your notification preferences',
 }
 

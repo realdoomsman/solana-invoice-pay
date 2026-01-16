@@ -55,10 +55,10 @@ export default function ReferralsPage() {
 
   const shareReferralLink = () => {
     const link = `${window.location.origin}?ref=${referralCode}`
-    const text = `Join NOVIQ and get fast Solana payments! Use my referral code: ${referralCode}`
+    const text = `Join PayOS and get fast Solana payments! Use my referral code: ${referralCode}`
     
     if (navigator.share) {
-      navigator.share({ title: 'NOVIQ Referral', text, url: link })
+      navigator.share({ title: 'PayOS Referral', text, url: link })
     } else {
       copyReferralLink()
     }
@@ -183,7 +183,7 @@ export default function ReferralsPage() {
                 <span className="text-green-400 font-mono font-bold">0.15 SOL</span>
               </div>
               <div className="text-sm text-slate-400 mt-4">
-                💡 The more your referrals use NOVIQ, the more you earn!
+                💡 The more your referrals use PayOS, the more you earn!
               </div>
             </div>
           </div>

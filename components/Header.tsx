@@ -108,7 +108,7 @@ export default function Header() {
               <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: 'var(--gradient-2)' }}>
                 <span className="text-white font-bold text-sm">P</span>
               </div>
-              <span className="font-semibold hidden sm:block">PAYDOS</span>
+              <span className="font-semibold hidden sm:block">PayOS</span>
             </Link>
 
             {/* Desktop Nav */}
