@@ -5,30 +5,36 @@ import Footer from '@/components/Footer'
 
 // Icons
 const Icons = {
-    escrow: () => (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    lock: () => (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
             <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
         </svg>
     ),
-    splits: () => (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    chart: () => (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
             <line x1="18" y1="20" x2="18" y2="10"></line>
             <line x1="12" y1="20" x2="12" y2="4"></line>
             <line x1="6" y1="20" x2="6" y2="14"></line>
         </svg>
     ),
-    goals: () => (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    target: () => (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
             <circle cx="12" cy="12" r="10"></circle>
             <circle cx="12" cy="12" r="6"></circle>
             <circle cx="12" cy="12" r="2"></circle>
         </svg>
     ),
-    payments: () => (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    card: () => (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
             <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
             <line x1="1" y1="10" x2="23" y2="10"></line>
+        </svg>
+    ),
+    arrow: () => (
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
         </svg>
     ),
 }
@@ -37,20 +43,22 @@ function Window({
     title,
     children,
     className = '',
+    id,
 }: {
     title: string
     children: React.ReactNode
     className?: string
+    id?: string
 }) {
     return (
-        <div className={`pd-window ${className}`}>
-            <div className="pd-titlebar">
-                <div className="pd-controls">
-                    <span className="pd-control pd-control-close"></span>
-                    <span className="pd-control pd-control-min"></span>
-                    <span className="pd-control pd-control-max"></span>
+        <div className={`sys-window ${className}`} id={id}>
+            <div className="sys-titlebar">
+                <div className="sys-controls">
+                    <span className="sys-control sys-control-close"></span>
+                    <span className="sys-control sys-control-minimize"></span>
+                    <span className="sys-control sys-control-maximize"></span>
                 </div>
-                <span className="pd-titlebar-title">{title}</span>
+                <span className="sys-titlebar-text">{title}</span>
                 <div style={{ width: '54px' }}></div>
             </div>
             <div className="p-6">
@@ -62,195 +70,210 @@ function Window({
 
 export default function WhitepaperPage() {
     return (
-        <div className="min-h-screen" style={{ background: 'var(--pd-bg)' }}>
+        <div className="min-h-screen" style={{ background: 'var(--sys-bg)' }}>
             <Header />
 
-            <main className="pt-14 px-4 pb-16">
+            <main className="pt-7 px-4 pb-16">
                 <div className="max-w-4xl mx-auto">
                     {/* Header */}
                     <div className="py-12 md:py-16 text-center">
-                        <span className="pd-badge pd-badge-success mb-4 inline-block">Documentation</span>
-                        <h1 className="text-3xl md:text-5xl font-bold mb-4">PAYDOS Whitepaper</h1>
-                        <p className="text-lg" style={{ color: 'var(--pd-text-muted)' }}>
+                        <span className="sys-badge sys-badge-success mb-4 inline-block">Documentation</span>
+                        <h1 className="text-2xl md:text-4xl font-bold mb-3">PAYDOS Whitepaper</h1>
+                        <p className="text-sm" style={{ color: 'var(--sys-text-secondary)' }}>
                             Technical documentation and protocol overview
                         </p>
                     </div>
 
                     {/* Table of Contents */}
-                    <Window title="Table of Contents" className="mb-6">
-                        <nav className="space-y-2">
-                            <a href="#overview" className="block pd-button-ghost text-left">1. Overview</a>
-                            <a href="#architecture" className="block pd-button-ghost text-left">2. Architecture</a>
-                            <a href="#products" className="block pd-button-ghost text-left">3. Products</a>
-                            <a href="#security" className="block pd-button-ghost text-left">4. Security</a>
-                            <a href="#fees" className="block pd-button-ghost text-left">5. Fee Structure</a>
-                            <a href="#roadmap" className="block pd-button-ghost text-left">6. Roadmap</a>
+                    <Window title="Contents" className="mb-4">
+                        <nav className="space-y-1">
+                            <a href="#overview" className="sys-button-ghost text-left w-full flex items-center gap-2">
+                                <span style={{ color: 'var(--sys-text-tertiary)' }}>01</span>
+                                <span>Overview</span>
+                            </a>
+                            <a href="#architecture" className="sys-button-ghost text-left w-full flex items-center gap-2">
+                                <span style={{ color: 'var(--sys-text-tertiary)' }}>02</span>
+                                <span>Architecture</span>
+                            </a>
+                            <a href="#products" className="sys-button-ghost text-left w-full flex items-center gap-2">
+                                <span style={{ color: 'var(--sys-text-tertiary)' }}>03</span>
+                                <span>Products</span>
+                            </a>
+                            <a href="#security" className="sys-button-ghost text-left w-full flex items-center gap-2">
+                                <span style={{ color: 'var(--sys-text-tertiary)' }}>04</span>
+                                <span>Security</span>
+                            </a>
+                            <a href="#fees" className="sys-button-ghost text-left w-full flex items-center gap-2">
+                                <span style={{ color: 'var(--sys-text-tertiary)' }}>05</span>
+                                <span>Fee Structure</span>
+                            </a>
+                            <a href="#roadmap" className="sys-button-ghost text-left w-full flex items-center gap-2">
+                                <span style={{ color: 'var(--sys-text-tertiary)' }}>06</span>
+                                <span>Roadmap</span>
+                            </a>
                         </nav>
                     </Window>
 
                     {/* Overview */}
-                    <Window title="1. Overview" className="mb-6" id="overview">
-                        <div className="prose prose-invert max-w-none">
-                            <h3 className="text-xl font-semibold mb-4">What is PAYDOS?</h3>
-                            <p className="mb-4" style={{ color: 'var(--pd-text-muted)' }}>
+                    <Window title="01 — Overview" className="mb-4" id="overview">
+                        <div>
+                            <h3 className="text-lg font-semibold mb-4">What is PAYDOS?</h3>
+                            <p className="text-sm mb-6" style={{ color: 'var(--sys-text-secondary)' }}>
                                 PAYDOS is a payment infrastructure protocol built on Solana. It provides a suite of
                                 tools for creating payment links, escrow transactions, revenue splits, and crowdfunding
-                                campaigns - all without requiring users to give up custody of their funds.
+                                campaigns — all without requiring users to give up custody of their funds.
                             </p>
 
-                            <h4 className="text-lg font-semibold mb-3 mt-6">Core Principles</h4>
-                            <ul className="space-y-2" style={{ color: 'var(--pd-text-muted)' }}>
+                            <h4 className="text-sm font-semibold mb-3">Core Principles</h4>
+                            <ul className="space-y-3 text-sm" style={{ color: 'var(--sys-text-secondary)' }}>
                                 <li className="flex items-start gap-3">
-                                    <span style={{ color: 'var(--pd-accent)' }}>→</span>
-                                    <span><strong className="text-[var(--pd-text)]">Non-Custodial:</strong> Users maintain control of their funds at all times. PAYDOS never holds or has access to user funds.</span>
+                                    <span style={{ color: 'var(--sys-accent)' }}><Icons.arrow /></span>
+                                    <span><strong className="text-[var(--sys-text)]">Non-Custodial:</strong> Users maintain control of their funds at all times.</span>
                                 </li>
                                 <li className="flex items-start gap-3">
-                                    <span style={{ color: 'var(--pd-accent)' }}>→</span>
-                                    <span><strong className="text-[var(--pd-text)]">Trustless:</strong> Smart contract logic ensures fair execution without requiring trust between parties.</span>
+                                    <span style={{ color: 'var(--sys-accent)' }}><Icons.arrow /></span>
+                                    <span><strong className="text-[var(--sys-text)]">Trustless:</strong> Smart contract logic ensures fair execution without trust.</span>
                                 </li>
                                 <li className="flex items-start gap-3">
-                                    <span style={{ color: 'var(--pd-accent)' }}>→</span>
-                                    <span><strong className="text-[var(--pd-text)]">Instant:</strong> Leveraging Solana's sub-second finality for immediate transaction confirmation.</span>
+                                    <span style={{ color: 'var(--sys-accent)' }}><Icons.arrow /></span>
+                                    <span><strong className="text-[var(--sys-text)]">Instant:</strong> Sub-second finality on Solana.</span>
                                 </li>
                                 <li className="flex items-start gap-3">
-                                    <span style={{ color: 'var(--pd-accent)' }}>→</span>
-                                    <span><strong className="text-[var(--pd-text)]">Low Cost:</strong> Transaction fees averaging $0.0003 make micropayments viable.</span>
+                                    <span style={{ color: 'var(--sys-accent)' }}><Icons.arrow /></span>
+                                    <span><strong className="text-[var(--sys-text)]">Low Cost:</strong> Transaction fees averaging $0.0003.</span>
                                 </li>
                             </ul>
                         </div>
                     </Window>
 
                     {/* Architecture */}
-                    <Window title="2. Architecture" className="mb-6" id="architecture">
-                        <div className="prose prose-invert max-w-none">
-                            <h3 className="text-xl font-semibold mb-4">Technical Stack</h3>
+                    <Window title="02 — Architecture" className="mb-4" id="architecture">
+                        <div>
+                            <h3 className="text-lg font-semibold mb-4">Technical Stack</h3>
 
-                            <div className="pd-code mb-6">
-                                <pre className="text-sm">
-                                    {`┌─────────────────────────────────────────────────┐
-│                   PAYDOS                         │
-├─────────────────────────────────────────────────┤
-│  Frontend     │  Next.js + React                │
-│  Blockchain   │  Solana Mainnet                 │
-│  Wallet       │  Wallet Adapter (Phantom, etc)  │
-│  Database     │  Supabase (PostgreSQL)          │
-│  Hosting      │  Vercel Edge Network            │
-└─────────────────────────────────────────────────┘`}
+                            <div className="p-4 rounded-lg mb-6 mono text-xs overflow-x-auto" style={{ background: 'var(--sys-bg)' }}>
+                                <pre>
+                                    {`PAYDOS ARCHITECTURE
+├── Frontend      Next.js + React
+├── Blockchain    Solana Mainnet
+├── Wallet        Wallet Adapter
+├── Database      Supabase (PostgreSQL)
+└── Hosting       Vercel Edge Network`}
                                 </pre>
                             </div>
 
-                            <h4 className="text-lg font-semibold mb-3">Transaction Flow</h4>
-                            <ol className="space-y-3" style={{ color: 'var(--pd-text-muted)' }}>
+                            <h4 className="text-sm font-semibold mb-3">Transaction Flow</h4>
+                            <ol className="space-y-2 text-sm" style={{ color: 'var(--sys-text-secondary)' }}>
                                 <li className="flex items-start gap-3">
-                                    <span className="mono text-sm" style={{ color: 'var(--pd-accent)' }}>01</span>
-                                    <span>User creates a payment request through the PAYDOS interface</span>
+                                    <span className="mono text-xs" style={{ color: 'var(--sys-accent)' }}>01</span>
+                                    <span>User creates a payment request through the interface</span>
                                 </li>
                                 <li className="flex items-start gap-3">
-                                    <span className="mono text-sm" style={{ color: 'var(--pd-accent)' }}>02</span>
-                                    <span>A unique payment wallet is generated for the transaction</span>
+                                    <span className="mono text-xs" style={{ color: 'var(--sys-accent)' }}>02</span>
+                                    <span>A unique payment wallet is generated</span>
                                 </li>
                                 <li className="flex items-start gap-3">
-                                    <span className="mono text-sm" style={{ color: 'var(--pd-accent)' }}>03</span>
-                                    <span>Payer sends funds to the payment wallet via standard Solana transfer</span>
+                                    <span className="mono text-xs" style={{ color: 'var(--sys-accent)' }}>03</span>
+                                    <span>Payer sends funds via standard Solana transfer</span>
                                 </li>
                                 <li className="flex items-start gap-3">
-                                    <span className="mono text-sm" style={{ color: 'var(--pd-accent)' }}>04</span>
-                                    <span>PAYDOS monitors for incoming transactions and triggers forwarding</span>
+                                    <span className="mono text-xs" style={{ color: 'var(--sys-accent)' }}>04</span>
+                                    <span>System monitors for incoming transactions</span>
                                 </li>
                                 <li className="flex items-start gap-3">
-                                    <span className="mono text-sm" style={{ color: 'var(--pd-accent)' }}>05</span>
-                                    <span>Funds are automatically forwarded to the recipient wallet</span>
+                                    <span className="mono text-xs" style={{ color: 'var(--sys-accent)' }}>05</span>
+                                    <span>Funds are automatically forwarded to recipient</span>
                                 </li>
                             </ol>
                         </div>
                     </Window>
 
                     {/* Products */}
-                    <Window title="3. Products" className="mb-6" id="products">
-                        <div className="space-y-6">
+                    <Window title="03 — Products" className="mb-4" id="products">
+                        <div className="space-y-4">
                             {/* Escrow */}
-                            <div className="pd-card">
-                                <div className="flex items-start gap-4">
-                                    <div className="pd-app-icon" style={{ background: 'rgba(59, 130, 246, 0.2)' }}>
-                                        <div style={{ color: 'var(--pd-blue)' }}><Icons.escrow /></div>
-                                    </div>
-                                    <div>
-                                        <h4 className="font-semibold mb-2">Escrow</h4>
-                                        <p className="text-sm mb-3" style={{ color: 'var(--pd-text-muted)' }}>
-                                            Trustless P2P transactions where both parties deposit funds into a smart contract.
-                                            Funds are released only when both parties confirm the transaction is complete.
-                                            Includes timeout protection and dispute resolution mechanisms.
-                                        </p>
-                                        <div className="flex flex-wrap gap-2">
-                                            <span className="pd-badge" style={{ background: 'rgba(59, 130, 246, 0.15)', color: 'var(--pd-blue)' }}>Mutual Confirmation</span>
-                                            <span className="pd-badge" style={{ background: 'rgba(59, 130, 246, 0.15)', color: 'var(--pd-blue)' }}>Timeout Protection</span>
-                                            <span className="pd-badge" style={{ background: 'rgba(59, 130, 246, 0.15)', color: 'var(--pd-blue)' }}>Dispute Resolution</span>
+                            <div className="sys-card">
+                                <div className="sys-card-body">
+                                    <div className="flex items-start gap-4">
+                                        <div className="sys-icon" style={{ background: '#3b82f6' }}>
+                                            <div style={{ color: 'white' }}><Icons.lock /></div>
+                                        </div>
+                                        <div>
+                                            <h4 className="font-semibold text-sm mb-2">Escrow</h4>
+                                            <p className="text-xs mb-3" style={{ color: 'var(--sys-text-secondary)' }}>
+                                                Trustless P2P transactions where both parties deposit funds into a smart contract.
+                                                Funds are released only when both parties confirm completion.
+                                            </p>
+                                            <div className="flex flex-wrap gap-2">
+                                                <span className="sys-badge" style={{ background: 'rgba(59, 130, 246, 0.15)', color: '#3b82f6' }}>Mutual Confirmation</span>
+                                                <span className="sys-badge" style={{ background: 'rgba(59, 130, 246, 0.15)', color: '#3b82f6' }}>Timeout Protection</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
                             {/* Splits */}
-                            <div className="pd-card">
-                                <div className="flex items-start gap-4">
-                                    <div className="pd-app-icon" style={{ background: 'rgba(168, 85, 247, 0.2)' }}>
-                                        <div style={{ color: 'var(--pd-purple)' }}><Icons.splits /></div>
-                                    </div>
-                                    <div>
-                                        <h4 className="font-semibold mb-2">Splits</h4>
-                                        <p className="text-sm mb-3" style={{ color: 'var(--pd-text-muted)' }}>
-                                            Automatic revenue distribution to multiple recipients. Define percentage allocations
-                                            for each recipient. Incoming payments are instantly split and forwarded to all
-                                            parties according to their share.
-                                        </p>
-                                        <div className="flex flex-wrap gap-2">
-                                            <span className="pd-badge" style={{ background: 'rgba(168, 85, 247, 0.15)', color: 'var(--pd-purple)' }}>Auto Distribution</span>
-                                            <span className="pd-badge" style={{ background: 'rgba(168, 85, 247, 0.15)', color: 'var(--pd-purple)' }}>Custom Percentages</span>
-                                            <span className="pd-badge" style={{ background: 'rgba(168, 85, 247, 0.15)', color: 'var(--pd-purple)' }}>Multi-Recipient</span>
+                            <div className="sys-card">
+                                <div className="sys-card-body">
+                                    <div className="flex items-start gap-4">
+                                        <div className="sys-icon" style={{ background: '#8b5cf6' }}>
+                                            <div style={{ color: 'white' }}><Icons.chart /></div>
+                                        </div>
+                                        <div>
+                                            <h4 className="font-semibold text-sm mb-2">Splits</h4>
+                                            <p className="text-xs mb-3" style={{ color: 'var(--sys-text-secondary)' }}>
+                                                Automatic revenue distribution to multiple recipients. Define percentage allocations.
+                                                Incoming payments are instantly split and forwarded.
+                                            </p>
+                                            <div className="flex flex-wrap gap-2">
+                                                <span className="sys-badge" style={{ background: 'rgba(139, 92, 246, 0.15)', color: '#8b5cf6' }}>Auto Distribution</span>
+                                                <span className="sys-badge" style={{ background: 'rgba(139, 92, 246, 0.15)', color: '#8b5cf6' }}>Multi-Recipient</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
                             {/* Goals */}
-                            <div className="pd-card">
-                                <div className="flex items-start gap-4">
-                                    <div className="pd-app-icon" style={{ background: 'rgba(34, 197, 94, 0.2)' }}>
-                                        <div style={{ color: 'var(--pd-green)' }}><Icons.goals /></div>
-                                    </div>
-                                    <div>
-                                        <h4 className="font-semibold mb-2">Goals (Crowdfunding)</h4>
-                                        <p className="text-sm mb-3" style={{ color: 'var(--pd-text-muted)' }}>
-                                            Collective fundraising with full transparency. Set a target amount and deadline.
-                                            Real-time progress tracking for contributors. Automatic refunds if the goal is
-                                            not reached by the deadline.
-                                        </p>
-                                        <div className="flex flex-wrap gap-2">
-                                            <span className="pd-badge" style={{ background: 'rgba(34, 197, 94, 0.15)', color: 'var(--pd-green)' }}>Target Goals</span>
-                                            <span className="pd-badge" style={{ background: 'rgba(34, 197, 94, 0.15)', color: 'var(--pd-green)' }}>Auto Refunds</span>
-                                            <span className="pd-badge" style={{ background: 'rgba(34, 197, 94, 0.15)', color: 'var(--pd-green)' }}>Progress Tracking</span>
+                            <div className="sys-card">
+                                <div className="sys-card-body">
+                                    <div className="flex items-start gap-4">
+                                        <div className="sys-icon" style={{ background: '#22c55e' }}>
+                                            <div style={{ color: 'white' }}><Icons.target /></div>
+                                        </div>
+                                        <div>
+                                            <h4 className="font-semibold text-sm mb-2">Goals</h4>
+                                            <p className="text-xs mb-3" style={{ color: 'var(--sys-text-secondary)' }}>
+                                                Crowdfunding with full transparency. Set a target amount and deadline.
+                                                Automatic refunds if the goal is not reached.
+                                            </p>
+                                            <div className="flex flex-wrap gap-2">
+                                                <span className="sys-badge" style={{ background: 'rgba(34, 197, 94, 0.15)', color: '#22c55e' }}>Target Goals</span>
+                                                <span className="sys-badge" style={{ background: 'rgba(34, 197, 94, 0.15)', color: '#22c55e' }}>Auto Refunds</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
                             {/* Payments */}
-                            <div className="pd-card">
-                                <div className="flex items-start gap-4">
-                                    <div className="pd-app-icon" style={{ background: 'rgba(249, 115, 22, 0.2)' }}>
-                                        <div style={{ color: 'var(--pd-orange)' }}><Icons.payments /></div>
-                                    </div>
-                                    <div>
-                                        <h4 className="font-semibold mb-2">Payment Links</h4>
-                                        <p className="text-sm mb-3" style={{ color: 'var(--pd-text-muted)' }}>
-                                            Simple, shareable payment links. Generate a unique URL and QR code for any amount.
-                                            Share via email, message, or social media. Funds are auto-forwarded to your wallet
-                                            upon receipt.
-                                        </p>
-                                        <div className="flex flex-wrap gap-2">
-                                            <span className="pd-badge" style={{ background: 'rgba(249, 115, 22, 0.15)', color: 'var(--pd-orange)' }}>QR Codes</span>
-                                            <span className="pd-badge" style={{ background: 'rgba(249, 115, 22, 0.15)', color: 'var(--pd-orange)' }}>Auto Forward</span>
-                                            <span className="pd-badge" style={{ background: 'rgba(249, 115, 22, 0.15)', color: 'var(--pd-orange)' }}>Multi-Token</span>
+                            <div className="sys-card">
+                                <div className="sys-card-body">
+                                    <div className="flex items-start gap-4">
+                                        <div className="sys-icon" style={{ background: '#f97316' }}>
+                                            <div style={{ color: 'white' }}><Icons.card /></div>
+                                        </div>
+                                        <div>
+                                            <h4 className="font-semibold text-sm mb-2">Payment Links</h4>
+                                            <p className="text-xs mb-3" style={{ color: 'var(--sys-text-secondary)' }}>
+                                                Simple, shareable payment links. Generate a unique URL and QR code.
+                                                Funds auto-forward to your wallet upon receipt.
+                                            </p>
+                                            <div className="flex flex-wrap gap-2">
+                                                <span className="sys-badge" style={{ background: 'rgba(249, 115, 22, 0.15)', color: '#f97316' }}>QR Codes</span>
+                                                <span className="sys-badge" style={{ background: 'rgba(249, 115, 22, 0.15)', color: '#f97316' }}>Auto Forward</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -259,117 +282,123 @@ export default function WhitepaperPage() {
                     </Window>
 
                     {/* Security */}
-                    <Window title="4. Security" className="mb-6" id="security">
-                        <div className="prose prose-invert max-w-none">
-                            <h3 className="text-xl font-semibold mb-4">Security Model</h3>
+                    <Window title="04 — Security" className="mb-4" id="security">
+                        <div>
+                            <h3 className="text-lg font-semibold mb-4">Security Model</h3>
 
-                            <div className="grid md:grid-cols-2 gap-4 mb-6">
-                                <div className="pd-card">
-                                    <h4 className="font-semibold mb-2">Non-Custodial Design</h4>
-                                    <p className="text-sm" style={{ color: 'var(--pd-text-muted)' }}>
-                                        PAYDOS never has access to user private keys. All transactions are signed
-                                        locally in the user's wallet.
-                                    </p>
+                            <div className="grid md:grid-cols-2 gap-4">
+                                <div className="sys-card">
+                                    <div className="sys-card-body">
+                                        <h4 className="font-semibold text-sm mb-2">Non-Custodial Design</h4>
+                                        <p className="text-xs" style={{ color: 'var(--sys-text-secondary)' }}>
+                                            PAYDOS never has access to user private keys. All transactions are signed
+                                            locally in the user's wallet.
+                                        </p>
+                                    </div>
                                 </div>
-                                <div className="pd-card">
-                                    <h4 className="font-semibold mb-2">Encrypted Storage</h4>
-                                    <p className="text-sm" style={{ color: 'var(--pd-text-muted)' }}>
-                                        Sensitive data is encrypted at rest and in transit using industry-standard
-                                        encryption protocols.
-                                    </p>
+                                <div className="sys-card">
+                                    <div className="sys-card-body">
+                                        <h4 className="font-semibold text-sm mb-2">Encrypted Storage</h4>
+                                        <p className="text-xs" style={{ color: 'var(--sys-text-secondary)' }}>
+                                            Sensitive data is encrypted at rest and in transit using industry-standard
+                                            encryption protocols.
+                                        </p>
+                                    </div>
                                 </div>
-                                <div className="pd-card">
-                                    <h4 className="font-semibold mb-2">Open Source</h4>
-                                    <p className="text-sm" style={{ color: 'var(--pd-text-muted)' }}>
-                                        Core protocol code is open source and available for audit by the community.
-                                    </p>
+                                <div className="sys-card">
+                                    <div className="sys-card-body">
+                                        <h4 className="font-semibold text-sm mb-2">Open Source</h4>
+                                        <p className="text-xs" style={{ color: 'var(--sys-text-secondary)' }}>
+                                            Core protocol code is open source and available for community audit.
+                                        </p>
+                                    </div>
                                 </div>
-                                <div className="pd-card">
-                                    <h4 className="font-semibold mb-2">Timeout Protection</h4>
-                                    <p className="text-sm" style={{ color: 'var(--pd-text-muted)' }}>
-                                        Escrow transactions include automatic timeout refunds to prevent funds
-                                        from being locked indefinitely.
-                                    </p>
+                                <div className="sys-card">
+                                    <div className="sys-card-body">
+                                        <h4 className="font-semibold text-sm mb-2">Timeout Protection</h4>
+                                        <p className="text-xs" style={{ color: 'var(--sys-text-secondary)' }}>
+                                            Escrow transactions include automatic timeout refunds.
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </Window>
 
                     {/* Fees */}
-                    <Window title="5. Fee Structure" className="mb-6" id="fees">
-                        <div className="prose prose-invert max-w-none">
-                            <h3 className="text-xl font-semibold mb-4">Transparent Pricing</h3>
+                    <Window title="05 — Fee Structure" className="mb-4" id="fees">
+                        <div>
+                            <h3 className="text-lg font-semibold mb-4">Transparent Pricing</h3>
 
-                            <div className="pd-code mb-6">
-                                <pre className="text-sm">
-                                    {`Fee Structure
-─────────────────────────────────────
-Payment Links      │  1.0% of amount
-Escrow             │  1.0% of amount
-Splits             │  1.0% of amount  
-Goals              │  2.0% of amount
-─────────────────────────────────────
-Solana Network Fee │  ~$0.0003 per tx
-─────────────────────────────────────`}
+                            <div className="p-4 rounded-lg mb-4 mono text-xs" style={{ background: 'var(--sys-bg)' }}>
+                                <pre>
+                                    {`FEE STRUCTURE
+──────────────────────────────
+Payment Links      1.0%
+Escrow             1.0%
+Splits             1.0%  
+Goals              2.0%
+──────────────────────────────
+Network Fee        ~$0.0003/tx`}
                                 </pre>
                             </div>
 
-                            <p style={{ color: 'var(--pd-text-muted)' }}>
+                            <p className="text-sm" style={{ color: 'var(--sys-text-secondary)' }}>
                                 Fees are deducted automatically from the transaction amount. No hidden charges
-                                or monthly subscriptions. You only pay when you use the service.
+                                or subscriptions.
                             </p>
                         </div>
                     </Window>
 
                     {/* Roadmap */}
-                    <Window title="6. Roadmap" className="mb-6" id="roadmap">
+                    <Window title="06 — Roadmap" className="mb-4" id="roadmap">
                         <div className="space-y-4">
                             <div className="flex items-start gap-4">
-                                <div className="w-3 h-3 rounded-full mt-1.5" style={{ background: 'var(--pd-success)' }}></div>
+                                <div className="w-2 h-2 rounded-full mt-1.5" style={{ background: 'var(--sys-success)' }}></div>
                                 <div>
                                     <div className="flex items-center gap-2 mb-1">
-                                        <span className="font-semibold">Q1 2025</span>
-                                        <span className="pd-badge pd-badge-success">Complete</span>
+                                        <span className="font-semibold text-sm">Q1 2025</span>
+                                        <span className="sys-badge sys-badge-success">Complete</span>
                                     </div>
-                                    <p className="text-sm" style={{ color: 'var(--pd-text-muted)' }}>
-                                        Payment links, escrow, splits, and crowdfunding MVP launch
+                                    <p className="text-xs" style={{ color: 'var(--sys-text-secondary)' }}>
+                                        Payment links, escrow, splits, and crowdfunding MVP
                                     </p>
                                 </div>
                             </div>
 
                             <div className="flex items-start gap-4">
-                                <div className="w-3 h-3 rounded-full mt-1.5" style={{ background: 'var(--pd-warning)' }}></div>
+                                <div className="w-2 h-2 rounded-full mt-1.5" style={{ background: 'var(--sys-warning)' }}></div>
                                 <div>
                                     <div className="flex items-center gap-2 mb-1">
-                                        <span className="font-semibold">Q2 2025</span>
-                                        <span className="pd-badge pd-badge-warning">In Progress</span>
+                                        <span className="font-semibold text-sm">Q2 2025</span>
+                                        <span className="sys-badge sys-badge-warning">In Progress</span>
                                     </div>
-                                    <p className="text-sm" style={{ color: 'var(--pd-text-muted)' }}>
-                                        API access, webhooks, merchant integrations, mobile app
+                                    <p className="text-xs" style={{ color: 'var(--sys-text-secondary)' }}>
+                                        API access, webhooks, merchant integrations
                                     </p>
                                 </div>
                             </div>
 
                             <div className="flex items-start gap-4">
-                                <div className="w-3 h-3 rounded-full mt-1.5" style={{ background: 'var(--pd-text-dim)' }}></div>
+                                <div className="w-2 h-2 rounded-full mt-1.5" style={{ background: 'var(--sys-text-tertiary)' }}></div>
                                 <div>
                                     <div className="flex items-center gap-2 mb-1">
-                                        <span className="font-semibold">Q3 2025</span>
+                                        <span className="font-semibold text-sm">Q3 2025</span>
                                     </div>
-                                    <p className="text-sm" style={{ color: 'var(--pd-text-muted)' }}>
-                                        Multi-chain expansion, fiat on/off ramps, enterprise features
+                                    <p className="text-xs" style={{ color: 'var(--sys-text-secondary)' }}>
+                                        Multi-chain expansion, fiat on/off ramps
                                     </p>
                                 </div>
                             </div>
 
                             <div className="flex items-start gap-4">
-                                <div className="w-3 h-3 rounded-full mt-1.5" style={{ background: 'var(--pd-text-dim)' }}></div>
+                                <div className="w-2 h-2 rounded-full mt-1.5" style={{ background: 'var(--sys-text-tertiary)' }}></div>
                                 <div>
                                     <div className="flex items-center gap-2 mb-1">
-                                        <span className="font-semibold">Q4 2025</span>
+                                        <span className="font-semibold text-sm">Q4 2025</span>
                                     </div>
-                                    <p className="text-sm" style={{ color: 'var(--pd-text-muted)' }}>
-                                        DAO governance, protocol token, advanced analytics
+                                    <p className="text-xs" style={{ color: 'var(--sys-text-secondary)' }}>
+                                        DAO governance, protocol token
                                     </p>
                                 </div>
                             </div>

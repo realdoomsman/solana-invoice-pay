@@ -11,62 +11,62 @@ import Header from '@/components/Header'
 
 // Icons
 const Icons = {
-  escrow: () => (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  lock: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
       <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
       <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
     </svg>
   ),
-  splits: () => (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  chart: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
       <line x1="18" y1="20" x2="18" y2="10"></line>
       <line x1="12" y1="20" x2="12" y2="4"></line>
       <line x1="6" y1="20" x2="6" y2="14"></line>
     </svg>
   ),
-  goals: () => (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  target: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
       <circle cx="12" cy="12" r="10"></circle>
       <circle cx="12" cy="12" r="6"></circle>
       <circle cx="12" cy="12" r="2"></circle>
     </svg>
   ),
-  payments: () => (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  card: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
       <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
       <line x1="1" y1="10" x2="23" y2="10"></line>
     </svg>
   ),
   zap: () => (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
       <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
     </svg>
   ),
   shield: () => (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
       <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
     </svg>
   ),
-  code: () => (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <polyline points="16 18 22 12 16 6"></polyline>
-      <polyline points="8 6 2 12 8 18"></polyline>
-    </svg>
-  ),
   arrow: () => (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <line x1="5" y1="12" x2="19" y2="12"></line>
-      <polyline points="12 5 19 12 12 19"></polyline>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <polyline points="9 18 15 12 9 6"></polyline>
     </svg>
   ),
   check: () => (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
       <polyline points="20 6 9 17 4 12"></polyline>
+    </svg>
+  ),
+  info: () => (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="16" x2="12" y2="12"></line>
+      <line x1="12" y1="8" x2="12.01" y2="8"></line>
     </svg>
   ),
 }
 
-// Window Component
+// System Window Component
 function Window({
   title,
   children,
@@ -77,14 +77,14 @@ function Window({
   className?: string
 }) {
   return (
-    <div className={`pd-window ${className}`}>
-      <div className="pd-titlebar">
-        <div className="pd-controls">
-          <span className="pd-control pd-control-close"></span>
-          <span className="pd-control pd-control-min"></span>
-          <span className="pd-control pd-control-max"></span>
+    <div className={`sys-window ${className}`}>
+      <div className="sys-titlebar">
+        <div className="sys-controls">
+          <span className="sys-control sys-control-close"></span>
+          <span className="sys-control sys-control-minimize"></span>
+          <span className="sys-control sys-control-maximize"></span>
         </div>
-        <span className="pd-titlebar-title">{title}</span>
+        <span className="sys-titlebar-text">{title}</span>
         <div style={{ width: '54px' }}></div>
       </div>
       <div className="p-4">
@@ -94,8 +94,8 @@ function Window({
   )
 }
 
-// App Card Component
-function AppCard({
+// App List Item
+function AppItem({
   title,
   description,
   icon: Icon,
@@ -115,27 +115,20 @@ function AppCard({
   return (
     <button
       onClick={() => router.push(href)}
-      className="pd-card text-left hover:border-[var(--pd-border-light)] transition-all group"
+      className="sys-list-item w-full text-left group cursor-pointer"
     >
-      <div className="flex items-start gap-4">
-        <div
-          className="pd-app-icon"
-          style={{ background: `linear-gradient(135deg, ${color}20, ${color}40)` }}
-        >
-          <div style={{ color }}><Icon /></div>
+      <div className="sys-icon" style={{ background: color }}>
+        <div style={{ color: 'white' }}><Icon /></div>
+      </div>
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2">
+          <span className="font-medium text-sm" style={{ color: 'var(--sys-text)' }}>{title}</span>
+          {badge && <span className="sys-badge sys-badge-success">{badge}</span>}
         </div>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1">
-            <h3 className="font-semibold text-[var(--pd-text)]">{title}</h3>
-            {badge && (
-              <span className="pd-badge pd-badge-success">{badge}</span>
-            )}
-          </div>
-          <p className="text-sm text-[var(--pd-text-muted)] line-clamp-2">{description}</p>
-        </div>
-        <div className="text-[var(--pd-text-dim)] group-hover:text-[var(--pd-accent)] transition-colors">
-          <Icons.arrow />
-        </div>
+        <p className="text-xs mt-0.5" style={{ color: 'var(--sys-text-tertiary)' }}>{description}</p>
+      </div>
+      <div style={{ color: 'var(--sys-text-tertiary)' }} className="group-hover:translate-x-1 transition-transform">
+        <Icons.arrow />
       </div>
     </button>
   )
@@ -203,281 +196,263 @@ export default function Home() {
   const apps = [
     {
       title: 'Escrow',
-      description: 'Trustless P2P transactions with secure fund holding until both parties confirm.',
-      icon: Icons.escrow,
-      color: 'var(--pd-blue)',
+      description: 'Secure P2P transactions with mutual confirmation',
+      icon: Icons.lock,
+      color: '#3b82f6',
       href: '/escrow',
     },
     {
       title: 'Splits',
-      description: 'Automatic revenue distribution to multiple recipients with custom percentages.',
-      icon: Icons.splits,
-      color: 'var(--pd-purple)',
+      description: 'Automatic revenue distribution to multiple wallets',
+      icon: Icons.chart,
+      color: '#8b5cf6',
       href: '/splits',
     },
     {
       title: 'Goals',
-      description: 'Crowdfunding with full transparency. Auto-refund if target not reached.',
-      icon: Icons.goals,
-      color: 'var(--pd-green)',
+      description: 'Crowdfunding with auto-refund protection',
+      icon: Icons.target,
+      color: '#22c55e',
       href: '/crowdfunding',
     },
     {
       title: 'Payments',
-      description: 'Simple payment links. Share via any channel, get paid instantly.',
-      icon: Icons.payments,
-      color: 'var(--pd-orange)',
+      description: 'Simple payment links with QR codes',
+      icon: Icons.card,
+      color: '#f97316',
       href: '/create/simple',
       badge: 'Popular',
     },
   ]
 
   return (
-    <div className="min-h-screen" style={{ background: 'var(--pd-bg)' }}>
+    <div className="min-h-screen" style={{ background: 'var(--sys-bg)' }}>
       <Header />
 
-      <main className="pt-14">
-        {/* Hero Section */}
-        <section className="px-4 py-16 md:py-24">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs mb-6" style={{ background: 'var(--pd-accent-glow)', color: 'var(--pd-accent)' }}>
-              <div className="pd-status pd-status-online" style={{ width: '6px', height: '6px' }}></div>
-              <span className="font-medium">Mainnet Live</span>
+      <main className="pt-7 pb-20">
+        {/* Hero */}
+        <section className="px-4 py-16 md:py-20">
+          <div className="max-w-3xl mx-auto text-center">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs mb-6" style={{ background: 'var(--sys-bg-3)', border: '1px solid var(--sys-border)' }}>
+              <div className="sys-status sys-status-online"></div>
+              <span style={{ color: 'var(--sys-text-secondary)' }}>Solana Mainnet</span>
             </div>
 
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 tracking-tight">
-              Payment Infrastructure<br />
-              <span style={{ color: 'var(--pd-accent)' }}>for Solana</span>
+            <h1 className="text-3xl md:text-5xl font-bold mb-4 tracking-tight" style={{ letterSpacing: '-0.02em' }}>
+              Payment Infrastructure
+              <br />
+              <span style={{ color: 'var(--sys-accent)' }}>for Solana</span>
             </h1>
 
-            <p className="text-lg md:text-xl mb-8 max-w-2xl mx-auto" style={{ color: 'var(--pd-text-muted)' }}>
+            <p className="text-sm md:text-base mb-8 max-w-xl mx-auto" style={{ color: 'var(--sys-text-secondary)' }}>
               Escrow, splits, crowdfunding, and instant payments.
-              Non-custodial. No KYC. Built for speed.
+              Non-custodial. No KYC. Sub-second finality.
             </p>
 
             <div className="flex flex-wrap justify-center gap-3">
               <button
-                onClick={() => document.getElementById('create-payment')?.scrollIntoView({ behavior: 'smooth' })}
-                className="pd-button"
+                onClick={() => document.getElementById('create')?.scrollIntoView({ behavior: 'smooth' })}
+                className="sys-button"
               >
                 Create Payment
               </button>
               <button
                 onClick={() => router.push('/whitepaper')}
-                className="pd-button-secondary"
+                className="sys-button sys-button-secondary"
               >
-                Read Whitepaper
+                Documentation
               </button>
             </div>
           </div>
         </section>
 
-        {/* Apps Grid */}
-        <section className="px-4 pb-16">
-          <div className="max-w-6xl mx-auto">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold">Apps</h2>
-              <span className="text-sm" style={{ color: 'var(--pd-text-muted)' }}>Choose a product</span>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {apps.map((app) => (
-                <AppCard key={app.title} {...app} />
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* Main Content */}
-        <section className="px-4 pb-16">
-          <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <section className="px-4">
+          <div className="max-w-5xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
 
-              {/* Create Payment Window */}
-              <Window title="Quick Payment" id="create-payment">
-                <div className="space-y-4">
-                  {!isLoggedIn && (
-                    <div className="pd-card text-sm" style={{ background: 'var(--pd-accent-glow)', border: 'none' }}>
-                      <div className="flex items-start gap-3">
-                        <Icons.shield />
-                        <div>
-                          <p className="font-medium mb-1">Connect Wallet</p>
-                          <p style={{ color: 'var(--pd-text-muted)' }}>Connect your wallet to save and track payments.</p>
+              {/* Apps List */}
+              <div className="lg:col-span-1">
+                <Window title="Applications">
+                  <div className="-m-4">
+                    {apps.map((app) => (
+                      <AppItem key={app.title} {...app} />
+                    ))}
+                  </div>
+                </Window>
+              </div>
+
+              {/* Create Payment */}
+              <div className="lg:col-span-2" id="create">
+                <Window title="New Payment">
+                  <div className="space-y-4">
+                    {!isLoggedIn && (
+                      <div className="flex items-start gap-3 p-3 rounded-lg" style={{ background: 'var(--sys-bg-3)' }}>
+                        <div style={{ color: 'var(--sys-text-tertiary)' }}><Icons.info /></div>
+                        <div className="text-xs" style={{ color: 'var(--sys-text-secondary)' }}>
+                          <p className="font-medium mb-0.5" style={{ color: 'var(--sys-text)' }}>Connect Wallet</p>
+                          <p>Connect your wallet to save and track payments.</p>
                         </div>
                       </div>
-                    </div>
-                  )}
+                    )}
 
-                  <div>
-                    <label className="pd-label">Recipient Wallet</label>
-                    <input
-                      type="text"
-                      value={merchantWallet}
-                      onChange={(e) => setMerchantWallet(e.target.value)}
-                      placeholder="Solana wallet address"
-                      disabled={isLoggedIn}
-                      className="pd-input mono"
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-3">
-                    <div className="col-span-2">
-                      <label className="pd-label">Amount</label>
+                    <div>
+                      <label className="sys-label">Recipient Address</label>
                       <input
-                        type="number"
-                        step="0.01"
-                        value={amount}
-                        onChange={(e) => setAmount(e.target.value)}
-                        placeholder="0.00"
-                        className="pd-input"
+                        type="text"
+                        value={merchantWallet}
+                        onChange={(e) => setMerchantWallet(e.target.value)}
+                        placeholder="Solana wallet address"
+                        disabled={isLoggedIn}
+                        className="sys-input mono"
                       />
                     </div>
+
+                    <div className="grid grid-cols-3 gap-3">
+                      <div className="col-span-2">
+                        <label className="sys-label">Amount</label>
+                        <input
+                          type="number"
+                          step="0.01"
+                          value={amount}
+                          onChange={(e) => setAmount(e.target.value)}
+                          placeholder="0.00"
+                          className="sys-input"
+                        />
+                      </div>
+                      <div>
+                        <label className="sys-label">Token</label>
+                        <select
+                          value={token}
+                          onChange={(e) => setToken(e.target.value)}
+                          className="sys-select w-full"
+                        >
+                          <option value="SOL">SOL</option>
+                          <option value="USDC">USDC</option>
+                          <option value="USDT">USDT</option>
+                        </select>
+                      </div>
+                    </div>
+
                     <div>
-                      <label className="pd-label">Token</label>
-                      <select
-                        value={token}
-                        onChange={(e) => setToken(e.target.value)}
-                        className="pd-select w-full"
-                      >
-                        <option value="SOL">SOL</option>
-                        <option value="USDC">USDC</option>
-                        <option value="USDT">USDT</option>
-                      </select>
+                      <label className="sys-label">Description</label>
+                      <textarea
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        placeholder="Optional note"
+                        rows={2}
+                        className="sys-input sys-textarea"
+                      />
                     </div>
-                  </div>
 
-                  <div>
-                    <label className="pd-label">Description (Optional)</label>
-                    <textarea
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
-                      placeholder="What is this payment for?"
-                      rows={2}
-                      className="pd-input resize-none"
-                    />
+                    <button
+                      onClick={createPaymentLink}
+                      disabled={loading}
+                      className="sys-button w-full justify-center"
+                    >
+                      {loading ? 'Creating...' : 'Create Payment Link'}
+                    </button>
                   </div>
+                </Window>
+              </div>
 
-                  <button
-                    onClick={createPaymentLink}
-                    disabled={loading}
-                    className="pd-button w-full"
-                  >
-                    {loading ? 'Creating...' : 'Create Payment Link'}
-                  </button>
-                </div>
-              </Window>
+            </div>
 
-              {/* Stats Window */}
-              <Window title="Network Stats">
-                <div className="grid grid-cols-2 gap-4 mb-4">
-                  <div className="pd-card">
-                    <div className="pd-stat">
-                      <div className="pd-stat-value">&lt;1s</div>
-                      <div className="pd-stat-label">Confirmation</div>
-                    </div>
-                  </div>
-                  <div className="pd-card">
-                    <div className="pd-stat">
-                      <div className="pd-stat-value">$0.0003</div>
-                      <div className="pd-stat-label">Avg Fee</div>
-                    </div>
-                  </div>
-                  <div className="pd-card">
-                    <div className="pd-stat">
-                      <div className="pd-stat-value" style={{ color: 'var(--pd-success)' }}>Online</div>
-                      <div className="pd-stat-label">Network</div>
-                    </div>
-                  </div>
-                  <div className="pd-card">
-                    <div className="pd-stat">
-                      <div className="pd-stat-value">65K</div>
-                      <div className="pd-stat-label">TPS</div>
-                    </div>
+            {/* Stats Row */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+              <div className="sys-card">
+                <div className="sys-card-body">
+                  <div className="sys-stat">
+                    <div className="sys-stat-value" style={{ color: 'var(--sys-accent)' }}>&lt;1s</div>
+                    <div className="sys-stat-label">Confirmation</div>
                   </div>
                 </div>
+              </div>
+              <div className="sys-card">
+                <div className="sys-card-body">
+                  <div className="sys-stat">
+                    <div className="sys-stat-value" style={{ color: 'var(--sys-accent)' }}>$0.0003</div>
+                    <div className="sys-stat-label">Avg Fee</div>
+                  </div>
+                </div>
+              </div>
+              <div className="sys-card">
+                <div className="sys-card-body">
+                  <div className="sys-stat">
+                    <div className="sys-stat-value" style={{ color: 'var(--sys-success)' }}>Online</div>
+                    <div className="sys-stat-label">Network</div>
+                  </div>
+                </div>
+              </div>
+              <div className="sys-card">
+                <div className="sys-card-body">
+                  <div className="sys-stat">
+                    <div className="sys-stat-value" style={{ color: 'var(--sys-accent)' }}>65K</div>
+                    <div className="sys-stat-label">TPS</div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-                <div className="pd-divider"></div>
-
-                <div className="space-y-3">
-                  <h4 className="font-medium text-sm">Why PAYDOS?</h4>
-                  <ul className="space-y-2 text-sm" style={{ color: 'var(--pd-text-muted)' }}>
-                    <li className="flex items-center gap-2">
-                      <span style={{ color: 'var(--pd-success)' }}><Icons.check /></span>
-                      <span>Non-custodial - you control your funds</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span style={{ color: 'var(--pd-success)' }}><Icons.check /></span>
-                      <span>No KYC required to get started</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span style={{ color: 'var(--pd-success)' }}><Icons.check /></span>
-                      <span>Sub-second transaction finality</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span style={{ color: 'var(--pd-success)' }}><Icons.check /></span>
-                      <span>Built on Solana for maximum speed</span>
-                    </li>
-                  </ul>
+            {/* Features */}
+            <div className="mt-4">
+              <Window title="Features">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="text-center p-4">
+                    <div className="sys-icon mx-auto mb-3" style={{ background: 'var(--sys-bg-3)', width: '40px', height: '40px' }}>
+                      <Icons.zap />
+                    </div>
+                    <h3 className="font-medium text-sm mb-1">Instant Settlement</h3>
+                    <p className="text-xs" style={{ color: 'var(--sys-text-tertiary)' }}>
+                      Sub-second transaction finality on Solana
+                    </p>
+                  </div>
+                  <div className="text-center p-4">
+                    <div className="sys-icon mx-auto mb-3" style={{ background: 'var(--sys-bg-3)', width: '40px', height: '40px' }}>
+                      <Icons.shield />
+                    </div>
+                    <h3 className="font-medium text-sm mb-1">Non-Custodial</h3>
+                    <p className="text-xs" style={{ color: 'var(--sys-text-tertiary)' }}>
+                      You maintain full control of your funds
+                    </p>
+                  </div>
+                  <div className="text-center p-4">
+                    <div className="sys-icon mx-auto mb-3" style={{ background: 'var(--sys-bg-3)', width: '40px', height: '40px' }}>
+                      <Icons.lock />
+                    </div>
+                    <h3 className="font-medium text-sm mb-1">Trustless Escrow</h3>
+                    <p className="text-xs" style={{ color: 'var(--sys-text-tertiary)' }}>
+                      Smart contract secured transactions
+                    </p>
+                  </div>
                 </div>
               </Window>
             </div>
-          </div>
-        </section>
 
-        {/* Features Section */}
-        <section className="px-4 pb-16">
-          <div className="max-w-6xl mx-auto">
-            <Window title="How It Works">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="text-center p-4">
-                  <div className="w-12 h-12 rounded-full mx-auto mb-4 flex items-center justify-center mono font-bold text-lg" style={{ background: 'var(--pd-accent-glow)', color: 'var(--pd-accent)' }}>
-                    1
-                  </div>
-                  <h3 className="font-semibold mb-2">Create</h3>
-                  <p className="text-sm" style={{ color: 'var(--pd-text-muted)' }}>
-                    Set amount and description. We generate a unique payment address.
-                  </p>
-                </div>
-                <div className="text-center p-4">
-                  <div className="w-12 h-12 rounded-full mx-auto mb-4 flex items-center justify-center mono font-bold text-lg" style={{ background: 'var(--pd-accent-glow)', color: 'var(--pd-accent)' }}>
-                    2
-                  </div>
-                  <h3 className="font-semibold mb-2">Share</h3>
-                  <p className="text-sm" style={{ color: 'var(--pd-text-muted)' }}>
-                    Send the payment link via any channel. QR code included.
-                  </p>
-                </div>
-                <div className="text-center p-4">
-                  <div className="w-12 h-12 rounded-full mx-auto mb-4 flex items-center justify-center mono font-bold text-lg" style={{ background: 'var(--pd-accent-glow)', color: 'var(--pd-accent)' }}>
-                    3
-                  </div>
-                  <h3 className="font-semibold mb-2">Receive</h3>
-                  <p className="text-sm" style={{ color: 'var(--pd-text-muted)' }}>
-                    Funds auto-forward to your wallet. Track in dashboard.
-                  </p>
-                </div>
-              </div>
-            </Window>
-          </div>
-        </section>
-
-        {/* CTA Section */}
-        <section className="px-4 pb-16">
-          <div className="max-w-4xl mx-auto">
-            <div className="pd-card text-center py-12 px-8" style={{ background: 'linear-gradient(135deg, var(--pd-bg-elevated), var(--pd-bg-window))', border: '1px solid var(--pd-border)' }}>
-              <h2 className="text-2xl md:text-3xl font-bold mb-4">Ready to get started?</h2>
-              <p className="mb-6" style={{ color: 'var(--pd-text-muted)' }}>
-                Create your first payment link in under 30 seconds.
-              </p>
-              <div className="flex flex-wrap justify-center gap-3">
-                <button onClick={() => router.push('/dashboard')} className="pd-button">
-                  Open Dashboard
-                </button>
-                <button onClick={() => router.push('/whitepaper')} className="pd-button-secondary">
-                  Read Documentation
-                </button>
-              </div>
+            {/* Why PAYDOS */}
+            <div className="mt-4">
+              <Window title="Why PAYDOS">
+                <ul className="space-y-3">
+                  <li className="flex items-center gap-3 text-sm">
+                    <span style={{ color: 'var(--sys-success)' }}><Icons.check /></span>
+                    <span style={{ color: 'var(--sys-text-secondary)' }}>Non-custodial - you control your funds</span>
+                  </li>
+                  <li className="flex items-center gap-3 text-sm">
+                    <span style={{ color: 'var(--sys-success)' }}><Icons.check /></span>
+                    <span style={{ color: 'var(--sys-text-secondary)' }}>No KYC required to get started</span>
+                  </li>
+                  <li className="flex items-center gap-3 text-sm">
+                    <span style={{ color: 'var(--sys-success)' }}><Icons.check /></span>
+                    <span style={{ color: 'var(--sys-text-secondary)' }}>Sub-second transaction finality</span>
+                  </li>
+                  <li className="flex items-center gap-3 text-sm">
+                    <span style={{ color: 'var(--sys-success)' }}><Icons.check /></span>
+                    <span style={{ color: 'var(--sys-text-secondary)' }}>Built on Solana for maximum throughput</span>
+                  </li>
+                </ul>
+              </Window>
             </div>
+
           </div>
         </section>
       </main>
