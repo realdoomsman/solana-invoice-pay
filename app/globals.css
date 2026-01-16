@@ -2,384 +2,462 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom Font */
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+/* System Fonts */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
 
 :root {
-  /* PAYDOS Custom Palette - Dark Terminal Theme */
-  --pd-bg: #0a0a0f;
-  --pd-bg-elevated: #12121a;
-  --pd-bg-window: #16161f;
-  --pd-border: #2a2a3a;
-  --pd-border-light: #3a3a4a;
+  /* System Color Palette */
+  --sys-bg: #0c0c0e;
+  --sys-bg-1: #111113;
+  --sys-bg-2: #18181b;
+  --sys-bg-3: #1f1f23;
+  --sys-border: #27272a;
+  --sys-border-light: #3f3f46;
 
-  --pd-text: #e4e4e7;
-  --pd-text-muted: #71717a;
-  --pd-text-dim: #52525b;
+  --sys-text: #fafafa;
+  --sys-text-secondary: #a1a1aa;
+  --sys-text-tertiary: #71717a;
 
-  --pd-accent: #22d3ee;
-  --pd-accent-hover: #06b6d4;
-  --pd-accent-glow: rgba(34, 211, 238, 0.15);
+  --sys-accent: #3b82f6;
+  --sys-accent-hover: #2563eb;
+  --sys-success: #22c55e;
+  --sys-warning: #eab308;
+  --sys-error: #ef4444;
 
-  --pd-success: #10b981;
-  --pd-warning: #f59e0b;
-  --pd-error: #ef4444;
-
-  --pd-purple: #a855f7;
-  --pd-blue: #3b82f6;
-  --pd-green: #22c55e;
-  --pd-orange: #f97316;
+  /* Window Title Bar Colors */
+  --sys-titlebar: #1a1a1d;
+  --sys-titlebar-text: #a1a1aa;
 }
 
 @layer base {
   * {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   }
 
   code,
   pre,
   .mono {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
   }
 
   body {
-    background-color: var(--pd-bg);
-    color: var(--pd-text);
-    font-size: 14px;
+    background: var(--sys-bg);
+    color: var(--sys-text);
+    font-size: 13px;
     line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-weight: 600;
-    letter-spacing: -0.02em;
+  ::selection {
+    background: var(--sys-accent);
+    color: white;
   }
 }
 
 @layer components {
 
-  /* Window Container */
-  .pd-window {
-    background: var(--pd-bg-window);
-    border: 1px solid var(--pd-border);
+  /* System Window */
+  .sys-window {
+    background: var(--sys-bg-2);
+    border: 1px solid var(--sys-border);
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.03);
   }
 
   /* Window Title Bar */
-  .pd-titlebar {
-    background: var(--pd-bg-elevated);
-    border-bottom: 1px solid var(--pd-border);
-    padding: 10px 12px;
+  .sys-titlebar {
+    height: 36px;
+    background: var(--sys-titlebar);
+    border-bottom: 1px solid var(--sys-border);
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    user-select: none;
-  }
-
-  .pd-titlebar-title {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--pd-text);
-    display: flex;
-    align-items: center;
+    padding: 0 12px;
     gap: 8px;
   }
 
-  /* Window Controls */
-  .pd-controls {
+  /* Traffic Light Controls */
+  .sys-controls {
     display: flex;
-    gap: 6px;
+    gap: 8px;
+    align-items: center;
   }
 
-  .pd-control {
+  .sys-control {
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    cursor: pointer;
+    position: relative;
+  }
+
+  .sys-control::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    opacity: 0;
     transition: opacity 0.15s;
   }
 
-  .pd-control:hover {
-    opacity: 0.8;
-  }
-
-  .pd-control-close {
+  .sys-control-close {
     background: #ff5f57;
   }
 
-  .pd-control-min {
+  .sys-control-minimize {
     background: #febc2e;
   }
 
-  .pd-control-max {
+  .sys-control-maximize {
     background: #28c840;
   }
 
-  /* Primary Button */
-  .pd-button {
-    background: var(--pd-accent);
-    color: var(--pd-bg);
-    font-weight: 600;
-    padding: 10px 20px;
+  .sys-titlebar-text {
+    flex: 1;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--sys-titlebar-text);
+    user-select: none;
+  }
+
+  /* System Toolbar */
+  .sys-toolbar {
+    height: 40px;
+    background: var(--sys-bg-1);
+    border-bottom: 1px solid var(--sys-border);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 16px;
+  }
+
+  /* System Sidebar */
+  .sys-sidebar {
+    width: 200px;
+    background: var(--sys-bg-1);
+    border-right: 1px solid var(--sys-border);
+    height: 100%;
+  }
+
+  .sys-sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    margin: 2px 8px;
     border-radius: 6px;
-    border: none;
+    font-size: 13px;
+    color: var(--sys-text-secondary);
     cursor: pointer;
-    transition: all 0.15s;
-    font-size: 14px;
+    transition: all 0.1s;
   }
 
-  .pd-button:hover {
-    background: var(--pd-accent-hover);
-    transform: translateY(-1px);
+  .sys-sidebar-item:hover {
+    background: var(--sys-bg-3);
+    color: var(--sys-text);
   }
 
-  .pd-button:active {
-    transform: translateY(0);
+  .sys-sidebar-item-active {
+    background: var(--sys-accent);
+    color: white;
   }
 
-  .pd-button:disabled {
+  .sys-sidebar-item-active:hover {
+    background: var(--sys-accent-hover);
+  }
+
+  /* System Button */
+  .sys-button {
+    height: 32px;
+    padding: 0 14px;
+    background: var(--sys-accent);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.1s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .sys-button:hover {
+    background: var(--sys-accent-hover);
+  }
+
+  .sys-button:active {
+    transform: scale(0.98);
+  }
+
+  .sys-button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
-    transform: none;
   }
 
-  /* Secondary Button */
-  .pd-button-secondary {
+  .sys-button-secondary {
+    background: var(--sys-bg-3);
+    border: 1px solid var(--sys-border);
+  }
+
+  .sys-button-secondary:hover {
+    background: var(--sys-border);
+  }
+
+  .sys-button-ghost {
     background: transparent;
-    color: var(--pd-text);
-    border: 1px solid var(--pd-border);
-    font-weight: 500;
-    padding: 10px 20px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.15s;
-    font-size: 14px;
+    color: var(--sys-text-secondary);
+    height: auto;
+    padding: 6px 10px;
   }
 
-  .pd-button-secondary:hover {
-    background: var(--pd-bg-elevated);
-    border-color: var(--pd-border-light);
+  .sys-button-ghost:hover {
+    background: var(--sys-bg-3);
+    color: var(--sys-text);
   }
 
-  /* Ghost Button */
-  .pd-button-ghost {
-    background: transparent;
-    color: var(--pd-text-muted);
-    border: none;
-    padding: 8px 12px;
+  /* System Input */
+  .sys-input {
+    height: 32px;
+    padding: 0 10px;
+    background: var(--sys-bg);
+    border: 1px solid var(--sys-border);
     border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.15s;
+    color: var(--sys-text);
     font-size: 13px;
-  }
-
-  .pd-button-ghost:hover {
-    color: var(--pd-text);
-    background: var(--pd-bg-elevated);
-  }
-
-  /* Input */
-  .pd-input {
-    background: var(--pd-bg);
-    border: 1px solid var(--pd-border);
-    border-radius: 6px;
-    padding: 10px 12px;
-    color: var(--pd-text);
-    font-size: 14px;
-    transition: border-color 0.15s;
     width: 100%;
+    transition: border-color 0.15s;
   }
 
-  .pd-input:focus {
+  .sys-input:focus {
     outline: none;
-    border-color: var(--pd-accent);
-    box-shadow: 0 0 0 3px var(--pd-accent-glow);
+    border-color: var(--sys-accent);
   }
 
-  .pd-input::placeholder {
-    color: var(--pd-text-dim);
+  .sys-input::placeholder {
+    color: var(--sys-text-tertiary);
   }
 
-  /* Select */
-  .pd-select {
-    background: var(--pd-bg);
-    border: 1px solid var(--pd-border);
+  .sys-textarea {
+    padding: 8px 10px;
+    min-height: 64px;
+    resize: vertical;
+  }
+
+  /* System Select */
+  .sys-select {
+    height: 32px;
+    padding: 0 10px;
+    background: var(--sys-bg);
+    border: 1px solid var(--sys-border);
     border-radius: 6px;
-    padding: 10px 12px;
-    color: var(--pd-text);
-    font-size: 14px;
+    color: var(--sys-text);
+    font-size: 13px;
     cursor: pointer;
   }
 
-  .pd-select:focus {
-    outline: none;
-    border-color: var(--pd-accent);
+  /* System Label */
+  .sys-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--sys-text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
   }
 
-  /* Card */
-  .pd-card {
-    background: var(--pd-bg-elevated);
-    border: 1px solid var(--pd-border);
+  /* System Card */
+  .sys-card {
+    background: var(--sys-bg-2);
+    border: 1px solid var(--sys-border);
     border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .sys-card-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--sys-border);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--sys-text-secondary);
+  }
+
+  .sys-card-body {
     padding: 16px;
   }
 
-  /* App Icon */
-  .pd-app-icon {
+  /* System List */
+  .sys-list-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--sys-border);
+    transition: background 0.1s;
+  }
+
+  .sys-list-item:last-child {
+    border-bottom: none;
+  }
+
+  .sys-list-item:hover {
+    background: var(--sys-bg-3);
+  }
+
+  /* System Icon */
+  .sys-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* System Badge */
+  .sys-badge {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  .sys-badge-success {
+    background: rgba(34, 197, 94, 0.15);
+    color: var(--sys-success);
+  }
+
+  .sys-badge-warning {
+    background: rgba(234, 179, 8, 0.15);
+    color: var(--sys-warning);
+  }
+
+  /* System Divider */
+  .sys-divider {
+    height: 1px;
+    background: var(--sys-border);
+    margin: 16px 0;
+  }
+
+  /* System Status */
+  .sys-status {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .sys-status-online {
+    background: var(--sys-success);
+    box-shadow: 0 0 6px var(--sys-success);
+  }
+
+  /* System Menu Bar */
+  .sys-menubar {
+    height: 28px;
+    background: linear-gradient(to bottom, var(--sys-bg-2), var(--sys-bg-1));
+    border-bottom: 1px solid var(--sys-border);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    font-size: 13px;
+  }
+
+  .sys-menubar-item {
+    padding: 4px 12px;
+    border-radius: 4px;
+    color: var(--sys-text);
+    cursor: pointer;
+  }
+
+  .sys-menubar-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  /* System Dock */
+  .sys-dock {
+    position: fixed;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(30, 30, 35, 0.85);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 6px 10px;
+    display: flex;
+    gap: 4px;
+    z-index: 100;
+  }
+
+  .sys-dock-item {
     width: 48px;
     height: 48px;
     border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
     transition: transform 0.15s;
+    position: relative;
   }
 
-  .pd-app-icon:hover {
-    transform: scale(1.05);
+  .sys-dock-item:hover {
+    transform: scale(1.15) translateY(-4px);
   }
 
-  /* Label */
-  .pd-label {
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--pd-text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 6px;
-  }
-
-  /* Badge */
-  .pd-badge {
-    font-size: 11px;
-    font-weight: 600;
-    padding: 2px 8px;
-    border-radius: 4px;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-  }
-
-  .pd-badge-success {
-    background: rgba(16, 185, 129, 0.15);
-    color: var(--pd-success);
-  }
-
-  .pd-badge-warning {
-    background: rgba(245, 158, 11, 0.15);
-    color: var(--pd-warning);
-  }
-
-  /* Divider */
-  .pd-divider {
-    height: 1px;
-    background: var(--pd-border);
-    margin: 16px 0;
-  }
-
-  /* Status Indicator */
-  .pd-status {
-    width: 8px;
-    height: 8px;
+  .sys-dock-item-active::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    width: 4px;
+    height: 4px;
     border-radius: 50%;
+    background: var(--sys-text-tertiary);
   }
 
-  .pd-status-online {
-    background: var(--pd-success);
-    box-shadow: 0 0 8px var(--pd-success);
+  .sys-dock-separator {
+    width: 1px;
+    height: 40px;
+    background: var(--sys-border);
+    margin: 0 6px;
   }
 
-  /* Tab Bar */
-  .pd-tabs {
-    display: flex;
-    gap: 4px;
-    background: var(--pd-bg);
-    padding: 4px;
-    border-radius: 6px;
-  }
-
-  .pd-tab {
-    padding: 8px 16px;
-    border-radius: 4px;
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--pd-text-muted);
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-
-  .pd-tab:hover {
-    color: var(--pd-text);
-  }
-
-  .pd-tab-active {
-    background: var(--pd-bg-elevated);
-    color: var(--pd-text);
-  }
-
-  /* Dock */
-  .pd-dock {
-    background: var(--pd-bg-elevated);
-    border: 1px solid var(--pd-border);
-    border-radius: 16px;
-    padding: 8px 16px;
-    display: flex;
-    gap: 8px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-  }
-
-  .pd-dock-item {
-    padding: 8px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-
-  .pd-dock-item:hover {
-    background: var(--pd-bg-window);
-  }
-
-  .pd-dock-item-active {
-    background: var(--pd-accent-glow);
-  }
-
-  /* Code Block */
-  .pd-code {
-    background: var(--pd-bg);
-    border: 1px solid var(--pd-border);
-    border-radius: 6px;
-    padding: 16px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
-    overflow-x: auto;
-  }
-
-  /* Stats */
-  .pd-stat {
+  /* System Stat */
+  .sys-stat {
     text-align: center;
   }
 
-  .pd-stat-value {
-    font-size: 28px;
-    font-weight: 700;
-    color: var(--pd-accent);
-    font-family: 'JetBrains Mono', monospace;
+  .sys-stat-value {
+    font-size: 24px;
+    font-weight: 600;
+    font-family: 'IBM Plex Mono', monospace;
   }
 
-  .pd-stat-label {
-    font-size: 12px;
-    color: var(--pd-text-muted);
+  .sys-stat-label {
+    font-size: 11px;
+    color: var(--sys-text-tertiary);
     margin-top: 4px;
   }
-}
 
-@layer utilities {
-  .glow-accent {
-    box-shadow: 0 0 20px var(--pd-accent-glow), 0 0 40px var(--pd-accent-glow);
+  /* System Progress */
+  .sys-progress {
+    height: 4px;
+    background: var(--sys-bg);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .sys-progress-bar {
+    height: 100%;
+    background: var(--sys-accent);
+    border-radius: 2px;
+    transition: width 0.3s;
   }
 }
