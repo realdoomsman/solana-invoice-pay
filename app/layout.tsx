@@ -5,20 +5,20 @@ import { ErrorBoundary } from '@/components/ErrorBoundary'
 import { ToastProvider } from '@/components/ToastProvider'
 
 export const metadata: Metadata = {
-  title: 'PAYDOS - Retro Payment Infrastructure for Solana',
-  description: 'OTC escrow, group buys, profit splits, and instant SOL payments. Non-custodial, no KYC, built for Solana traders. Windows 95 vibes.',
-  keywords: ['paydos', 'solana', 'otc', 'escrow', 'group buy', 'memecoin', 'trading', 'p2p', 'crypto payments', 'defi', 'retro', 'windows 95'],
-  authors: [{ name: 'PAYDOS' }],
+  title: 'PayOS - Payment Infrastructure for Solana',
+  description: 'Escrow, splits, crowdfunding, and instant payments. Non-custodial, no KYC, built for Solana.',
+  keywords: ['payos', 'solana', 'escrow', 'splits', 'crowdfunding', 'payments', 'p2p', 'crypto payments', 'defi'],
+  authors: [{ name: 'PayOS' }],
   openGraph: {
-    title: 'PAYDOS - Retro Payment Infrastructure for Solana',
-    description: 'OTC escrow, group buys, and instant payments. Non-custodial. No KYC. Built for degens. Windows 95 aesthetic.',
+    title: 'PayOS - Payment Infrastructure for Solana',
+    description: 'Escrow, splits, crowdfunding, and instant payments. Non-custodial. No KYC.',
     type: 'website',
     locale: 'en_US',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'PAYDOS - Payment Links for Solana',
-    description: 'OTC trades, group buys, profit splits. Non-custodial. Retro Windows 95 vibes.',
+    title: 'PayOS - Payment Infrastructure for Solana',
+    description: 'Escrow, splits, crowdfunding, and instant payments. Non-custodial.',
   },
   robots: {
     index: true,

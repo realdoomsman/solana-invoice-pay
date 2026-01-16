@@ -78,7 +78,7 @@ export default function WhitepaperPage() {
                     {/* Header */}
                     <div className="py-12 md:py-16 text-center">
                         <span className="badge badge-success mb-4 inline-block">Documentation</span>
-                        <h1 className="text-3xl md:text-4xl font-bold mb-3">PAYDOS Whitepaper</h1>
+                        <h1 className="text-3xl md:text-4xl font-bold mb-3">PayOS Whitepaper</h1>
                         <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
                             Technical documentation and protocol overview
                         </p>
@@ -110,9 +110,9 @@ export default function WhitepaperPage() {
                     {/* Overview */}
                     <Window title="01 — Overview" className="mb-4" id="overview">
                         <div>
-                            <h3 className="text-lg font-semibold mb-4">What is PAYDOS?</h3>
+                            <h3 className="text-lg font-semibold mb-4">What is PayOS?</h3>
                             <p className="text-sm mb-6" style={{ color: 'var(--text-muted)' }}>
-                                PAYDOS is a payment infrastructure protocol built on Solana. It provides a suite of
+                                PayOS is a payment infrastructure protocol built on Solana. It provides a suite of
                                 tools for creating payment links, escrow transactions, revenue splits, and crowdfunding
                                 campaigns — all without requiring users to give up custody of their funds.
                             </p>
@@ -146,7 +146,7 @@ export default function WhitepaperPage() {
 
                             <div className="p-4 rounded-xl mb-6 mono text-xs overflow-x-auto" style={{ background: 'var(--bg-base)' }}>
                                 <pre>
-                                    {`PAYDOS ARCHITECTURE
+                                    {`PayOS ARCHITECTURE
 ├── Frontend      Next.js + React
 ├── Blockchain    Solana Mainnet
 ├── Wallet        Wallet Adapter
@@ -251,7 +251,7 @@ export default function WhitepaperPage() {
 
                             <div className="grid md:grid-cols-2 gap-4">
                                 {[
-                                    { title: 'Non-Custodial Design', desc: 'PAYDOS never has access to user private keys. All transactions are signed locally.' },
+                                    { title: 'Non-Custodial Design', desc: 'PayOS never has access to user private keys. All transactions are signed locally.' },
                                     { title: 'Encrypted Storage', desc: 'Sensitive data is encrypted at rest and in transit using industry-standard protocols.' },
                                     { title: 'Open Source', desc: 'Core protocol code is open source and available for community audit.' },
                                     { title: 'Timeout Protection', desc: 'Escrow transactions include automatic timeout refunds.' },

@@ -583,7 +583,7 @@ export default function PaymentPage() {
                   {milestone.status === 'disputed' && (
                     <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 p-3 rounded-lg">
                       <p className="text-sm text-red-800 dark:text-red-300">
-                        <strong>Warning:</strong> This milestone is under dispute. Funds are frozen. NOVIQ admin will review and make a decision.
+                        <strong>Warning:</strong> This milestone is under dispute. Funds are frozen. PayOS admin will review and make a decision.
                       </p>
                       <p className="text-sm mt-2 text-red-700 dark:text-red-400">
                         Both parties can submit evidence. Admin will decide to release funds to seller or refund to buyer.

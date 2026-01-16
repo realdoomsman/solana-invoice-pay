@@ -13,8 +13,8 @@ interface FAQItem {
 const faqs: FAQItem[] = [
   {
     category: 'Getting Started',
-    question: 'What is NOVIQ?',
-    answer: 'NOVIQ is a payment platform for Solana that enables secure P2P trading through escrow, automated payment splits, and crowdfunding goals. Non-custodial, no KYC, instant settlements.',
+    question: 'What is PayOS?',
+    answer: 'PayOS is a payment platform for Solana that enables secure P2P trading through escrow, automated payment splits, and crowdfunding goals. Non-custodial, no KYC, instant settlements.',
   },
   {
     category: 'Getting Started',
@@ -44,7 +44,7 @@ const faqs: FAQItem[] = [
   {
     category: 'Fees',
     question: 'What are the fees?',
-    answer: 'NOVIQ charges 1% on successful transactions only. Solana network fees are around $0.00025 per transaction. Creating escrows, splits, and goals is free.',
+    answer: 'PayOS charges 1% on successful transactions only. Solana network fees are around $0.00025 per transaction. Creating escrows, splits, and goals is free.',
   },
   {
     category: 'Fees',
@@ -54,7 +54,7 @@ const faqs: FAQItem[] = [
   {
     category: 'Security',
     question: 'Is my money safe?',
-    answer: 'Yes! NOVIQ is non-custodial - we never hold your funds. Everything is transparent on the Solana blockchain. Escrow funds are locked until both parties confirm.',
+    answer: 'Yes! PayOS is non-custodial - we never hold your funds. Everything is transparent on the Solana blockchain. Escrow funds are locked until both parties confirm.',
   },
   {
     category: 'Security',
@@ -141,7 +141,7 @@ export default function FAQPage() {
           </button>
           <h1 className="text-5xl font-black mb-4">Frequently Asked Questions</h1>
           <p className="text-xl text-blue-100">
-            Everything you need to know about NOVIQ
+            Everything you need to know about PayOS
           </p>
         </div>
       </div>
