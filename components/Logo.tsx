@@ -20,19 +20,16 @@ export function LogoIcon({ className = "h-8 w-8" }: { className?: string }) {
           <stop offset="100%" style={{ stopColor: '#EC4899' }} />
         </linearGradient>
       </defs>
+      {/* Option 3: Nodes Design */}
+      <circle cx="16" cy="16" r="5" fill="url(#logoGrad)" />
+      <circle cx="26" cy="10" r="2.5" fill="url(#logoGrad)" opacity="0.6" />
+      <circle cx="6" cy="22" r="2.5" fill="url(#logoGrad)" opacity="0.6" />
       <path
-        d="M6 18C6 11.3726 11.3726 6 18 6H28"
+        d="M16 16L26 10M16 16L6 22"
         stroke="url(#logoGrad)"
-        strokeWidth="4"
+        strokeWidth="2.5"
         strokeLinecap="round"
       />
-      <path
-        d="M6 18C6 24.6274 11.3726 30 18 30H28"
-        stroke="url(#logoGrad)"
-        strokeWidth="4"
-        strokeLinecap="round"
-      />
-      <circle cx="18" cy="18" r="3.5" fill="url(#logoGrad)" />
     </svg>
   )
 }
