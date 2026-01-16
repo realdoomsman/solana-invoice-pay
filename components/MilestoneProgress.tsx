@@ -97,7 +97,7 @@ export default function MilestoneProgress({ milestones, token }: MilestoneProgre
       {completedMilestones === totalMilestones ? (
         <div className="mt-4 p-3 bg-green-900/20 border border-green-800 rounded-lg">
           <div className="flex items-center gap-2">
-            <span className="text-green-400 text-lg">🎉</span>
+            <span className="text-green-400 text-lg"></span>
             <span className="text-sm text-green-400 font-medium">
               All milestones completed!
             </span>
@@ -106,7 +106,7 @@ export default function MilestoneProgress({ milestones, token }: MilestoneProgre
       ) : submittedMilestones > 0 ? (
         <div className="mt-4 p-3 bg-blue-900/20 border border-blue-800 rounded-lg">
           <div className="flex items-center gap-2">
-            <span className="text-blue-400 text-lg">👀</span>
+            <span className="text-blue-400 text-lg"></span>
             <span className="text-sm text-blue-400">
               {submittedMilestones} milestone{submittedMilestones > 1 ? 's' : ''} awaiting review
             </span>
@@ -115,7 +115,7 @@ export default function MilestoneProgress({ milestones, token }: MilestoneProgre
       ) : (
         <div className="mt-4 p-3 bg-slate-800 rounded-lg">
           <div className="flex items-center gap-2">
-            <span className="text-slate-400 text-lg">⏳</span>
+            <span className="text-slate-400 text-lg">...</span>
             <span className="text-sm text-slate-400">
               {pendingMilestones} milestone{pendingMilestones > 1 ? 's' : ''} in progress
             </span>

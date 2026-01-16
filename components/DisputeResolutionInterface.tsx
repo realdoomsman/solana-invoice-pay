@@ -343,7 +343,7 @@ export default function DisputeResolutionInterface({
           {validationError && (
             <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
               <p className="text-sm text-red-800 dark:text-red-300">
-                ⚠️ {validationError}
+                {validationError}
               </p>
             </div>
           )}
@@ -351,7 +351,7 @@ export default function DisputeResolutionInterface({
           {/* Warning */}
           <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
             <p className="text-sm text-yellow-800 dark:text-yellow-300 font-semibold mb-1">
-              ⚠️ Final Decision Warning
+              Final Decision Warning
             </p>
             <ul className="text-xs text-yellow-700 dark:text-yellow-400 space-y-1 ml-4 list-disc">
               <li>This action is final and cannot be undone</li>

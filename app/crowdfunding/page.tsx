@@ -157,7 +157,7 @@ export default function CrowdfundingPage() {
               </p>
             </div>
             <div className="bg-slate-900/50 rounded-xl p-6 border border-slate-800">
-              <h3 className="text-lg font-bold text-white mb-2">💡 Startup Funding</h3>
+              <h3 className="text-lg font-bold text-white mb-2">Startup Funding</h3>
               <p className="text-slate-400 text-sm">
                 Raise initial capital from your community.
               </p>

@@ -183,7 +183,7 @@ export default function ReferralsPage() {
                 <span className="text-green-400 font-mono font-bold">0.15 SOL</span>
               </div>
               <div className="text-sm text-slate-400 mt-4">
-                💡 The more your referrals use PayOS, the more you earn!
+                The more your referrals use PayOS, the more you earn!
               </div>
             </div>
           </div>

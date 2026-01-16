@@ -52,7 +52,7 @@ export default function EscrowAmountDisplay({
         </div>
         <div className="mt-4 pt-4 border-t border-slate-800 text-center">
           <div className="text-sm text-slate-400">
-            🔄 Assets will be exchanged atomically when both parties deposit
+            Assets will be exchanged atomically when both parties deposit
           </div>
         </div>
       </div>
@@ -92,7 +92,7 @@ export default function EscrowAmountDisplay({
         </div>
         <div className="mt-4 pt-4 border-t border-slate-800 text-center">
           <div className="text-sm text-slate-400">
-            🤝 Both parties must deposit before escrow becomes active
+             Both parties must deposit before escrow becomes active
           </div>
         </div>
       </div>
@@ -109,9 +109,9 @@ export default function EscrowAmountDisplay({
               {buyerAmount} {token}
             </div>
             <div className="text-sm text-slate-400">
-              {isBuyer && '💰 Your budget'}
-              {isSeller && '💰 Total available'}
-              {!isBuyer && !isSeller && '💰 Total budget'}
+              {isBuyer && 'Your budget'}
+              {isSeller && 'Total available'}
+              {!isBuyer && !isSeller && 'Total budget'}
             </div>
           </div>
           <div className="text-right">
@@ -121,7 +121,7 @@ export default function EscrowAmountDisplay({
         </div>
         <div className="mt-4 pt-4 border-t border-slate-800 text-center">
           <div className="text-sm text-slate-400">
-            📋 Funds released as milestones are completed and approved
+             Funds released as milestones are completed and approved
           </div>
         </div>
       </div>

@@ -73,7 +73,7 @@ export default function EscrowActionIndicator({
       indicators.push({
         type: 'danger',
         message: 'Under Admin Review',
-        icon: '⚠️',
+        icon: '!',
         priority: 'high'
       })
       return indicators // Disputed is highest priority, show only this
@@ -84,7 +84,7 @@ export default function EscrowActionIndicator({
       indicators.push({
         type: 'success',
         message: 'Completed',
-        icon: '✅',
+        icon: 'OK',
         priority: 'low'
       })
       return indicators
@@ -96,7 +96,7 @@ export default function EscrowActionIndicator({
         indicators.push({
           type: 'action',
           message: 'Deposit Required',
-          icon: '💰',
+          icon: '$',
           priority: 'high'
         })
       }
@@ -105,7 +105,7 @@ export default function EscrowActionIndicator({
         indicators.push({
           type: 'action',
           message: 'Deposit Required',
-          icon: '💰',
+          icon: '$',
           priority: 'high'
         })
       }
@@ -137,7 +137,7 @@ export default function EscrowActionIndicator({
       indicators.push({
         type: 'action',
         message: `${submittedMilestones} Milestone${submittedMilestones > 1 ? 's' : ''} to Review`,
-        icon: '📋',
+        icon: '',
         priority: 'high'
       })
     }
@@ -157,7 +157,7 @@ export default function EscrowActionIndicator({
       indicators.push({
         type: 'info',
         message: 'Waiting for Counterparty',
-        icon: '⏳',
+        icon: '...',
         priority: 'medium'
       })
     }

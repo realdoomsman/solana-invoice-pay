@@ -432,14 +432,14 @@ export default function CreateSimpleBuyerEscrow() {
                   {milestones.some(m => !m.description) && (
                     <div className="p-2 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
                       <p className="text-xs text-yellow-800 dark:text-yellow-200">
-                        ⚠️ All milestones need descriptions
+                        All milestones need descriptions
                       </p>
                     </div>
                   )}
                   {milestones.some(m => m.percentage <= 0) && (
                     <div className="p-2 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
                       <p className="text-xs text-yellow-800 dark:text-yellow-200">
-                        ⚠️ All milestones need a percentage greater than 0%
+                        All milestones need a percentage greater than 0%
                       </p>
                     </div>
                   )}

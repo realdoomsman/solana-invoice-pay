@@ -222,33 +222,33 @@ export default function EscrowTypeSelector() {
               <tbody className="text-sm">
                 <tr className="border-b border-slate-100 dark:border-slate-700/50">
                   <td className="py-3 px-4 text-slate-600 dark:text-slate-400">Both parties deposit</td>
-                  <td className="text-center py-3 px-4">✅</td>
-                  <td className="text-center py-3 px-4">❌</td>
-                  <td className="text-center py-3 px-4">✅</td>
+                  <td className="text-center py-3 px-4"> Yes </td>
+                  <td className="text-center py-3 px-4"> No </td>
+                  <td className="text-center py-3 px-4"> Yes </td>
                 </tr>
                 <tr className="border-b border-slate-100 dark:border-slate-700/50">
                   <td className="py-3 px-4 text-slate-600 dark:text-slate-400">Milestone-based release</td>
-                  <td className="text-center py-3 px-4">❌</td>
-                  <td className="text-center py-3 px-4">✅</td>
-                  <td className="text-center py-3 px-4">❌</td>
+                  <td className="text-center py-3 px-4"> No </td>
+                  <td className="text-center py-3 px-4"> Yes </td>
+                  <td className="text-center py-3 px-4"> No </td>
                 </tr>
                 <tr className="border-b border-slate-100 dark:border-slate-700/50">
                   <td className="py-3 px-4 text-slate-600 dark:text-slate-400">Automatic swap</td>
-                  <td className="text-center py-3 px-4">❌</td>
-                  <td className="text-center py-3 px-4">❌</td>
-                  <td className="text-center py-3 px-4">✅</td>
+                  <td className="text-center py-3 px-4"> No </td>
+                  <td className="text-center py-3 px-4"> No </td>
+                  <td className="text-center py-3 px-4"> Yes </td>
                 </tr>
                 <tr className="border-b border-slate-100 dark:border-slate-700/50">
                   <td className="py-3 px-4 text-slate-600 dark:text-slate-400">Dispute resolution</td>
-                  <td className="text-center py-3 px-4">✅</td>
-                  <td className="text-center py-3 px-4">✅</td>
-                  <td className="text-center py-3 px-4">❌</td>
+                  <td className="text-center py-3 px-4"> Yes </td>
+                  <td className="text-center py-3 px-4"> Yes </td>
+                  <td className="text-center py-3 px-4"> No </td>
                 </tr>
                 <tr className="border-b border-slate-100 dark:border-slate-700/50">
                   <td className="py-3 px-4 text-slate-600 dark:text-slate-400">Requires confirmation</td>
-                  <td className="text-center py-3 px-4">✅</td>
-                  <td className="text-center py-3 px-4">✅</td>
-                  <td className="text-center py-3 px-4">❌</td>
+                  <td className="text-center py-3 px-4"> Yes </td>
+                  <td className="text-center py-3 px-4"> Yes </td>
+                  <td className="text-center py-3 px-4"> No </td>
                 </tr>
                 <tr>
                   <td className="py-3 px-4 text-slate-600 dark:text-slate-400">Best for</td>

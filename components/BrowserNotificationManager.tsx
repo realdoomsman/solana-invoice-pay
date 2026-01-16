@@ -40,7 +40,7 @@ export default function BrowserNotificationManager() {
       <Card>
         <div className="p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
           <div className="flex items-start gap-3">
-            <span className="text-yellow-500 text-xl">⚠️</span>
+            <span className="text-yellow-500 font-bold">!</span>
             <div>
               <p className="text-yellow-400 font-medium">Browser notifications not supported</p>
               <p className="text-yellow-400/70 text-sm mt-1">

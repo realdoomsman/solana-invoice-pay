@@ -18,29 +18,29 @@ export default function EscrowActivityTimeline({
   const getActionIcon = (actionType: string) => {
     switch (actionType) {
       case 'created':
-        return '📝'
+        return ''
       case 'deposited':
-        return '💰'
+        return '$'
       case 'confirmed':
-        return '✅'
+        return 'OK'
       case 'submitted':
         return '📤'
       case 'approved':
         return '👍'
       case 'disputed':
-        return '⚠️'
+        return '!'
       case 'released':
-        return '🎉'
+        return ''
       case 'refunded':
         return '↩️'
       case 'cancelled':
-        return '❌'
+        return 'X'
       case 'swapped':
-        return '🔄'
+        return 'O'
       case 'timeout':
         return '⏰'
       case 'admin_action':
-        return '👨‍💼'
+        return 'A'
       default:
         return '•'
     }
@@ -272,7 +272,7 @@ export default function EscrowActivityTimeline({
                             className="text-xs text-slate-600 hover:text-slate-400 transition-colors"
                             title="Copy full address"
                           >
-                            📋
+                            
                           </button>
                         )}
                       </div>
@@ -306,7 +306,7 @@ export default function EscrowActivityTimeline({
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-900/30 border border-blue-800/50 rounded-lg text-xs text-blue-400 hover:text-blue-300 hover:bg-blue-900/50 transition-colors"
                       >
-                        <span>🔗</span>
+                        <span>LINK</span>
                         <span>View on Solana Explorer</span>
                         <span>↗</span>
                       </a>
@@ -315,7 +315,7 @@ export default function EscrowActivityTimeline({
                         className="text-xs text-slate-500 hover:text-slate-400 transition-colors"
                         title="Copy transaction signature"
                       >
-                        📋 Copy TX
+                         Copy TX
                       </button>
                     </div>
                   )}

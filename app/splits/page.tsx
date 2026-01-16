@@ -128,13 +128,13 @@ export default function SplitsPage() {
           <h2 className="text-3xl font-bold text-white mb-8 text-center">Perfect For</h2>
           <div className="grid md:grid-cols-2 gap-6">
             <div className="bg-slate-900/50 rounded-xl p-6 border border-slate-800">
-              <h3 className="text-lg font-bold text-white mb-2">📈 Trading Teams</h3>
+              <h3 className="text-lg font-bold text-white mb-2">Trading Teams</h3>
               <p className="text-slate-400 text-sm">
                 Split profits from successful trades automatically.
               </p>
             </div>
             <div className="bg-slate-900/50 rounded-xl p-6 border border-slate-800">
-              <h3 className="text-lg font-bold text-white mb-2">💼 Freelance Teams</h3>
+              <h3 className="text-lg font-bold text-white mb-2">Freelance Teams</h3>
               <p className="text-slate-400 text-sm">
                 Split project payments among team members fairly.
               </p>

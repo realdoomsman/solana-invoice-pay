@@ -31,13 +31,13 @@ export default function AIAssistant({ onSuggestion }: AIAssistantProps) {
       if (inputLower.includes('description') || inputLower.includes('what should i write')) {
         const result = await generatePaymentDescription(0.1, 'SOL', input)
         if (result.success) {
-          setResponse(`💡 Suggested description: "${result.data}"`)
+          setResponse(`Suggested description: "${result.data}"`)
           onSuggestion?.({ type: 'description', value: result.data })
         }
       } else if (inputLower.includes('amount') || inputLower.includes('how much')) {
         const result = await suggestPaymentAmount(input)
         if (result.success) {
-          setResponse(`💰 ${result.data.reasoning}`)
+          setResponse(`${result.data.reasoning}`)
           onSuggestion?.({ type: 'amount', value: result.data.amount })
         }
       } else if (inputLower.includes('wallet') || inputLower.includes('address')) {
@@ -48,9 +48,9 @@ export default function AIAssistant({ onSuggestion }: AIAssistantProps) {
           const result = await validateWalletAddress(potentialAddress)
           if (result.success && result.data) {
             if (result.data.valid) {
-              setResponse('✅ Wallet address looks valid!')
+              setResponse('Wallet address looks valid!')
             } else {
-              setResponse(`⚠️ Issues found: ${result.data.issues.join(', ')}`)
+              setResponse(`Issues found: ${result.data.issues.join(', ')}`)
             }
           }
         } else {
@@ -60,7 +60,7 @@ export default function AIAssistant({ onSuggestion }: AIAssistantProps) {
         const result = await recommendPaymentType(0.1, input)
         if (result.success && result.data) {
           const top = result.data[0]
-          setResponse(`🎯 Recommended: ${top.type.toUpperCase()} payment - ${top.reason}`)
+          setResponse(`Recommended: ${top.type.toUpperCase()} payment - ${top.reason}`)
           onSuggestion?.({ type: 'paymentType', value: top.type })
         }
       } else {

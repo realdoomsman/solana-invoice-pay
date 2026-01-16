@@ -84,7 +84,7 @@ export default function EscrowActionBadges({
       badges.push({
         type: 'danger',
         message: 'Disputed',
-        icon: '⚠️'
+        icon: '!'
       })
     }
 
@@ -93,7 +93,7 @@ export default function EscrowActionBadges({
       badges.push({
         type: 'success',
         message: 'Completed',
-        icon: '✅'
+        icon: 'OK'
       })
     }
 
@@ -103,7 +103,7 @@ export default function EscrowActionBadges({
         badges.push({
           type: 'action',
           message: 'Deposit',
-          icon: '💰'
+          icon: '$'
         })
       }
       
@@ -111,7 +111,7 @@ export default function EscrowActionBadges({
         badges.push({
           type: 'action',
           message: 'Deposit',
-          icon: '💰'
+          icon: '$'
         })
       }
     }
@@ -141,7 +141,7 @@ export default function EscrowActionBadges({
         badges.push({
           type: 'action',
           message: 'Review',
-          icon: '📋',
+          icon: '',
           count: submittedMilestones
         })
       }
@@ -150,7 +150,7 @@ export default function EscrowActionBadges({
         badges.push({
           type: 'info',
           message: 'Pending',
-          icon: '⏳',
+          icon: '...',
           count: pendingMilestones
         })
       }

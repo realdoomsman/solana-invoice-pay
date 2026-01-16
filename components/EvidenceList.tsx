@@ -57,13 +57,13 @@ export default function EvidenceList({
   const getEvidenceIcon = (type: string) => {
     switch (type) {
       case 'text':
-        return '📝'
+        return ''
       case 'image':
-        return '🖼️'
+        return 'IMG'
       case 'document':
         return '📄'
       case 'link':
-        return '🔗'
+        return 'URL'
       case 'screenshot':
         return '📸'
       default:
@@ -186,13 +186,13 @@ function EvidenceCard({ evidence }: { evidence: EscrowEvidence }) {
   const getEvidenceIcon = (type: string) => {
     switch (type) {
       case 'text':
-        return '📝'
+        return ''
       case 'image':
-        return '🖼️'
+        return 'IMG'
       case 'document':
         return '📄'
       case 'link':
-        return '🔗'
+        return 'URL'
       case 'screenshot':
         return '📸'
       default:

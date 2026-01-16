@@ -10,21 +10,21 @@ export default function EscrowTypeDisplay({ type, className = '' }: EscrowTypeDi
     switch (type) {
       case 'traditional':
         return {
-          icon: '🤝',
+          icon: '',
           label: 'Traditional Escrow',
           description: 'Both parties deposit funds',
           color: 'text-blue-400'
         }
       case 'simple_buyer':
         return {
-          icon: '📋',
+          icon: '',
           label: 'Milestone-Based',
           description: 'Payment released in stages',
           color: 'text-purple-400'
         }
       case 'atomic_swap':
         return {
-          icon: '🔄',
+          icon: 'sync',
           label: 'Atomic Swap',
           description: 'Trustless token exchange',
           color: 'text-green-400'
