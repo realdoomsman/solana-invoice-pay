@@ -2,72 +2,84 @@
 
 export function LogoIcon({ className = "h-8 w-8" }: { className?: string }) {
   return (
-    <span className={`${className} flex items-center justify-center`}>💸</span>
+    <div className={`${className} rounded-lg flex items-center justify-center`} style={{ background: 'linear-gradient(135deg, var(--pd-accent), var(--pd-purple))' }}>
+      <span className="text-black font-bold text-xs">P</span>
+    </div>
   )
 }
 
 export default function Footer() {
   return (
-    <footer className="win95-window mx-4 mb-16">
-      <div className="win95-title-bar">
-        <span className="text-sm">ℹ️ About PAYDOS</span>
-        <div className="flex gap-[2px]">
-          <button className="win95-control-btn">_</button>
-          <button className="win95-control-btn">□</button>
-          <button className="win95-control-btn">×</button>
-        </div>
-      </div>
-      <div className="p-3">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-xl">💸</span>
-              <span className="font-bold">PAYDOS 95</span>
+    <footer className="px-4 pb-8">
+      <div className="max-w-6xl mx-auto">
+        <div className="pd-window">
+          <div className="pd-titlebar">
+            <div className="pd-controls">
+              <span className="pd-control pd-control-close"></span>
+              <span className="pd-control pd-control-min"></span>
+              <span className="pd-control pd-control-max"></span>
             </div>
-            <p className="text-xs">
-              Payment infrastructure for Solana. Built for speed.
-            </p>
+            <span className="pd-titlebar-title">About PAYDOS</span>
+            <div style={{ width: '54px' }}></div>
           </div>
 
-          <div>
-            <p className="font-bold mb-2 underline">Products</p>
-            <ul className="space-y-1 text-xs">
-              <li><a href="/" className="hover:underline">📄 Simple Payments</a></li>
-              <li><a href="/create/split" className="hover:underline">📊 Split Payments</a></li>
-              <li><a href="/create/escrow" className="hover:underline">🔒 Escrow</a></li>
-              <li><a href="/create/goal" className="hover:underline">🎯 Funding Goals</a></li>
-            </ul>
-          </div>
+          <div className="p-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+              <div>
+                <div className="flex items-center gap-2 mb-4">
+                  <LogoIcon className="w-6 h-6" />
+                  <span className="font-semibold">PAYDOS</span>
+                </div>
+                <p className="text-sm" style={{ color: 'var(--pd-text-muted)' }}>
+                  Payment infrastructure for Solana. Fast, secure, non-custodial.
+                </p>
+              </div>
 
-          <div>
-            <p className="font-bold mb-2 underline">Resources</p>
-            <ul className="space-y-1 text-xs">
-              <li><a href="/dashboard" className="hover:underline">📁 Dashboard</a></li>
-              <li><a href="/faq" className="hover:underline">❓ FAQ</a></li>
-              <li><a href="https://solana.com" target="_blank" rel="noopener noreferrer" className="hover:underline">🌐 Solana.com</a></li>
-              <li><a href="https://explorer.solana.com" target="_blank" rel="noopener noreferrer" className="hover:underline">🔍 Explorer</a></li>
-            </ul>
-          </div>
+              <div>
+                <h4 className="font-semibold mb-4 text-sm">Products</h4>
+                <ul className="space-y-2 text-sm" style={{ color: 'var(--pd-text-muted)' }}>
+                  <li><a href="/" className="hover:text-[var(--pd-text)] transition-colors">Payments</a></li>
+                  <li><a href="/escrow" className="hover:text-[var(--pd-text)] transition-colors">Escrow</a></li>
+                  <li><a href="/splits" className="hover:text-[var(--pd-text)] transition-colors">Splits</a></li>
+                  <li><a href="/crowdfunding" className="hover:text-[var(--pd-text)] transition-colors">Goals</a></li>
+                </ul>
+              </div>
 
-          <div>
-            <p className="font-bold mb-2 underline">Network</p>
-            <div className="flex items-center gap-2 text-xs mb-2">
-              <span className="inline-block w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-              <span className="text-green-700 font-bold">Mainnet Online</span>
+              <div>
+                <h4 className="font-semibold mb-4 text-sm">Resources</h4>
+                <ul className="space-y-2 text-sm" style={{ color: 'var(--pd-text-muted)' }}>
+                  <li><a href="/dashboard" className="hover:text-[var(--pd-text)] transition-colors">Dashboard</a></li>
+                  <li><a href="/whitepaper" className="hover:text-[var(--pd-text)] transition-colors">Whitepaper</a></li>
+                  <li><a href="/faq" className="hover:text-[var(--pd-text)] transition-colors">FAQ</a></li>
+                  <li><a href="https://solana.com" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--pd-text)] transition-colors">Solana</a></li>
+                </ul>
+              </div>
+
+              <div>
+                <h4 className="font-semibold mb-4 text-sm">Network</h4>
+                <div className="flex items-center gap-2 text-sm mb-2">
+                  <div className="pd-status pd-status-online"></div>
+                  <span style={{ color: 'var(--pd-success)' }}>Mainnet Online</span>
+                </div>
+                <p className="text-sm" style={{ color: 'var(--pd-text-muted)' }}>
+                  Built on Solana
+                </p>
+              </div>
             </div>
-            <p className="text-xs">Powered by Solana</p>
-          </div>
-        </div>
 
-        <div className="win95-divider"></div>
+            <div className="pd-divider"></div>
 
-        <div className="flex flex-col md:flex-row justify-between items-center gap-2 text-xs">
-          <div className="flex gap-4">
-            <a href="/terms" className="hover:underline">Terms</a>
-            <a href="/privacy" className="hover:underline">Privacy</a>
-            <a href="/faq" className="hover:underline">Help</a>
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+              <div className="flex gap-6 text-sm" style={{ color: 'var(--pd-text-muted)' }}>
+                <a href="/terms" className="hover:text-[var(--pd-text)] transition-colors">Terms</a>
+                <a href="/privacy" className="hover:text-[var(--pd-text)] transition-colors">Privacy</a>
+                <a href="/faq" className="hover:text-[var(--pd-text)] transition-colors">Help</a>
+              </div>
+              <p className="text-sm" style={{ color: 'var(--pd-text-dim)' }}>
+                © 2025 PAYDOS. All rights reserved.
+              </p>
+            </div>
           </div>
-          <p>© 2025 PAYDOS. All rights reserved.</p>
         </div>
       </div>
     </footer>

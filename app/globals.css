@@ -2,241 +2,384 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Windows 95 Font - VT323 or system fallback */
-@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+/* Custom Font */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-  /* Windows 95 Color Palette */
-  --win95-gray: #c0c0c0;
-  --win95-dark-gray: #808080;
-  --win95-light-gray: #dfdfdf;
-  --win95-white: #ffffff;
-  --win95-black: #000000;
-  --win95-blue: #000080;
-  --win95-cyan: #008080;
-  --win95-title-start: #000080;
-  --win95-title-end: #1084d0;
+  /* PAYDOS Custom Palette - Dark Terminal Theme */
+  --pd-bg: #0a0a0f;
+  --pd-bg-elevated: #12121a;
+  --pd-bg-window: #16161f;
+  --pd-border: #2a2a3a;
+  --pd-border-light: #3a3a4a;
+
+  --pd-text: #e4e4e7;
+  --pd-text-muted: #71717a;
+  --pd-text-dim: #52525b;
+
+  --pd-accent: #22d3ee;
+  --pd-accent-hover: #06b6d4;
+  --pd-accent-glow: rgba(34, 211, 238, 0.15);
+
+  --pd-success: #10b981;
+  --pd-warning: #f59e0b;
+  --pd-error: #ef4444;
+
+  --pd-purple: #a855f7;
+  --pd-blue: #3b82f6;
+  --pd-green: #22c55e;
+  --pd-orange: #f97316;
 }
 
 @layer base {
   * {
-    font-family: 'VT323', 'Courier New', monospace;
-  }
-  
-  body {
-    @apply text-black;
-    background-color: var(--win95-cyan);
-    font-size: 18px;
-    line-height: 1.4;
+    font-family: 'Inter', system-ui, sans-serif;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-normal tracking-normal;
+  code,
+  pre,
+  .mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  body {
+    background-color: var(--pd-bg);
+    color: var(--pd-text);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: 600;
+    letter-spacing: -0.02em;
   }
 }
 
 @layer components {
-  /* Classic Windows 95 Window */
-  .win95-window {
-    background-color: var(--win95-gray);
-    border: 2px solid;
-    border-color: var(--win95-white) var(--win95-dark-gray) var(--win95-dark-gray) var(--win95-white);
-    box-shadow: 1px 1px 0 var(--win95-black);
+
+  /* Window Container */
+  .pd-window {
+    background: var(--pd-bg-window);
+    border: 1px solid var(--pd-border);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
   }
 
   /* Window Title Bar */
-  .win95-title-bar {
-    background: linear-gradient(90deg, var(--win95-title-start), var(--win95-title-end));
-    color: white;
-    padding: 2px 4px;
+  .pd-titlebar {
+    background: var(--pd-bg-elevated);
+    border-bottom: 1px solid var(--pd-border);
+    padding: 10px 12px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     user-select: none;
   }
 
-  /* Raised Button (default) */
-  .win95-button {
-    background-color: var(--win95-gray);
-    border: 2px solid;
-    border-color: var(--win95-white) var(--win95-dark-gray) var(--win95-dark-gray) var(--win95-white);
-    padding: 4px 16px;
+  .pd-titlebar-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--pd-text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Window Controls */
+  .pd-controls {
+    display: flex;
+    gap: 6px;
+  }
+
+  .pd-control {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
     cursor: pointer;
-    font-family: 'VT323', monospace;
-    font-size: 18px;
-    min-width: 75px;
+    transition: opacity 0.15s;
   }
 
-  .win95-button:active {
-    border-color: var(--win95-dark-gray) var(--win95-white) var(--win95-white) var(--win95-dark-gray);
-    padding: 5px 15px 3px 17px;
+  .pd-control:hover {
+    opacity: 0.8;
   }
 
-  .win95-button:focus {
-    outline: 1px dotted var(--win95-black);
-    outline-offset: -4px;
+  .pd-control-close {
+    background: #ff5f57;
   }
 
-  /* Sunken Input Field */
-  .win95-input {
-    background-color: var(--win95-white);
-    border: 2px solid;
-    border-color: var(--win95-dark-gray) var(--win95-white) var(--win95-white) var(--win95-dark-gray);
-    padding: 4px 8px;
-    font-family: 'VT323', monospace;
-    font-size: 18px;
+  .pd-control-min {
+    background: #febc2e;
   }
 
-  .win95-input:focus {
+  .pd-control-max {
+    background: #28c840;
+  }
+
+  /* Primary Button */
+  .pd-button {
+    background: var(--pd-accent);
+    color: var(--pd-bg);
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 14px;
+  }
+
+  .pd-button:hover {
+    background: var(--pd-accent-hover);
+    transform: translateY(-1px);
+  }
+
+  .pd-button:active {
+    transform: translateY(0);
+  }
+
+  .pd-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* Secondary Button */
+  .pd-button-secondary {
+    background: transparent;
+    color: var(--pd-text);
+    border: 1px solid var(--pd-border);
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 14px;
+  }
+
+  .pd-button-secondary:hover {
+    background: var(--pd-bg-elevated);
+    border-color: var(--pd-border-light);
+  }
+
+  /* Ghost Button */
+  .pd-button-ghost {
+    background: transparent;
+    color: var(--pd-text-muted);
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 13px;
+  }
+
+  .pd-button-ghost:hover {
+    color: var(--pd-text);
+    background: var(--pd-bg-elevated);
+  }
+
+  /* Input */
+  .pd-input {
+    background: var(--pd-bg);
+    border: 1px solid var(--pd-border);
+    border-radius: 6px;
+    padding: 10px 12px;
+    color: var(--pd-text);
+    font-size: 14px;
+    transition: border-color 0.15s;
+    width: 100%;
+  }
+
+  .pd-input:focus {
     outline: none;
+    border-color: var(--pd-accent);
+    box-shadow: 0 0 0 3px var(--pd-accent-glow);
   }
 
-  /* Sunken Panel */
-  .win95-inset {
-    background-color: var(--win95-white);
-    border: 2px solid;
-    border-color: var(--win95-dark-gray) var(--win95-white) var(--win95-white) var(--win95-dark-gray);
+  .pd-input::placeholder {
+    color: var(--pd-text-dim);
   }
 
-  /* Raised Panel */
-  .win95-raised {
-    background-color: var(--win95-gray);
-    border: 2px solid;
-    border-color: var(--win95-white) var(--win95-dark-gray) var(--win95-dark-gray) var(--win95-white);
+  /* Select */
+  .pd-select {
+    background: var(--pd-bg);
+    border: 1px solid var(--pd-border);
+    border-radius: 6px;
+    padding: 10px 12px;
+    color: var(--pd-text);
+    font-size: 14px;
+    cursor: pointer;
   }
 
-  /* Window Control Buttons */
-  .win95-control-btn {
-    background-color: var(--win95-gray);
-    border: 2px solid;
-    border-color: var(--win95-white) var(--win95-dark-gray) var(--win95-dark-gray) var(--win95-white);
-    width: 16px;
-    height: 14px;
+  .pd-select:focus {
+    outline: none;
+    border-color: var(--pd-accent);
+  }
+
+  /* Card */
+  .pd-card {
+    background: var(--pd-bg-elevated);
+    border: 1px solid var(--pd-border);
+    border-radius: 8px;
+    padding: 16px;
+  }
+
+  /* App Icon */
+  .pd-app-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 10px;
-    font-weight: bold;
-    cursor: pointer;
+    transition: transform 0.15s;
   }
 
-  .win95-control-btn:active {
-    border-color: var(--win95-dark-gray) var(--win95-white) var(--win95-white) var(--win95-dark-gray);
+  .pd-app-icon:hover {
+    transform: scale(1.05);
   }
 
-  /* Menu Bar */
-  .win95-menubar {
-    background-color: var(--win95-gray);
-    border-bottom: 1px solid var(--win95-dark-gray);
-    padding: 2px 0;
+  /* Label */
+  .pd-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--pd-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
   }
 
-  .win95-menu-item {
+  /* Badge */
+  .pd-badge {
+    font-size: 11px;
+    font-weight: 600;
     padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .pd-badge-success {
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--pd-success);
+  }
+
+  .pd-badge-warning {
+    background: rgba(245, 158, 11, 0.15);
+    color: var(--pd-warning);
+  }
+
+  /* Divider */
+  .pd-divider {
+    height: 1px;
+    background: var(--pd-border);
+    margin: 16px 0;
+  }
+
+  /* Status Indicator */
+  .pd-status {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .pd-status-online {
+    background: var(--pd-success);
+    box-shadow: 0 0 8px var(--pd-success);
+  }
+
+  /* Tab Bar */
+  .pd-tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--pd-bg);
+    padding: 4px;
+    border-radius: 6px;
+  }
+
+  .pd-tab {
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--pd-text-muted);
     cursor: pointer;
+    transition: all 0.15s;
   }
 
-  .win95-menu-item:hover {
-    background-color: var(--win95-blue);
-    color: white;
+  .pd-tab:hover {
+    color: var(--pd-text);
   }
 
-  /* Status Bar */
-  .win95-statusbar {
-    background-color: var(--win95-gray);
-    border-top: 1px solid var(--win95-white);
-    padding: 2px 4px;
-    font-size: 14px;
+  .pd-tab-active {
+    background: var(--pd-bg-elevated);
+    color: var(--pd-text);
   }
 
-  .win95-statusbar-item {
-    border: 1px solid;
-    border-color: var(--win95-dark-gray) var(--win95-white) var(--win95-white) var(--win95-dark-gray);
-    padding: 0 8px;
+  /* Dock */
+  .pd-dock {
+    background: var(--pd-bg-elevated);
+    border: 1px solid var(--pd-border);
+    border-radius: 16px;
+    padding: 8px 16px;
+    display: flex;
+    gap: 8px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   }
 
-  /* Select/Dropdown */
-  .win95-select {
-    background-color: var(--win95-white);
-    border: 2px solid;
-    border-color: var(--win95-dark-gray) var(--win95-white) var(--win95-white) var(--win95-dark-gray);
-    padding: 2px 4px;
-    font-family: 'VT323', monospace;
-    font-size: 18px;
+  .pd-dock-item {
+    padding: 8px;
+    border-radius: 8px;
     cursor: pointer;
+    transition: all 0.15s;
   }
 
-  /* Tab styling */
-  .win95-tab {
-    background-color: var(--win95-gray);
-    border: 2px solid;
-    border-color: var(--win95-white) var(--win95-dark-gray) var(--win95-gray) var(--win95-white);
-    border-bottom: none;
-    padding: 4px 12px;
-    margin-right: -2px;
-    position: relative;
-    cursor: pointer;
+  .pd-dock-item:hover {
+    background: var(--pd-bg-window);
   }
 
-  .win95-tab-active {
-    background-color: var(--win95-gray);
-    border-bottom: 2px solid var(--win95-gray);
-    z-index: 1;
+  .pd-dock-item-active {
+    background: var(--pd-accent-glow);
   }
 
-  /* Checkbox */
-  .win95-checkbox {
-    appearance: none;
-    width: 13px;
-    height: 13px;
-    background-color: var(--win95-white);
-    border: 2px solid;
-    border-color: var(--win95-dark-gray) var(--win95-white) var(--win95-white) var(--win95-dark-gray);
-    cursor: pointer;
-    position: relative;
+  /* Code Block */
+  .pd-code {
+    background: var(--pd-bg);
+    border: 1px solid var(--pd-border);
+    border-radius: 6px;
+    padding: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    overflow-x: auto;
   }
 
-  .win95-checkbox:checked::after {
-    content: '✓';
-    position: absolute;
-    top: -4px;
-    left: 1px;
-    font-size: 14px;
-    color: var(--win95-black);
+  /* Stats */
+  .pd-stat {
+    text-align: center;
   }
 
-  /* Divider/Separator */
-  .win95-divider {
-    height: 2px;
-    background: linear-gradient(to bottom, var(--win95-dark-gray) 0%, var(--win95-dark-gray) 50%, var(--win95-white) 50%, var(--win95-white) 100%);
-    margin: 8px 0;
+  .pd-stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--pd-accent);
+    font-family: 'JetBrains Mono', monospace;
   }
 
-  /* Progress Bar */
-  .win95-progress {
-    background-color: var(--win95-gray);
-    border: 2px solid;
-    border-color: var(--win95-dark-gray) var(--win95-white) var(--win95-white) var(--win95-dark-gray);
-    height: 16px;
-    padding: 2px;
-  }
-
-  .win95-progress-bar {
-    background: repeating-linear-gradient(
-      90deg,
-      var(--win95-blue) 0px,
-      var(--win95-blue) 8px,
-      var(--win95-gray) 8px,
-      var(--win95-gray) 10px
-    );
-    height: 100%;
+  .pd-stat-label {
+    font-size: 12px;
+    color: var(--pd-text-muted);
+    margin-top: 4px;
   }
 }
 
 @layer utilities {
-  .pixel-text {
-    font-family: 'VT323', 'Courier New', monospace;
-    -webkit-font-smoothing: none;
-    -moz-osx-font-smoothing: unset;
+  .glow-accent {
+    box-shadow: 0 0 20px var(--pd-accent-glow), 0 0 40px var(--pd-accent-glow);
   }
 }

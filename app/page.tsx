@@ -9,38 +9,135 @@ import { getCurrentUser } from '@/lib/auth'
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
 
+// Icons
+const Icons = {
+  escrow: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+      <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+    </svg>
+  ),
+  splits: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="18" y1="20" x2="18" y2="10"></line>
+      <line x1="12" y1="20" x2="12" y2="4"></line>
+      <line x1="6" y1="20" x2="6" y2="14"></line>
+    </svg>
+  ),
+  goals: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10"></circle>
+      <circle cx="12" cy="12" r="6"></circle>
+      <circle cx="12" cy="12" r="2"></circle>
+    </svg>
+  ),
+  payments: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+      <line x1="1" y1="10" x2="23" y2="10"></line>
+    </svg>
+  ),
+  zap: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+    </svg>
+  ),
+  shield: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+    </svg>
+  ),
+  code: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="16 18 22 12 16 6"></polyline>
+      <polyline points="8 6 2 12 8 18"></polyline>
+    </svg>
+  ),
+  arrow: () => (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="5" y1="12" x2="19" y2="12"></line>
+      <polyline points="12 5 19 12 12 19"></polyline>
+    </svg>
+  ),
+  check: () => (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="20 6 9 17 4 12"></polyline>
+    </svg>
+  ),
+}
+
 // Window Component
 function Window({
   title,
   children,
   className = '',
-  onClose,
-  showControls = true
 }: {
   title: string
   children: React.ReactNode
   className?: string
-  onClose?: () => void
-  showControls?: boolean
 }) {
   return (
-    <div className={`win95-window ${className}`}>
-      <div className="win95-title-bar">
-        <div className="flex items-center gap-1">
-          <span className="text-sm">{title}</span>
+    <div className={`pd-window ${className}`}>
+      <div className="pd-titlebar">
+        <div className="pd-controls">
+          <span className="pd-control pd-control-close"></span>
+          <span className="pd-control pd-control-min"></span>
+          <span className="pd-control pd-control-max"></span>
         </div>
-        {showControls && (
-          <div className="flex gap-[2px]">
-            <button className="win95-control-btn">_</button>
-            <button className="win95-control-btn">□</button>
-            <button className="win95-control-btn" onClick={onClose}>×</button>
-          </div>
-        )}
+        <span className="pd-titlebar-title">{title}</span>
+        <div style={{ width: '54px' }}></div>
       </div>
-      <div className="p-2">
+      <div className="p-4">
         {children}
       </div>
     </div>
+  )
+}
+
+// App Card Component
+function AppCard({
+  title,
+  description,
+  icon: Icon,
+  color,
+  href,
+  badge
+}: {
+  title: string
+  description: string
+  icon: () => JSX.Element
+  color: string
+  href: string
+  badge?: string
+}) {
+  const router = useRouter()
+
+  return (
+    <button
+      onClick={() => router.push(href)}
+      className="pd-card text-left hover:border-[var(--pd-border-light)] transition-all group"
+    >
+      <div className="flex items-start gap-4">
+        <div
+          className="pd-app-icon"
+          style={{ background: `linear-gradient(135deg, ${color}20, ${color}40)` }}
+        >
+          <div style={{ color }}><Icon /></div>
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-1">
+            <h3 className="font-semibold text-[var(--pd-text)]">{title}</h3>
+            {badge && (
+              <span className="pd-badge pd-badge-success">{badge}</span>
+            )}
+          </div>
+          <p className="text-sm text-[var(--pd-text-muted)] line-clamp-2">{description}</p>
+        </div>
+        <div className="text-[var(--pd-text-dim)] group-hover:text-[var(--pd-accent)] transition-colors">
+          <Icons.arrow />
+        </div>
+      </div>
+    </button>
   )
 }
 
@@ -52,7 +149,6 @@ export default function Home() {
   const [merchantWallet, setMerchantWallet] = useState('')
   const [loading, setLoading] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [showWelcome, setShowWelcome] = useState(true)
 
   useEffect(() => {
     const user = getCurrentUser()
@@ -104,325 +200,287 @@ export default function Home() {
     }
   }
 
+  const apps = [
+    {
+      title: 'Escrow',
+      description: 'Trustless P2P transactions with secure fund holding until both parties confirm.',
+      icon: Icons.escrow,
+      color: 'var(--pd-blue)',
+      href: '/escrow',
+    },
+    {
+      title: 'Splits',
+      description: 'Automatic revenue distribution to multiple recipients with custom percentages.',
+      icon: Icons.splits,
+      color: 'var(--pd-purple)',
+      href: '/splits',
+    },
+    {
+      title: 'Goals',
+      description: 'Crowdfunding with full transparency. Auto-refund if target not reached.',
+      icon: Icons.goals,
+      color: 'var(--pd-green)',
+      href: '/crowdfunding',
+    },
+    {
+      title: 'Payments',
+      description: 'Simple payment links. Share via any channel, get paid instantly.',
+      icon: Icons.payments,
+      color: 'var(--pd-orange)',
+      href: '/create/simple',
+      badge: 'Popular',
+    },
+  ]
+
   return (
-    <div className="min-h-screen pb-10" style={{ background: 'var(--win95-cyan)' }}>
+    <div className="min-h-screen" style={{ background: 'var(--pd-bg)' }}>
       <Header />
 
-      {/* Desktop Area */}
-      <div className="p-4 md:p-8">
-        {/* Desktop Icons */}
-        <div className="flex flex-wrap gap-4 mb-8">
-          <button
-            onClick={() => router.push('/dashboard')}
-            className="flex flex-col items-center gap-1 p-2 hover:bg-[var(--win95-blue)]/30 rounded w-[80px]"
-          >
-            <span className="text-4xl">📁</span>
-            <span className="text-white text-xs text-center drop-shadow-[1px_1px_0_black]">My Payments</span>
-          </button>
-          <button
-            onClick={() => router.push('/escrow')}
-            className="flex flex-col items-center gap-1 p-2 hover:bg-[var(--win95-blue)]/30 rounded w-[80px]"
-          >
-            <span className="text-4xl">🔒</span>
-            <span className="text-white text-xs text-center drop-shadow-[1px_1px_0_black]">Escrow</span>
-          </button>
-          <button
-            onClick={() => router.push('/splits')}
-            className="flex flex-col items-center gap-1 p-2 hover:bg-[var(--win95-blue)]/30 rounded w-[80px]"
-          >
-            <span className="text-4xl">📊</span>
-            <span className="text-white text-xs text-center drop-shadow-[1px_1px_0_black]">Splits</span>
-          </button>
-          <button
-            onClick={() => router.push('/crowdfunding')}
-            className="flex flex-col items-center gap-1 p-2 hover:bg-[var(--win95-blue)]/30 rounded w-[80px]"
-          >
-            <span className="text-4xl">🎯</span>
-            <span className="text-white text-xs text-center drop-shadow-[1px_1px_0_black]">Goals</span>
-          </button>
-        </div>
+      <main className="pt-14">
+        {/* Hero Section */}
+        <section className="px-4 py-16 md:py-24">
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs mb-6" style={{ background: 'var(--pd-accent-glow)', color: 'var(--pd-accent)' }}>
+              <div className="pd-status pd-status-online" style={{ width: '6px', height: '6px' }}></div>
+              <span className="font-medium">Mainnet Live</span>
+            </div>
 
-        {/* Main Windows */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 max-w-6xl mx-auto">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 tracking-tight">
+              Payment Infrastructure<br />
+              <span style={{ color: 'var(--pd-accent)' }}>for Solana</span>
+            </h1>
 
-          {/* Welcome Window */}
-          {showWelcome && (
-            <Window
-              title="Welcome to PAYDOS 95"
-              className="lg:col-span-2"
-              onClose={() => setShowWelcome(false)}
-            >
-              <div className="p-4">
-                <div className="flex items-start gap-4">
-                  <span className="text-6xl">💸</span>
+            <p className="text-lg md:text-xl mb-8 max-w-2xl mx-auto" style={{ color: 'var(--pd-text-muted)' }}>
+              Escrow, splits, crowdfunding, and instant payments.
+              Non-custodial. No KYC. Built for speed.
+            </p>
+
+            <div className="flex flex-wrap justify-center gap-3">
+              <button
+                onClick={() => document.getElementById('create-payment')?.scrollIntoView({ behavior: 'smooth' })}
+                className="pd-button"
+              >
+                Create Payment
+              </button>
+              <button
+                onClick={() => router.push('/whitepaper')}
+                className="pd-button-secondary"
+              >
+                Read Whitepaper
+              </button>
+            </div>
+          </div>
+        </section>
+
+        {/* Apps Grid */}
+        <section className="px-4 pb-16">
+          <div className="max-w-6xl mx-auto">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-semibold">Apps</h2>
+              <span className="text-sm" style={{ color: 'var(--pd-text-muted)' }}>Choose a product</span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {apps.map((app) => (
+                <AppCard key={app.title} {...app} />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Main Content */}
+        <section className="px-4 pb-16">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+              {/* Create Payment Window */}
+              <Window title="Quick Payment" id="create-payment">
+                <div className="space-y-4">
+                  {!isLoggedIn && (
+                    <div className="pd-card text-sm" style={{ background: 'var(--pd-accent-glow)', border: 'none' }}>
+                      <div className="flex items-start gap-3">
+                        <Icons.shield />
+                        <div>
+                          <p className="font-medium mb-1">Connect Wallet</p>
+                          <p style={{ color: 'var(--pd-text-muted)' }}>Connect your wallet to save and track payments.</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   <div>
-                    <h1 className="text-2xl md:text-3xl mb-2">Welcome to PAYDOS</h1>
-                    <p className="text-sm mb-4">
-                      The retro payment infrastructure for Solana. Create payment links,
-                      escrow transactions, split payments, and fund goals - all on the fastest blockchain.
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      <button
-                        onClick={() => setShowWelcome(false)}
-                        className="win95-button"
-                      >
-                        Get Started
-                      </button>
-                      <button
-                        onClick={() => window.open('https://solana.com', '_blank')}
-                        className="win95-button"
-                      >
-                        Learn About Solana
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Window>
-          )}
-
-          {/* Create Payment Window */}
-          <Window title="💳 Create Payment - PAYDOS">
-            <div className="p-2">
-              {!isLoggedIn && (
-                <div className="win95-inset p-2 mb-4">
-                  <div className="flex items-start gap-2">
-                    <span>ℹ️</span>
-                    <div className="text-sm">
-                      <p className="font-bold">Tip:</p>
-                      <p>Connect your wallet to save payment links.</p>
-                      <button
-                        onClick={() => router.push('/login')}
-                        className="text-[var(--win95-blue)] underline"
-                      >
-                        Connect Wallet
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              <div className="space-y-3">
-                <div>
-                  <label className="block text-sm mb-1">Your Wallet Address:</label>
-                  <input
-                    type="text"
-                    value={merchantWallet}
-                    onChange={(e) => setMerchantWallet(e.target.value)}
-                    placeholder="Enter your Solana wallet address"
-                    disabled={isLoggedIn}
-                    className="win95-input w-full"
-                  />
-                </div>
-
-                <div className="grid grid-cols-3 gap-2">
-                  <div className="col-span-2">
-                    <label className="block text-sm mb-1">Amount:</label>
+                    <label className="pd-label">Recipient Wallet</label>
                     <input
-                      type="number"
-                      step="0.01"
-                      value={amount}
-                      onChange={(e) => setAmount(e.target.value)}
-                      placeholder="0.00"
-                      className="win95-input w-full"
+                      type="text"
+                      value={merchantWallet}
+                      onChange={(e) => setMerchantWallet(e.target.value)}
+                      placeholder="Solana wallet address"
+                      disabled={isLoggedIn}
+                      className="pd-input mono"
                     />
                   </div>
+
+                  <div className="grid grid-cols-3 gap-3">
+                    <div className="col-span-2">
+                      <label className="pd-label">Amount</label>
+                      <input
+                        type="number"
+                        step="0.01"
+                        value={amount}
+                        onChange={(e) => setAmount(e.target.value)}
+                        placeholder="0.00"
+                        className="pd-input"
+                      />
+                    </div>
+                    <div>
+                      <label className="pd-label">Token</label>
+                      <select
+                        value={token}
+                        onChange={(e) => setToken(e.target.value)}
+                        className="pd-select w-full"
+                      >
+                        <option value="SOL">SOL</option>
+                        <option value="USDC">USDC</option>
+                        <option value="USDT">USDT</option>
+                      </select>
+                    </div>
+                  </div>
+
                   <div>
-                    <label className="block text-sm mb-1">Token:</label>
-                    <select
-                      value={token}
-                      onChange={(e) => setToken(e.target.value)}
-                      className="win95-select w-full"
-                    >
-                      <option value="SOL">SOL</option>
-                      <option value="USDC">USDC</option>
-                      <option value="USDT">USDT</option>
-                    </select>
+                    <label className="pd-label">Description (Optional)</label>
+                    <textarea
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      placeholder="What is this payment for?"
+                      rows={2}
+                      className="pd-input resize-none"
+                    />
+                  </div>
+
+                  <button
+                    onClick={createPaymentLink}
+                    disabled={loading}
+                    className="pd-button w-full"
+                  >
+                    {loading ? 'Creating...' : 'Create Payment Link'}
+                  </button>
+                </div>
+              </Window>
+
+              {/* Stats Window */}
+              <Window title="Network Stats">
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div className="pd-card">
+                    <div className="pd-stat">
+                      <div className="pd-stat-value">&lt;1s</div>
+                      <div className="pd-stat-label">Confirmation</div>
+                    </div>
+                  </div>
+                  <div className="pd-card">
+                    <div className="pd-stat">
+                      <div className="pd-stat-value">$0.0003</div>
+                      <div className="pd-stat-label">Avg Fee</div>
+                    </div>
+                  </div>
+                  <div className="pd-card">
+                    <div className="pd-stat">
+                      <div className="pd-stat-value" style={{ color: 'var(--pd-success)' }}>Online</div>
+                      <div className="pd-stat-label">Network</div>
+                    </div>
+                  </div>
+                  <div className="pd-card">
+                    <div className="pd-stat">
+                      <div className="pd-stat-value">65K</div>
+                      <div className="pd-stat-label">TPS</div>
+                    </div>
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-sm mb-1">Description (Optional):</label>
-                  <textarea
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    placeholder="What is this payment for?"
-                    rows={2}
-                    className="win95-input w-full resize-none"
-                  />
+                <div className="pd-divider"></div>
+
+                <div className="space-y-3">
+                  <h4 className="font-medium text-sm">Why PAYDOS?</h4>
+                  <ul className="space-y-2 text-sm" style={{ color: 'var(--pd-text-muted)' }}>
+                    <li className="flex items-center gap-2">
+                      <span style={{ color: 'var(--pd-success)' }}><Icons.check /></span>
+                      <span>Non-custodial - you control your funds</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span style={{ color: 'var(--pd-success)' }}><Icons.check /></span>
+                      <span>No KYC required to get started</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span style={{ color: 'var(--pd-success)' }}><Icons.check /></span>
+                      <span>Sub-second transaction finality</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span style={{ color: 'var(--pd-success)' }}><Icons.check /></span>
+                      <span>Built on Solana for maximum speed</span>
+                    </li>
+                  </ul>
                 </div>
-
-                <button
-                  onClick={createPaymentLink}
-                  disabled={loading}
-                  className="win95-button w-full py-2"
-                >
-                  {loading ? '⏳ Creating...' : '✨ Create Payment Link'}
-                </button>
-
-                <div className="win95-divider"></div>
-
-                <p className="text-sm text-center">Or choose a payment type:</p>
-                <div className="grid grid-cols-3 gap-2">
-                  <button
-                    onClick={() => router.push('/create/split')}
-                    className="win95-button text-sm py-2"
-                  >
-                    📊 Split
-                  </button>
-                  <button
-                    onClick={() => router.push('/create/escrow')}
-                    className="win95-button text-sm py-2"
-                  >
-                    🔒 Escrow
-                  </button>
-                  <button
-                    onClick={() => router.push('/create/goal')}
-                    className="win95-button text-sm py-2"
-                  >
-                    🎯 Goal
-                  </button>
-                </div>
-              </div>
+              </Window>
             </div>
-          </Window>
+          </div>
+        </section>
 
-          {/* Features Window */}
-          <Window title="📋 Features - README.txt">
-            <div className="win95-inset p-3 h-[300px] overflow-y-auto">
-              <pre className="text-sm whitespace-pre-wrap">
-                {`PAYDOS v1.0 - Payment Infrastructure for Solana
-================================================
-
-FEATURES:
----------
-🔒 ESCROW
-   Trustless P2P transactions. Both 
-   parties deposit into escrow. Auto
-   release on mutual confirmation.
-
-📊 SPLITS  
-   Multi-recipient distribution. Set
-   percentages. Instant settlement.
-
-🎯 FUNDING GOALS
-   Crowdfunding with transparency.
-   Real-time tracking. Auto refunds.
-
-💳 SIMPLE PAYMENTS
-   Create payment links in seconds.
-   Share via any channel.
-
-STATS:
-------
-⚡ <1s    - Average confirmation
-💰 $0.0003 - Average transaction fee
-🔒 100%   - Non-custodial
-
-REQUIREMENTS:
--------------
-- Solana Wallet (Phantom, Solflare)
-- SOL for transaction fees
-
-Press F1 for help...`}
-              </pre>
-            </div>
-          </Window>
-
-          {/* How It Works Window */}
-          <Window title="❓ How It Works - HELP.exe" className="lg:col-span-2">
-            <div className="p-2">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="win95-inset p-3">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-2xl">1️⃣</span>
-                    <span className="font-bold">Create Your Link</span>
+        {/* Features Section */}
+        <section className="px-4 pb-16">
+          <div className="max-w-6xl mx-auto">
+            <Window title="How It Works">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="text-center p-4">
+                  <div className="w-12 h-12 rounded-full mx-auto mb-4 flex items-center justify-center mono font-bold text-lg" style={{ background: 'var(--pd-accent-glow)', color: 'var(--pd-accent)' }}>
+                    1
                   </div>
-                  <p className="text-sm">
-                    Enter amount and description. We generate a unique payment wallet.
+                  <h3 className="font-semibold mb-2">Create</h3>
+                  <p className="text-sm" style={{ color: 'var(--pd-text-muted)' }}>
+                    Set amount and description. We generate a unique payment address.
                   </p>
                 </div>
-                <div className="win95-inset p-3">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-2xl">2️⃣</span>
-                    <span className="font-bold">Share with Customer</span>
+                <div className="text-center p-4">
+                  <div className="w-12 h-12 rounded-full mx-auto mb-4 flex items-center justify-center mono font-bold text-lg" style={{ background: 'var(--pd-accent-glow)', color: 'var(--pd-accent)' }}>
+                    2
                   </div>
-                  <p className="text-sm">
-                    Send via email, text, or social. They scan QR or connect wallet.
+                  <h3 className="font-semibold mb-2">Share</h3>
+                  <p className="text-sm" style={{ color: 'var(--pd-text-muted)' }}>
+                    Send the payment link via any channel. QR code included.
                   </p>
                 </div>
-                <div className="win95-inset p-3">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-2xl">3️⃣</span>
-                    <span className="font-bold">Get Paid Instantly</span>
+                <div className="text-center p-4">
+                  <div className="w-12 h-12 rounded-full mx-auto mb-4 flex items-center justify-center mono font-bold text-lg" style={{ background: 'var(--pd-accent-glow)', color: 'var(--pd-accent)' }}>
+                    3
                   </div>
-                  <p className="text-sm">
+                  <h3 className="font-semibold mb-2">Receive</h3>
+                  <p className="text-sm" style={{ color: 'var(--pd-text-muted)' }}>
                     Funds auto-forward to your wallet. Track in dashboard.
                   </p>
                 </div>
               </div>
-            </div>
-          </Window>
+            </Window>
+          </div>
+        </section>
 
-          {/* Use Cases Window */}
-          <Window title="💼 Use Cases - ABOUT.txt">
-            <div className="win95-inset p-3">
-              <ul className="space-y-2 text-sm">
-                <li className="flex items-center gap-2">
-                  <span>✅</span>
-                  <span><strong>Freelancers</strong> - Invoice clients in crypto</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <span>✅</span>
-                  <span><strong>Online Stores</strong> - Accept crypto payments</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <span>✅</span>
-                  <span><strong>Creators</strong> - Receive tips & donations</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <span>✅</span>
-                  <span><strong>Teams</strong> - Split revenue automatically</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <span>✅</span>
-                  <span><strong>P2P Trades</strong> - Secure escrow transactions</span>
-                </li>
-              </ul>
-            </div>
-          </Window>
-
-          {/* Stats Window */}
-          <Window title="📈 System Monitor - STATS.exe">
-            <div className="grid grid-cols-2 gap-2 p-2">
-              <div className="win95-inset p-3 text-center">
-                <div className="text-2xl font-bold text-[var(--win95-blue)]">&lt;1s</div>
-                <div className="text-xs">Confirmation Time</div>
-              </div>
-              <div className="win95-inset p-3 text-center">
-                <div className="text-2xl font-bold text-[var(--win95-blue)]">$0.0003</div>
-                <div className="text-xs">Avg Tx Fee</div>
-              </div>
-              <div className="win95-inset p-3 text-center">
-                <div className="text-2xl font-bold text-green-700">ONLINE</div>
-                <div className="text-xs">Network Status</div>
-              </div>
-              <div className="win95-inset p-3 text-center">
-                <div className="text-2xl font-bold text-[var(--win95-blue)]">65,000</div>
-                <div className="text-xs">TPS Capacity</div>
+        {/* CTA Section */}
+        <section className="px-4 pb-16">
+          <div className="max-w-4xl mx-auto">
+            <div className="pd-card text-center py-12 px-8" style={{ background: 'linear-gradient(135deg, var(--pd-bg-elevated), var(--pd-bg-window))', border: '1px solid var(--pd-border)' }}>
+              <h2 className="text-2xl md:text-3xl font-bold mb-4">Ready to get started?</h2>
+              <p className="mb-6" style={{ color: 'var(--pd-text-muted)' }}>
+                Create your first payment link in under 30 seconds.
+              </p>
+              <div className="flex flex-wrap justify-center gap-3">
+                <button onClick={() => router.push('/dashboard')} className="pd-button">
+                  Open Dashboard
+                </button>
+                <button onClick={() => router.push('/whitepaper')} className="pd-button-secondary">
+                  Read Documentation
+                </button>
               </div>
             </div>
-
-            {/* Fake Progress Bar */}
-            <div className="p-2">
-              <p className="text-xs mb-1">Network Load:</p>
-              <div className="win95-progress">
-                <div className="win95-progress-bar" style={{ width: '35%' }}></div>
-              </div>
-            </div>
-          </Window>
-        </div>
-      </div>
+          </div>
+        </section>
+      </main>
 
       <Footer />
     </div>
