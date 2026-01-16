@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
+import Logo from '@/components/Logo'
 
 // Icons
 const Icons = {
@@ -104,11 +105,8 @@ export default function Header() {
         <div className="flex items-center justify-between w-full max-w-7xl mx-auto">
           {/* Left */}
           <div className="flex items-center">
-            <Link href="/" className="flex items-center gap-2 mr-6">
-              <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: 'var(--gradient-2)' }}>
-                <span className="text-white font-bold text-sm">P</span>
-              </div>
-              <span className="font-semibold hidden sm:block">PayOS</span>
+            <Link href="/" className="mr-6">
+              <Logo />
             </Link>
 
             {/* Desktop Nav */}

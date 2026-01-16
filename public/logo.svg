@@ -1,16 +1,21 @@
-<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Logo matching the banner style -->
+<svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="400" height="400" fill="#09090B"/>
+  
+  <!-- Gradient Definition -->
   <defs>
-    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#9945ff;stop-opacity:1" />
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366F1"/>
+      <stop offset="50%" style="stop-color:#8B5CF6"/>
+      <stop offset="100%" style="stop-color:#EC4899"/>
     </linearGradient>
   </defs>
   
-  <!-- Clean N lettermark with gradient -->
-  <path d="M 50 50 L 50 150 L 70 150 L 70 85 L 130 150 L 150 150 L 150 50 L 130 50 L 130 115 L 70 50 Z" fill="url(#logoGrad)"/>
-  
-  <!-- Subtle tech accent -->
-  <circle cx="100" cy="30" r="3" fill="#00d4ff" opacity="0.6"/>
-  <circle cx="100" cy="170" r="3" fill="#9945ff" opacity="0.6"/>
+  <!-- Simple P lettermark -->
+  <text x="200" y="260" 
+        font-family="system-ui, -apple-system, sans-serif" 
+        font-size="220" 
+        font-weight="700" 
+        fill="url(#logoGradient)" 
+        text-anchor="middle">P</text>
 </svg>

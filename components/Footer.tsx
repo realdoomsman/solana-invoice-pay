@@ -1,14 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-
-export function LogoIcon({ className = "" }: { className?: string }) {
-  return (
-    <div className={`w-6 h-6 rounded-lg flex items-center justify-center ${className}`} style={{ background: 'var(--gradient-2)' }}>
-      <span className="text-white font-bold text-xs">P</span>
-    </div>
-  )
-}
+import Logo from '@/components/Logo'
 
 const Icons = {
   globe: () => (
@@ -38,9 +31,8 @@ export default function Footer() {
           <div className="p-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-6">
               <div>
-                <div className="flex items-center gap-2 mb-4">
-                  <LogoIcon />
-                  <span className="font-semibold text-sm">PayOS</span>
+                <div className="mb-4">
+                  <Logo />
                 </div>
                 <p className="text-xs" style={{ color: 'var(--text-subtle)' }}>
                   Payment infrastructure for Solana. Fast, secure, non-custodial.
@@ -89,7 +81,7 @@ export default function Footer() {
                 <Link href="/faq" className="hover:text-[var(--text)] transition-colors">Help</Link>
               </div>
               <p className="text-xs" style={{ color: 'var(--text-subtle)' }}>
-                2025 PayOS. All rights reserved.
+                2026 PayOS. All rights reserved.
               </p>
             </div>
           </div>
