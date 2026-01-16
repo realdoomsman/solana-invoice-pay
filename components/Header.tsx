@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
 
-// Icon Components - clean SVG icons
+// Icons
 const Icons = {
   home: () => (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -54,21 +54,16 @@ const Icons = {
     </svg>
   ),
   menu: () => (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
       <line x1="3" y1="12" x2="21" y2="12"></line>
       <line x1="3" y1="6" x2="21" y2="6"></line>
       <line x1="3" y1="18" x2="21" y2="18"></line>
     </svg>
   ),
   x: () => (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
       <line x1="18" y1="6" x2="6" y2="18"></line>
       <line x1="6" y1="6" x2="18" y2="18"></line>
-    </svg>
-  ),
-  chevronRight: () => (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-      <polyline points="9 18 15 12 9 6"></polyline>
     </svg>
   ),
 }
@@ -104,47 +99,53 @@ export default function Header() {
 
   return (
     <>
-      {/* Menu Bar - macOS style */}
-      <header className="sys-menubar fixed top-0 left-0 right-0 z-50">
-        <div className="flex items-center justify-between w-full">
-          {/* Left: Logo and Nav */}
+      {/* Menu Bar */}
+      <header className="menubar fixed top-0 left-0 right-0 z-50">
+        <div className="flex items-center justify-between w-full max-w-7xl mx-auto">
+          {/* Left */}
           <div className="flex items-center">
-            <Link href="/" className="sys-menubar-item font-semibold">
-              PAYDOS
+            <Link href="/" className="flex items-center gap-2 mr-6">
+              <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: 'var(--gradient-2)' }}>
+                <span className="text-white font-bold text-sm">P</span>
+              </div>
+              <span className="font-semibold hidden sm:block">PAYDOS</span>
             </Link>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center">
+            {/* Desktop Nav */}
+            <nav className="hidden lg:flex items-center">
               {navItems.slice(1, 5).map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`sys-menubar-item ${pathname === item.href ? 'bg-white/10' : ''}`}
+                  className={`menubar-item ${pathname === item.href ? 'menubar-item-active' : ''}`}
                 >
                   {item.label}
                 </Link>
               ))}
+              <Link href="/whitepaper" className={`menubar-item ${pathname === '/whitepaper' ? 'menubar-item-active' : ''}`}>
+                Docs
+              </Link>
             </nav>
           </div>
 
-          {/* Right: Status and Actions */}
+          {/* Right */}
           <div className="flex items-center gap-4">
-            <div className="hidden sm:flex items-center gap-2 text-xs" style={{ color: 'var(--sys-text-secondary)' }}>
-              <div className="sys-status sys-status-online"></div>
+            <div className="hidden md:flex items-center gap-2 text-xs" style={{ color: 'var(--text-muted)' }}>
+              <div className="status-dot status-online"></div>
               <span>Mainnet</span>
             </div>
 
-            <span className="text-xs mono hidden sm:block" style={{ color: 'var(--sys-text-tertiary)' }}>
+            <span className="text-xs mono hidden sm:block" style={{ color: 'var(--text-subtle)' }}>
               {time}
             </span>
 
             <WalletMultiButton />
 
-            {/* Mobile Menu Button */}
+            {/* Mobile Menu */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-1"
-              style={{ color: 'var(--sys-text-secondary)' }}
+              className="lg:hidden p-1"
+              style={{ color: 'var(--text-muted)' }}
             >
               {mobileMenuOpen ? <Icons.x /> : <Icons.menu />}
             </button>
@@ -152,9 +153,9 @@ export default function Header() {
         </div>
       </header>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-40 md:hidden" style={{ background: 'var(--sys-bg)', paddingTop: '28px' }}>
+        <div className="fixed inset-0 z-40 lg:hidden" style={{ background: 'var(--bg-base)', paddingTop: '36px' }}>
           <nav className="p-4 space-y-1">
             {navItems.map((item) => {
               const Icon = item.icon
@@ -164,7 +165,7 @@ export default function Header() {
                   key={item.href}
                   href={item.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`sys-sidebar-item ${isActive ? 'sys-sidebar-item-active' : ''}`}
+                  className={`sidebar-item ${isActive ? 'sidebar-item-active' : ''}`}
                 >
                   <Icon />
                   <span>{item.label}</span>
