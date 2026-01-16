@@ -2,16 +2,16 @@ import { LogoIcon } from './Logo'
 
 export default function Footer() {
   return (
-    <footer className="bg-black text-slate-300 py-12 mt-20 border-t border-slate-800">
+    <footer className="bg-black text-slate-300 py-8 md:py-12 mt-12 md:mt-20 border-t border-slate-800">
       <div className="max-w-6xl mx-auto px-4">
-        <div className="grid md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
           <div>
             <div className="flex items-center gap-2 mb-4">
-            <LogoIcon className="h-7 w-7" />
-            <span className="text-xl font-semibold tracking-tight bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
-              NOVIQ
-            </span>
-          </div>
+              <LogoIcon className="h-7 w-7" />
+              <span className="text-xl font-semibold tracking-tight bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
+                NOVIQ
+              </span>
+            </div>
             <p className="text-sm text-slate-400">
               Next-generation payment infrastructure. Built on Solana. Powered by innovation.
             </p>
