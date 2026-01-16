@@ -13,8 +13,8 @@ interface FAQItem {
 const faqs: FAQItem[] = [
   {
     category: 'Getting Started',
-    question: 'What is Solana Invoice Pay?',
-    answer: 'Solana Invoice Pay is a payment platform that allows you to create payment links, invoices, escrow deals, and crowdfunding campaigns on the Solana blockchain. It provides instant settlements with minimal fees.',
+    question: 'What is NOVIQ?',
+    answer: 'NOVIQ is a payment platform for Solana that enables secure P2P trading through escrow, automated payment splits, and crowdfunding goals. Non-custodial, no KYC, instant settlements.',
   },
   {
     category: 'Getting Started',
@@ -44,7 +44,7 @@ const faqs: FAQItem[] = [
   {
     category: 'Fees',
     question: 'What are the fees?',
-    answer: 'There are two types of fees: (1) Solana network fees (typically $0.00025 per transaction), and (2) Platform fee of 1% on forwarded payments. The platform fee helps us maintain and improve the service.',
+    answer: 'NOVIQ charges 1% on successful transactions only. Solana network fees are around $0.00025 per transaction. Creating escrows, splits, and goals is free.',
   },
   {
     category: 'Fees',
@@ -54,7 +54,7 @@ const faqs: FAQItem[] = [
   {
     category: 'Security',
     question: 'Is my money safe?',
-    answer: 'Yes! Each payment creates a unique temporary wallet. Funds are automatically forwarded to your merchant wallet once received. We never hold your funds - everything is non-custodial and transparent on the blockchain.',
+    answer: 'Yes! NOVIQ is non-custodial - we never hold your funds. Everything is transparent on the Solana blockchain. Escrow funds are locked until both parties confirm.',
   },
   {
     category: 'Security',
@@ -141,7 +141,7 @@ export default function FAQPage() {
           </button>
           <h1 className="text-5xl font-black mb-4">Frequently Asked Questions</h1>
           <p className="text-xl text-blue-100">
-            Everything you need to know about Solana Invoice Pay
+            Everything you need to know about NOVIQ
           </p>
         </div>
       </div>

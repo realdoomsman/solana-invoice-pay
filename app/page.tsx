@@ -96,9 +96,11 @@ export default function Home() {
             <h1 className="text-5xl md:text-7xl font-bold mb-6 text-white leading-tight">
               Payment infrastructure for Solana
             </h1>
-            <p className="text-xl text-slate-400 max-w-2xl mx-auto mb-12">
+            <p className="text-xl text-slate-400 max-w-2xl mx-auto mb-8">
               Escrow for secure transactions. Automated payment distribution. Collective fundraising.
             </p>
+            
+
             {/* 3 Main Features - Simple */}
             <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto mt-16">
               <div className="border border-slate-800 rounded-lg p-6 hover:border-slate-700 transition-colors">

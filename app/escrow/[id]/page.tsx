@@ -490,7 +490,7 @@ export default function EscrowManagementPage() {
                     <div className="text-green-400 text-sm">
                       ✓ Funds released
                       <a
-                        href={`https://explorer.solana.com/tx/${milestone.tx_signature}?cluster=${process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'devnet'}`}
+                        href={`https://explorer.solana.com/tx/${milestone.tx_signature}?cluster=${process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'mainnet-beta'}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="ml-2 underline"
@@ -511,7 +511,7 @@ export default function EscrowManagementPage() {
           <h2 className="text-2xl font-bold text-white mb-4">Activity Timeline</h2>
           <EscrowActivityTimeline 
             actions={actions} 
-            network={process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'devnet'}
+            network={process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'mainnet-beta'}
           />
         </div>
       </div>

@@ -8,7 +8,7 @@ interface EscrowActivityTimelineProps {
 
 export default function EscrowActivityTimeline({ 
   actions, 
-  network = 'devnet' 
+  network = 'mainnet-beta' 
 }: EscrowActivityTimelineProps) {
   // Handle both action_type and action field names
   const getActionType = (action: EscrowAction): string => {

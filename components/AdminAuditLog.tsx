@@ -344,7 +344,7 @@ export default function AdminAuditLog({ escrowId, disputeId, limit = 50 }: Admin
                             Buyer TX:
                           </span>{' '}
                           <a
-                            href={`https://explorer.solana.com/tx/${action.tx_signature_buyer}?cluster=${process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'devnet'}`}
+                            href={`https://explorer.solana.com/tx/${action.tx_signature_buyer}?cluster=${process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'mainnet-beta'}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="font-mono text-xs text-blue-600 dark:text-blue-400 hover:underline"
@@ -359,7 +359,7 @@ export default function AdminAuditLog({ escrowId, disputeId, limit = 50 }: Admin
                             Seller TX:
                           </span>{' '}
                           <a
-                            href={`https://explorer.solana.com/tx/${action.tx_signature_seller}?cluster=${process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'devnet'}`}
+                            href={`https://explorer.solana.com/tx/${action.tx_signature_seller}?cluster=${process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'mainnet-beta'}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="font-mono text-xs text-blue-600 dark:text-blue-400 hover:underline"

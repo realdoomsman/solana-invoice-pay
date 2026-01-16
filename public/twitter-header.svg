@@ -1,0 +1,48 @@
+<svg width="1500" height="500" viewBox="0 0 1500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f0f1a;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#0a0a14;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#000000;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#9945ff;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="glowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#9945ff;stop-opacity:0.3" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1500" height="500" fill="url(#bgGrad)"/>
+  
+  <!-- Subtle grid pattern -->
+  <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
+    <path d="M 50 0 L 0 0 0 50" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+  </pattern>
+  <rect width="1500" height="500" fill="url(#grid)"/>
+  
+  <!-- Glow orbs -->
+  <circle cx="200" cy="250" r="200" fill="#00d4ff" opacity="0.05"/>
+  <circle cx="1300" cy="250" r="200" fill="#9945ff" opacity="0.05"/>
+  
+  <!-- Accent lines -->
+  <line x1="0" y1="120" x2="400" y2="120" stroke="url(#textGrad)" stroke-width="2" opacity="0.3"/>
+  <line x1="1100" y1="380" x2="1500" y2="380" stroke="url(#textGrad)" stroke-width="2" opacity="0.3"/>
+  <circle cx="400" cy="120" r="4" fill="#00d4ff" opacity="0.6"/>
+  <circle cx="1100" cy="380" r="4" fill="#9945ff" opacity="0.6"/>
+  
+  <!-- NOVIQ Logo Text -->
+  <text x="750" y="230" font-family="system-ui, -apple-system, sans-serif" font-size="140" font-weight="700" fill="url(#textGrad)" text-anchor="middle" letter-spacing="-4">NOVIQ</text>
+  
+  <!-- Tagline -->
+  <text x="750" y="310" font-family="system-ui, -apple-system, sans-serif" font-size="32" font-weight="400" fill="rgba(255,255,255,0.7)" text-anchor="middle" letter-spacing="4">SAFE P2P TRADING ON SOLANA</text>
+  
+  <!-- Features -->
+  <text x="750" y="380" font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="400" fill="rgba(255,255,255,0.4)" text-anchor="middle" letter-spacing="2">ESCROW • SPLITS • GOALS</text>
+  
+  <!-- URL -->
+  <text x="750" y="440" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="500" fill="url(#textGrad)" text-anchor="middle">noviq.fun</text>
+</svg>

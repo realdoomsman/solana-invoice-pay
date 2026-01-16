@@ -12,7 +12,7 @@ require('@solana/wallet-adapter-react-ui/styles.css')
 export function WalletProvider({ children }: { children: React.ReactNode }) {
   const endpoint = useMemo(() => {
     // Use RPC URL from environment variable
-    return process.env.NEXT_PUBLIC_SOLANA_RPC_URL || 'https://api.devnet.solana.com'
+    return process.env.NEXT_PUBLIC_SOLANA_RPC_URL || 'https://api.mainnet-beta.solana.com'
   }, [])
 
   const wallets = useMemo(

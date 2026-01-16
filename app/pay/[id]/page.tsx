@@ -91,7 +91,7 @@ export default function PaymentPage() {
 
   const startBalanceCheck = async (paymentData: PaymentData) => {
     setChecking(true)
-    const network = process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'devnet'
+    const network = process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'mainnet-beta'
     const rpcUrl = process.env.NEXT_PUBLIC_SOLANA_RPC_URL
     const endpoint = rpcUrl || (
       network === 'mainnet-beta'
@@ -189,7 +189,7 @@ export default function PaymentPage() {
 
     setProcessing(true)
     try {
-      const network = process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'devnet'
+      const network = process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'mainnet-beta'
       const rpcUrl = process.env.NEXT_PUBLIC_SOLANA_RPC_URL
       const endpoint = rpcUrl || (
         network === 'mainnet-beta'
@@ -408,7 +408,7 @@ export default function PaymentPage() {
 
             <div className="space-y-2">
               <a
-                href={`https://explorer.solana.com/address/${payment.paymentWallet}?cluster=${process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'devnet'}`}
+                href={`https://explorer.solana.com/address/${payment.paymentWallet}?cluster=${process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'mainnet-beta'}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block text-blue-600 dark:text-blue-400 hover:underline text-sm"
@@ -419,7 +419,7 @@ export default function PaymentPage() {
                 <>
                   <br />
                   <a
-                    href={`https://explorer.solana.com/tx/${payment.txSignature}?cluster=${process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'devnet'}`}
+                    href={`https://explorer.solana.com/tx/${payment.txSignature}?cluster=${process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'mainnet-beta'}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-block text-blue-600 dark:text-blue-400 hover:underline text-sm"
@@ -569,7 +569,7 @@ export default function PaymentPage() {
                       </p>
                       {milestone.tx_signature && (
                         <a
-                          href={`https://explorer.solana.com/tx/${milestone.tx_signature}?cluster=${process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'devnet'}`}
+                          href={`https://explorer.solana.com/tx/${milestone.tx_signature}?cluster=${process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'mainnet-beta'}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
