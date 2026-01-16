@@ -1,62 +1,73 @@
-import { LogoIcon } from './Logo'
+'use client'
+
+export function LogoIcon({ className = "h-8 w-8" }: { className?: string }) {
+  return (
+    <span className={`${className} flex items-center justify-center`}>💸</span>
+  )
+}
 
 export default function Footer() {
   return (
-    <footer className="bg-black text-slate-300 py-8 md:py-12 mt-12 md:mt-20 border-t border-slate-800">
-      <div className="max-w-6xl mx-auto px-4">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+    <footer className="win95-window mx-4 mb-16">
+      <div className="win95-title-bar">
+        <span className="text-sm">ℹ️ About PAYDOS</span>
+        <div className="flex gap-[2px]">
+          <button className="win95-control-btn">_</button>
+          <button className="win95-control-btn">□</button>
+          <button className="win95-control-btn">×</button>
+        </div>
+      </div>
+      <div className="p-3">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <LogoIcon className="h-7 w-7" />
-              <span className="text-xl font-semibold tracking-tight bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
-                NOVIQ
-              </span>
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-xl">💸</span>
+              <span className="font-bold">PAYDOS 95</span>
             </div>
-            <p className="text-sm text-slate-400">
-              Next-generation payment infrastructure. Built on Solana. Powered by innovation.
+            <p className="text-xs">
+              Payment infrastructure for Solana. Built for speed.
             </p>
           </div>
+
           <div>
-            <h4 className="text-white font-semibold mb-4">Product</h4>
-            <ul className="space-y-2 text-sm">
-              <li><a href="/" className="hover:text-white transition-colors">Simple Payments</a></li>
-              <li><a href="/create/split" className="hover:text-white transition-colors">Split Payments</a></li>
-              <li><a href="/create/escrow" className="hover:text-white transition-colors">Escrow</a></li>
-              <li><a href="/create/goal" className="hover:text-white transition-colors">Funding Goals</a></li>
+            <p className="font-bold mb-2 underline">Products</p>
+            <ul className="space-y-1 text-xs">
+              <li><a href="/" className="hover:underline">📄 Simple Payments</a></li>
+              <li><a href="/create/split" className="hover:underline">📊 Split Payments</a></li>
+              <li><a href="/create/escrow" className="hover:underline">🔒 Escrow</a></li>
+              <li><a href="/create/goal" className="hover:underline">🎯 Funding Goals</a></li>
             </ul>
           </div>
+
           <div>
-            <h4 className="text-white font-semibold mb-4">Resources</h4>
-            <ul className="space-y-2 text-sm">
-              <li><a href="/dashboard" className="hover:text-white transition-colors">Dashboard</a></li>
-              <li><a href="/faq" className="hover:text-white transition-colors">FAQ</a></li>
-              <li><a href="/status" className="hover:text-white transition-colors">System Status</a></li>
-              <li><a href="https://docs.solana.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Solana Docs</a></li>
-              <li><a href="https://explorer.solana.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Explorer</a></li>
+            <p className="font-bold mb-2 underline">Resources</p>
+            <ul className="space-y-1 text-xs">
+              <li><a href="/dashboard" className="hover:underline">📁 Dashboard</a></li>
+              <li><a href="/faq" className="hover:underline">❓ FAQ</a></li>
+              <li><a href="https://solana.com" target="_blank" rel="noopener noreferrer" className="hover:underline">🌐 Solana.com</a></li>
+              <li><a href="https://explorer.solana.com" target="_blank" rel="noopener noreferrer" className="hover:underline">🔍 Explorer</a></li>
             </ul>
           </div>
+
           <div>
-            <h4 className="text-white font-semibold mb-4">Network</h4>
-            <div className="flex items-center gap-2 text-sm">
-              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-              <span className="text-green-400 font-medium">
-                Mainnet Live
-              </span>
+            <p className="font-bold mb-2 underline">Network</p>
+            <div className="flex items-center gap-2 text-xs mb-2">
+              <span className="inline-block w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+              <span className="text-green-700 font-bold">Mainnet Online</span>
             </div>
-            <p className="text-xs text-slate-500 mt-2">
-              Powered by Solana
-            </p>
+            <p className="text-xs">Powered by Solana</p>
           </div>
         </div>
-        <div className="border-t border-slate-800 mt-8 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="flex gap-6 text-sm text-slate-500">
-              <a href="/terms" className="hover:text-white transition-colors">Terms</a>
-              <a href="/privacy" className="hover:text-white transition-colors">Privacy</a>
-              <a href="/faq" className="hover:text-white transition-colors">FAQ</a>
-            </div>
-            <p className="text-sm text-slate-500">© 2025 NOVIQ. Built on Solana.</p>
+
+        <div className="win95-divider"></div>
+
+        <div className="flex flex-col md:flex-row justify-between items-center gap-2 text-xs">
+          <div className="flex gap-4">
+            <a href="/terms" className="hover:underline">Terms</a>
+            <a href="/privacy" className="hover:underline">Privacy</a>
+            <a href="/faq" className="hover:underline">Help</a>
           </div>
+          <p>© 2025 PAYDOS. All rights reserved.</p>
         </div>
       </div>
     </footer>
