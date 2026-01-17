@@ -54,7 +54,7 @@ export default function Footer() {
                 <ul className="space-y-2 text-xs" style={{ color: 'var(--text-subtle)' }}>
                   <li><Link href="/dashboard" className="hover:text-[var(--text)] transition-colors">Dashboard</Link></li>
                   <li><Link href="/whitepaper" className="hover:text-[var(--text)] transition-colors">Whitepaper</Link></li>
-                  <li><Link href="/faq" className="hover:text-[var(--text)] transition-colors">FAQ</Link></li>
+                  <li><a href="https://x.com/PayOScc" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--text)] transition-colors">Twitter (X)</a></li>
                   <li><a href="https://solana.com" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--text)] transition-colors">Solana</a></li>
                 </ul>
               </div>
@@ -65,9 +65,17 @@ export default function Footer() {
                   <div className="status-dot status-online"></div>
                   <span style={{ color: 'var(--success)' }}>Mainnet Online</span>
                 </div>
-                <div className="flex items-center gap-2 text-xs" style={{ color: 'var(--text-subtle)' }}>
+                <div className="flex items-center gap-2 text-xs mb-4" style={{ color: 'var(--text-subtle)' }}>
                   <Icons.globe />
                   <span>Powered by Solana</span>
+                </div>
+
+                {/* Contract Address Spot */}
+                <div className="pt-2 border-t border-white/5">
+                  <p className="text-[10px] uppercase font-bold text-slate-500 mb-1">Contract Address</p>
+                  <code className="text-[10px] font-mono text-slate-400 select-all cursor-pointer hover:text-white transition-colors">
+                    Coming Soon
+                  </code>
                 </div>
               </div>
             </div>
