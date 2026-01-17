@@ -64,8 +64,16 @@ const Icons = {
       <line x1="12" y1="8" x2="12.01" y2="8"></line>
     </svg>
   ),
-  copy: () => (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+  copy: (props: { size?: number, className?: string }) => (
+    <svg
+      width={props.size || 16}
+      height={props.size || 16}
+      className={props.className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+    >
       <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
       <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
     </svg>
@@ -271,6 +279,16 @@ export default function Home() {
               Create payment links, escrow transactions, splits, and crowdfunding campaigns.
               Non-custodial, instant, and secure.
             </p>
+
+            <div className="flex items-center justify-center gap-2 mb-8" title="Copy Contract Address">
+              <div className="glass px-4 py-2 rounded-lg flex items-center gap-2 border border-white/5 hover:border-indigo-500/30 transition-colors cursor-pointer group">
+                <span className="text-xs font-bold text-indigo-400">CA:</span>
+                <code className="text-xs text-slate-400 font-mono tracking-wide group-hover:text-white transition-colors">
+                  Coming Soon
+                </code>
+                <Icons.copy className="w-3 h-3 text-slate-500 group-hover:text-indigo-400" />
+              </div>
+            </div>
 
             <div className="flex flex-wrap justify-center gap-3">
               <button
