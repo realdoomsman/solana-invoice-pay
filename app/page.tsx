@@ -280,13 +280,20 @@ export default function Home() {
               Non-custodial, instant, and secure.
             </p>
 
-            <div className="flex items-center justify-center gap-2 mb-8" title="Copy Contract Address">
+            <div
+              className="flex items-center justify-center gap-2 mb-8"
+              title="Copy Contract Address"
+              onClick={() => {
+                navigator.clipboard.writeText('6CE74g1iZWhR5uKJuqwYCTFy85yKfhnMrZuUeKfGBAGS')
+                toast.success('Contract Address Copied!')
+              }}
+            >
               <div className="glass px-4 py-2 rounded-lg flex items-center gap-2 border border-white/5 hover:border-indigo-500/30 transition-colors cursor-pointer group">
                 <span className="text-xs font-bold text-indigo-400">CA:</span>
                 <code className="text-xs text-slate-400 font-mono tracking-wide group-hover:text-white transition-colors">
-                  Coming Soon
+                  6CE7...BAGS
                 </code>
-                <Icons.copy className="w-3 h-3 text-slate-500 group-hover:text-indigo-400" />
+                <Icons.copy size={12} className="text-slate-500 group-hover:text-indigo-400" />
               </div>
             </div>
 
