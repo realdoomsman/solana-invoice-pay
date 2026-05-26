@@ -70,13 +70,7 @@ export default function Footer() {
                   <span>Powered by Solana</span>
                 </div>
 
-                {/* Contract Address Spot */}
-                <div className="pt-2 border-t border-white/5">
-                  <p className="text-[10px] uppercase font-bold text-slate-500 mb-1">Contract Address</p>
-                  <code className="text-[10px] font-mono text-slate-400 select-all break-all cursor-pointer hover:text-white transition-colors">
-                    6CE74g1iZWhR5uKJuqwYCTFy85yKfhnMrZuUeKfGBAGS
-                  </code>
-                </div>
+
               </div>
             </div>
 

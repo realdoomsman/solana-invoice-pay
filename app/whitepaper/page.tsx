@@ -342,15 +342,7 @@ Network Fee        ~$0.0003/tx`}
                                 and earn a share of protocol revenue.
                             </p>
 
-                            <div className="bg-black/30 border border-indigo-500/20 rounded-xl p-6 text-center mb-6">
-                                <p className="text-xs uppercase font-bold text-slate-500 mb-2">Contract Address (Solana)</p>
-                                <code className="text-sm md:text-base font-mono text-white tracking-wide block mb-2 select-all break-all">
-                                    6CE74g1iZWhR5uKJuqwYCTFy85yKfhnMrZuUeKfGBAGS
-                                </code>
-                                <p className="text-xs text-slate-600">
-                                    Official CA. Verify on Solscan.
-                                </p>
-                            </div>
+
 
                             <div className="grid grid-cols-2 gap-4 text-center">
                                 <div className="p-4 rounded-lg bg-black/20">
